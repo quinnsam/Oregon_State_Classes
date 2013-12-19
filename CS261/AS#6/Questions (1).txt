@@ -1,0 +1,20 @@
+﻿1. The two hashing functions differ with the words:
+1. stringHash1 hashes “bitter” and “new” to the same value while stringHash2 doesn’t
+2. stringHash1 hashes “hot” and “across” to the same value while stringHash2 doesn’t
+
+
+2. stringHash2 is more complex and makes the number of collision lower.
+
+
+3. No, since the count is always updated when a new word is added. They both return 66.
+
+
+4. No, because if the table load function returns the value of (count / tableSize) and if the count and table size is the same for each hashing function the table load will be the same.
+
+
+5. Yes, since stringHash1 has more collisions it adds more words to one bucket while stringHash2 has less collisions it adds more words to empty buckets. This makes stringHash1 have more empty buckets then stringHash2.
+
+
+6. Yes, using a prime number for a table size normalises the distribution of the indices since it uses the modulus operator. Prime numbers produce more unique indexes.
+ 
+7. Changing the size of the hash table doesn’t seem to change the speed the concordance runs at all. This is due to the fact that each word that is entered in to the table has a semi-unique index so we can efficiently find where the word is placed fast. If however the particular index has several collisions making more than one word stored in it we then have to cycle through the entire bucket until we find the particular key.
