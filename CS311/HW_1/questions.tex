@@ -1,0 +1,93 @@
+\documentclass[letterpaper,10pt,titlepage,fleqn]{article}
+
+%example of setting the fleqn parameter to the article class -- the below sets the offset from flush left (fl)
+\setlength{\mathindent}{1cm}
+
+\usepackage{graphicx}                                        
+
+\usepackage{amssymb}                                         
+\usepackage{amsmath}                                         
+\usepackage{amsthm}                                          
+\usepackage{nopageno}
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{wasysym}
+\usepackage{url}
+
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+
+\usepackage{pstricks, pst-node}
+
+%the following sets the geometry of the page
+\usepackage{geometry}
+\geometry{textheight=9in, textwidth=6.5in}
+
+% random comment
+
+\newcommand{\cred}[1]{{\color{red}#1}}
+\newcommand{\cblue}[1]{{\color{blue}#1}}
+
+\usepackage{hyperref}
+
+\usepackage{textcomp}
+\usepackage{listings}
+
+\def\name{Sam Quinn}
+
+%% The following metadata will show up in the PDF properties
+\hypersetup{
+  colorlinks = true,
+  urlcolor = black,
+  pdfauthor = {\name},
+  pdfkeywords = {cs311 ``operating systems'' files filesystem I/O},
+  pdftitle = {CS 311 Project},
+  pdfsubject = {CS 311 Project},
+  pdfpagemode = UseNone
+}
+
+\parindent = 0.0 in
+\parskip = 0.2 in
+
+\begin{document}
+
+\section*{Questions}
+
+\hrule
+
+\begin{enumerate}
+\item Describe at least 2 ways of transferring files from a remote server to a local machine.
+\begin{itemize}
+\item FTP(File Transfer Protocol) and SSH(Secure Shell) are two very common ways to retrieve files from a remote server.
+\end{itemize}
+\item What are revision control systems? Why are they useful? Explain how to create a subversion or git repository on os-class (and create it, while you're at it).
+\begin{itemize}
+\item Revision control systems help identify which version is currently in use with things like a version number. Revision control systems can help in debugging and updating because if a know bug is in a file and the file hasn’t been updated you can try the updated file first.
+\item To create a git repository on the OS-Class server you just use the command ``git init” to create an empty repository.
+\end{itemize}
+\item What is the difference between redirecting and piping? Describe each.
+\begin{itemize}
+\item Redirecting sends and receives data from files or streams.
+\item Piping sends and receives data to and from other programs
+\end{itemize}
+\item What is make, and how is it useful?
+\begin{itemize}
+\item Make is useful for compiling multiple programs or compiling certain programs with default variables and flags. By typing ``Make" into the command line you could save yourself from typing multiple command line entries into the prompt.
+\end{itemize}
+\item Describe, in detail, the syntax of a make file.
+\begin{itemize}
+\item The syntax for calling a function in a makefile is just the function name. Functions declared with \textlangle filename\textrangle : followed by a colon.\\
+The code contained in each function of the makefile will be imputed directly into the command prompt. 
+\end{itemize}
+\item Give a find command that will run the file command on every regular file (not directories!) within the current filesystem subtree.
+\begin{itemize}
+\item find . -name 'Filename*' -type f\\
+Find triggers the find function -name signify that you are searching for a specific thing make sure you use the single quotes around the filename. The * is explaining that that the name before the * is not complete and doesn't have a file extension, it will return every file with those letters in that order to you.
+\end{itemize}
+\end{enumerate}
+
+
+
+\end{document}

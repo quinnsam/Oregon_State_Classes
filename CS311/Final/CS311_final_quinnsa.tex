@@ -1,0 +1,305 @@
+\documentclass[letterpaper,10pt,notitlepage,fleqn]{article}
+
+\usepackage{nopageno} %gets rid of page numbers
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{url}
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+\usepackage{pstricks, pst-node}
+\usepackage{geometry}
+\geometry{textheight=9in, textwidth=6.5in} %sets 1" margins 
+\newcommand{\cred}[1]{{\color{red}#1}} %command to change font to red
+\newcommand{\cblue}[1]{{\color{blue}#1}} % ...blue
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\def\name{Sam Quinn}
+
+\parindent = 0.0 in
+\parskip = 0.2 in
+
+\title{Final}
+\author{Sam Quinn}
+
+\begin{document}
+\maketitle
+\hrule
+
+\section{Signals}
+Signals are a from of notification that are sent between processes. Many times these signals are sent to let a processes know that an event has occurred. Signals are sent to and from software but have many similar features of hardware interrupts. Signals can be triggered by the kernel and the user. The kernel will send a signal if the hardware has notified the kernel of an invalid operation. A user my terminate a processes with the \textit{Control-C} which sends a signal to the running process. Lastly if implemented signals can be used as a form of IPC where processes send signals between each other that a specific event has occurred.
+
+\subsection{Signals}
+\textbf{POSIX} \\
+POSIX has many signals $>$ 25, each of these signals are used for simple IPC and abnormal scenarios that result in an error (e.g. divide by 0). \\ \\
+\textbf{Common POSIX Signals}
+\begin{itemize}
+\item SIGHUP
+\item SIGCHLD
+\item SIGINT
+\item SIGKILL
+\item SIGQUIT
+\end{itemize}
+
+\textbf{Windows} \\
+Windows doesn't have as many signals as POSIX uses but supports some. Others can be implemented with the Windows API and messages. \\ \\
+\textbf{All of Windows Signals}
+\begin{itemize}
+\item SIGABRT
+\item SIGFPE
+\item SIGILL
+\item SIGINT
+\item SIGSEGV
+\item SIGTERM
+\end{itemize}
+
+\subsection{Sending Signals}
+\textbf{Windows Syntax} \\
+In a Windows program signals are sent either with the \textit{signal()} system call or the \textit{raise()} system call. Each of these calls perform differently. The \textit{signal()} call sets up an association for the execution of any signal received while the \textit{raise()} function programmatically generates a signal within an application. Many times Windows programs will make use of Windows Messages to send information to another process rather than sending signals. The way Windows sends messages is with the \textit{PostMessage()} call or the \textit{SendMessage()} call. The \textit{PostMessage()} call adds the message to the message queue that is associated with the threads or processes. The \textit{SendMessage()} call will send the message and will not return until the thread or process has dealt with the message. \\ \\
+\textbf{POSIX Syntax} \\
+In POSIX signals are sent with the \textit{kill()} system call similar to the \textit{raise()} system call in Windows. The \textit{kill()} system call in POSIX will send a designated signal to a specific process. Conversely the Windows \textit{raise()} system call will only send the designated signal to the current process.
+
+\subsection{Handling Signals}
+In both POSIX and Windows you must include \textit{signals.h} library to be able to use signals with in a program. Also in both you may use a signal handler that you create or use a predefined signal handler. If you wish to use the predefined handler the constants are \emph{SIG\_DFL}-to use the default action for each signal or \emph{SIG\_IGN}-Ignore signals, these constants exist in both POSIX and Windows. There a very few discrepancies between the way POSIX and Windows handle signals and can almost be programmed with the same syntax. 
+
+\section{File I/O}
+While file I/O is often misconceived as only the process of reading and writing to a file, file input output covers a far broader spectrum. File I/O can not only be use to read and write to files but the techniques used with in file I/O are universal to many other programming needs. File input output can be use to read and write to and from pipes, sockets, files, FIFO's, terminals, devices and more. With out a doubt file I/O is one of the most important concepts to understand with in programming. Both in POSIX and in the Windows API file descriptors are used to pin point an opened file. As a standard in both POSIX and in Windows programs the file descriptors for STDIN, STDOUT, and STDERR are the same. STDIN $=$ 0, STDOUT $=$ 1, and STDERR $=$ 2. 
+
+\subsection{Open}
+\textbf{POSIX Syntax} \\
+Within POSIX you can open or create a file with the \textit{open()} system call. This call returns a file descriptor of the file it just opened or created. The \textit{open()} call has a wide variety of flags you may use wile opening or creating a file to suit your needs. 
+
+\begin{verbatim}
+ int open(const char *pathname, int flags, mode_t mode);
+\end{verbatim}
+
+A break down of what all the variables mean.
+
+\begin{itemize}
+\item pathname - The name of a file or device in the local directory or a path to a file or device in another directory.
+\item flags - The requested access to the file or device, which can be read, write, both or neither.
+\item mode - Permissions to set if creating file. Sets the permissions to Group, User, and Other with read, write, both, or neither.
+\end{itemize}
+
+\textbf{Windows Syntax} \\
+The way Windows opens or creates a file is with the \textit{CreateFile()} system call. If this call executes successfully it will return a handle that for the file it has opened or created. The \textit{CreateFile()} call seems to me to have many more features that the POSIX \textit{open()}. Some of these features that exist solely in the Windows API are included like SecurityAttributes and Templates. This may be beneficial for many reasons but require the programmer to fill in more variables than in the POSIX \textit{open()} function which could be annoying.
+
+\begin{verbatim}
+HANDLE WINAPI CreateFile(
+  _In_      LPCTSTR lpFileName,
+  _In_      DWORD dwDesiredAccess,
+  _In_      DWORD dwShareMode,	
+  _In_opt_  LPSECURITY_ATTRIBUTES lpSecurityAttributes,	
+  _In_      DWORD dwCreationDisposition,
+  _In_      DWORD dwFlagsAndAttributes,
+  _In_opt_  HANDLE hTemplateFile
+);
+\end{verbatim}
+
+A break down of what all of the variables mean.
+
+\begin{itemize}
+\item lpFileName - The name of the file or device to be created or opened.
+\item dwDesiredAccess - The requested access to the file or device, which can be read, write, both or neither.
+\item dwShareMode - The requested sharing mode of the file or device, which can be read, write, both, delete, all of these, or none.
+\item lpSecurityAttributes - A pointer to a SECURITY\_ATTRIBUTES struct. *Note this is optional.
+\item dwCreationDisposition - An action to take on a file or device that exists or does not exist.
+\item dwFlagsAndAttributes - Extra flags and attributes.
+\item hTemplateFile - A handle to a template file. *Note this is optional.
+\end{itemize}
+
+\subsection{Read}
+\textbf{POSIX Syntax} \\
+In POSIX the \textit{read()} system call is use to read data from anything that can be represented with a file descriptor. When \textit{read()} reads from the descriptor successfully it will return the number of bytes read. On an error \textit{read()} will return -1. 
+
+\begin{verbatim}
+ssize_t read(int fd, void *buf, size_t count);
+\end{verbatim}
+
+A break down of what all of the variables mean.
+
+\begin{itemize}
+\item fd - A valid file descriptor in which you wish to read from.
+\item buf - A pointer to a buffer to store the read characters in.
+\item count - The number of bytes to read from the file descriptor.
+\end{itemize}
+
+\textbf{Windows Syntax} \\
+In Windows for reading from a file or device the \textit{ReadFile()} system call is used. The \textit{ReadFile()} system call reads from both synchronous and asynchronous files or devices. If \textit{ReadFile()} system call runs successfully it will return TRUE(non-zero) and FALSE(zero) if failed. Like in previous comparisons of Windows and POSIX system calls the Windows one has more variables which I will explain below.
+
+\begin{verbatim}
+BOOL WINAPI ReadFile(
+  _In_         HANDLE hFile,
+  _Out_        LPVOID lpBuffer,
+  _In_         DWORD nNumberOfBytesToRead,
+  _Out_opt_    LPDWORD lpNumberOfBytesRead,
+  _Inout_opt_  LPOVERLAPPED lpOverlapped
+);
+\end{verbatim}
+
+A break down of what all of the variables mean.
+
+\begin{itemize}
+\item hFile - A handle to either a file or a device.
+\item lpBuffer - A pointer to a buffer to store the read characters.
+\item nNumberOfBytesToRead - The maximum bytes to read.
+\item lpNumberOfBytesRead - A pointer to the number of bytes already read. *Note this is optional.
+\item lpOverlapped - If the falg FILE\_FLAG\_OVERLAPPED is used when opening the file or device this is a pointer to an OVERLAPPED struct. *Note this is optional.
+\end{itemize}
+
+\subsection{Write}
+\textbf{POSIX Syntax} \\
+In POSIX the \textit{write()} system call is used to write to a specific file or device with a valid file descriptor. If \textit{write()} writes to the file or device successfully it will return the number of bytes written, if \textit{write()} fails it will return -1. 
+
+\begin{verbatim}
+ssize_t write(int fd, const void *buf, size_t count);
+\end{verbatim}
+
+A break down of what all of the variables mean.
+
+\begin{itemize}
+\item fd - A valid file descriptor in which you wish to write to.
+\item buf - A pointer to a buffer in which the characters to write are stored.
+\item count - The number of bytes to write to the file descriptor.
+\end{itemize}
+
+\textbf{Windows Syntax} \\
+In Windows the \textit{WriteFile()} system call is used to write to a file or device. If \textit{WriteFile()} system call runs successfully it will return TRUE(non-zero) and FALSE(zero) if failed. Similarly to the \textit{ReadFile()} System call used by Windows programs \textit{WriteFile()} system call also is designed for both synchronous and asynchronous operation.
+
+\begin{verbatim}
+BOOL WINAPI WriteFile(
+  _In_         HANDLE hFile,
+  _In_         LPCVOID lpBuffer,
+  _In_         DWORD nNumberOfBytesToWrite,
+  _Out_opt_    LPDWORD lpNumberOfBytesWritten,
+  _Inout_opt_  LPOVERLAPPED lpOverlapped
+);
+\end{verbatim}
+
+A break down of what all of the variables mean.
+
+\begin{itemize}
+\item hFile - A handle to either a file or a device.
+\item lpBuffer - A pointer to a buffer in which the characters to write are stored.
+\item nNumberOfBytesToWrite - The number of bytes to be written to the file or device.
+\item lpNumberOfBytesWritten - A pointer to the number of bytes already written.
+\item lpOverlapped - If the falg FILE\_FLAG\_OVERLAPPED is used when opening the file or device this is a pointer to an OVERLAPPED struct. *Note this is optional.
+\end{itemize}
+
+\subsection{Close}
+\textbf{POSIX Syntax} \\
+To close a file descriptor in POSIX the \textit{close)} system Call is used. If a file is no longer needed to be accessed through a file descriptor the \textit{close()} system call may be used to disassociate the assigned file descriptor from that file. After a file descriptor is closed that file descriptor may be used again for another file. The \textit{close()} system call will return 0 on a successful close and -1 on a failed close.
+
+\begin{verbatim}
+int close(int fd);
+\end{verbatim}
+
+\begin{itemize}
+\item fd - A vaild file descriptor in which you wish to close.
+\end{itemize}
+
+\textbf{Windows Syntax} \\
+To close a handle in Windows the \textit{CloseHandle()} system call is used. The \textit{CloseHandle()} call will close the specified handle and invalidate all pending operations that use that handle. If \textit{CloseHandle()} system call runs successfully it will return TRUE(non-zero) and FALSE(zero) if failed.
+
+\begin{verbatim}
+BOOL WINAPI CloseHandle(
+  _In_  HANDLE hObject
+);
+\end{verbatim}
+
+\begin{itemize}
+\item hObject - A valid handle to an open object.
+\end{itemize}
+
+\section{IPC - Synchronization}
+Programs that take advantage of multiple threads or processes need some way of communication between them. While IPC is a broad topic which covers all inter process communication I am only comparing synchronization facilities that is encompassed with in the broader IPC term. Synchronization between processes is needed to coordinate their actions to avoid multiple process updating a region of shared memory at the same time. When two or more processes try to update the same file it is known as a race condition. The two synchronization facilities that I am going to cover to avoid race cases between processes are semaphores and mutexes.
+
+\subsection{Mutexes}
+Since threaded programs share global variables mutexes are often the go to synchronization facility for threaded program. Mutexes allow serialization of specific parts of code in a parallel program. The Serialized section of code is referred to as the critical section. Mutexes have only two states locked and unlocked. If a mutex is locked and another process tries to access the critical section it will block and wait for the process in the critical section to finish. Once the mutex unlocks the mutex will now allow the waiting process to enter the critical section.
+
+\subsubsection{Creating a Mutex}
+\textbf{POSIX Syntax} \\
+In POSIX to create a mutex you must define a global variable with the type \textit{pthread\_mutex\_t} followed by the name of your mutex. In POSIX if you are using threads then you must include the \textit{pthread.h} library to use both the thread functionality and mutexes. Each mutex defined must be initialized for statically allocated mutexes the \textit{PTHREAD\_MUTEX\_INITALIZER} constant is used. \\ \\
+
+\textbf{Windows Syntax} \\
+In Windows programs they handle creating mutexes a little differently. To create a mutex in Windows you must use the \textit{CreateMutex()} function. The \textit{CreateMutex()} function will return the handle to the mutex on a successful creation or return NULL on a failed creation.
+\begin{verbatim}
+HANDLE WINAPI CreateMutex(
+  _In_opt_  LPSECURITY_ATTRIBUTES lpMutexAttributes,
+  _In_      BOOL bInitialOwner,
+  _In_opt_  LPCTSTR lpName
+);
+\end{verbatim}
+
+An overview of what each variable means.
+
+\begin{itemize}
+\item lpMutexAttributes - A pointer to a SECURITY\_ATTRIBUTES struct. *Note this is optional.
+\item bInitialOwner - Determines weather or not to give ownership to the calling thread.
+\item lpName - The name of the mutex object.
+\end{itemize}
+
+\subsubsection{Using a Mutex}
+\textbf{POSIX Syntax} \\
+To lock and unlock a mutex in POSIX the functions \textit{pthread\_mutex\_lock()} and \textit{pthread\_mutex\_unlock()} are used. Each of these functions are required to be passed a valid pointer to a mutex that has been initialized. When either of these functions executes successfully they return zero and if they fail errno is set accordingly.
+
+\textbf{Windows Syntax} \\
+In a Windows program that uses mutexes the functions \textit{WaitForSingleObject()} and \textit{ReleaseMutex()} functions are used. The  \textit{WaitForSingleObject()} is analogous to the POSIX \textit{pthread\_mutex\_lock()} function but gives an option to define a time out interval. If the time out interval is reached then the process waiting on the mutex stops waiting and continues without ever accessing the critical section. The Windows \textit{ReleaseMutex()} function has the exact same functionality as the POSIX counterpart.
+
+\subsection{Semaphores}
+Semaphores work are used as a synchronization facility for both threaded programs as well as multiple processed programs. Semaphores have the same general concept as mutexes in which they protect access to a critical section of code. The main difference between semaphores and mutexes are that semaphores are a non negative integer that can be incremented or decremented. When a semaphore is zero the next process who requests access to the critical section is granted access. Each request for access there after increments the semaphore. Unlike mutexes semaphores keep the order of who requested access next while in mutexes it is a free for all. There are two types of semaphores named and unnamed I will be talking about named semaphores only.
+
+\subsubsection{Creating a Semaphore}
+\textbf{POSIX Syntax} \\
+In POSIX to create a semaphore the \textit{sem\_open()} function is used. This function either creates the semaphore with the provided details or opens an existing one. This is useful because in multiprocess programs semaphores are stored in shared memory so each process doesn’t know if the semaphore has been created or not. On a successful execution of \textit{sem\_open()} it returns the address of the either new semaphore or the existing semaphore. If \textit{sem\_open()} fails to open or create a new semaphore it returns \textit{SEM\_FAILED} and errno is set accordingly. When the program is done with the semaphore the \textit{sem\_unlink} function is used which waits for all the processes that are using the semaphore to finish then deletes the semaphore. \\ \\
+
+\textbf{Windows Syntax} \\
+To create a semaphore in Windows you must use the \textit{CreateSemaphore()} function. This functions is very similar to the POSIX version but adds an extra variable that allows he programmer to set a max value for the semaphore to reach. Similar the POSIX version the \textit{CreateSemaphore()} function will either create a semaphore or open an existing one and return the handle to it. 
+
+\subsubsection{Using a Semaphore}
+\textbf{POSIX Syntax} \\
+POSIX uses two functions to manipulate semaphores the \textit{sem\_wait()} function and the \textit{sem\_post()} function. \textit{sem\_wait()} increments the semaphores value while \textit{sem\_post()} decrements the value. \\ \\
+
+\textbf{Windows Syntax} \\
+Windows has multiple functions that can perform the same task as the POSIX \textit{sem\_wait()} function. To increment a semaphore in a Windows program both of the following functions will work \textit{SignalObjectAndWait()} and \textit{WaitForSingleObject()}. Decrementing a semaphore in Widows the \textit{ReleaseSemaphore()} function is used.
+
+\section{Pipes}
+Pipes are one of the oldest form of IPC and are still used in abundance in today programming. Pipes allow direct connection to other process to send and receive information. Pipe can be used to send the output data from one process to the input of an other process. Pipes are unidirectional meaning that data can only flow through them one direction requiring 2 pipes for read and write support. Pipes are byte steams which relate to plumbing pipes in the real world, there are no boundary between the data it all flows through the pipe and the reader on the other end chooses how much to read at a time. Pipes do have a limited capacity and will block the write process until there is room to store more data in the pipe. One of pipes great features is that the data written to a pipe that is within the pipes buffer is guaranteed to be atomic. Atomic data ensures that the data has not been jumbled up or separated in any way  so the reader can receive the data with confidence. \\ \\
+
+\textbf{POSIX Syntax} \\
+One of POSIX's advantages is that it thinks of everything as a file, this includes files, sockets, devices, STDIN, STDOUT, and pipes. This gives uniform implementation to the programmers when writing POSIX programs. To create a pipe in POSIX the \textit{pipe()} function is used. The \textit{pipe()} call in POSIX Requires an two dimensional array of integers to be passed in where both the file descriptors for the read and write ends of the pipe created will be stored. The [0]th element of the integer array is the read file descriptor and the [1]st element is the write file descriptor. This is analogous to the STDIN and STDOUT file descriptors which make it easier to remember which file descriptor does what. \\ \\
+
+\textbf{Windows Syntax} \\
+Windows has two different types of pipes named pipes and anonymous pipes. Anonymous pipes are easier to implement because they require less overhead so I will be talking solely about anonymous pipes in this comparison. Windows anonymous pipes only work locally and cannot be used for communication over a network. Creating a pipe in Windows is very similar to POSIX, Windows uses the \textit{CreatePipe()} function which also returns two handles like the POSIX \textit{pipe()} does. Since the Windows API uses pipes as files similar to POSIX does, the same file I/O functions I described in section 2 work for reading and writing to and from pipes in Windows programs.
+
+\section*{Sources}
+\subsection*{Signals}
+The Linux Programming Interface - Chapter 20(Signals)\\
+Unix to Windows Porting Dictionary for HPC \\
+The GNU C Library \\
+MSDN - Signal, Message Functions 
+
+\subsubsection*{File I/O}
+The Linux Programming Interface - Chapter 4(File I/O: The Universal I/O Model)\\
+Linux Programmer's Manual \\
+MSDN - CreateFile function, ReadFile function, WriteFile function, CloseHandle function
+
+\subsubsection*{IPC}
+Linux Programmer's Manual \\
+The Linux Programming Interface
+\begin{itemize}
+\item Chapter 30(Threads: Thread Synchronization)
+\item Chapter 53(POSIX Semaphores)
+\end{itemize}
+
+\subsubsection*{Pipes}
+The Linux Programming Interface \\
+MSDN - Pipes
+
+\end{document}

@@ -1,0 +1,486 @@
+\documentclass[letterpaper,10pt,notitlepage,fleqn]{article}
+\usepackage{nopageno} %gets rid of page numbers
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{url}
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+\usepackage{pstricks, pst-node}
+\usepackage{geometry}
+\geometry{textheight=9in, textwidth=6.5in} %sets 1" margins 
+\newcommand{\cred}[1]{{\color{red}#1}} %command to change font to red
+\newcommand{\cblue}[1]{{\color{blue}#1}} % ...blue
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\def\name{Sam Quinn}
+\parindent = 0.0 in
+\parskip = 0.2 in
+\title{Project 5 Write Up}
+\author{Sam Quinn}
+\begin{document}
+\maketitle
+\hrule
+\section*{Design}
+\subsection*{compute.c Program}
+% Generated with LaTeXDraw 2.0.8
+% Sun Dec 08 12:42:18 PST 2013
+% \usepackage[usenames,dvipsnames]{pstricks}
+% \usepackage{epsfig}
+% \usepackage{pst-grad} % For gradients
+% \usepackage{pst-plot} % For axes
+\scalebox{1} % Change this value to rescale the drawing.
+{
+\begin{pspicture}(0,-6.5)(16.32,6.5)
+\definecolor{color1932b}{rgb}{0.984313725490196,0.9568627450980393,0.03529411764705882}
+\definecolor{color1934b}{rgb}{0.1450980392156863,0.2980392156862745,0.8392156862745098}
+\definecolor{color1933b}{rgb}{0.8941176470588236,0.058823529411764705,0.058823529411764705}
+\psframe[linewidth=0.04,dimen=outer,fillstyle=solid,fillcolor=color1932b](16.32,3.76)(2.92,-4.38)
+\psframe[linewidth=0.04,dimen=outer,fillstyle=solid,fillcolor=color1933b](16.0,2.94)(7.78,-4.14)
+\psframe[linewidth=0.04,dimen=outer,fillstyle=solid,fillcolor=color1934b](6.8,2.98)(3.22,-4.16)
+\usefont{T1}{ptm}{m}{n}
+\rput(1.194375,6.03){Start}
+\psframe[linewidth=0.04,dimen=outer](1.92,6.5)(0.56,5.68)
+\usefont{T1}{ptm}{m}{n}
+\rput(8.308125,5.09){Wait For}
+\usefont{T1}{ptm}{m}{n}
+\rput(8.293438,4.63){Handshake}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.619219,4.79){Send Handshake}
+\psframe[linewidth=0.04,dimen=outer](9.44,5.4)(7.1,4.28)
+\psframe[linewidth=0.04,dimen=outer](6.3,5.2)(2.98,4.46)
+\usefont{T1}{ptm}{m}{n}
+\rput(1.2560937,4.95){Connect}
+\usefont{T1}{ptm}{m}{n}
+\rput(1.2445313,4.63){To Server}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.838594,1.33){Request}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.8885937,0.97){New Limit}
+\usefont{T1}{ptm}{m}{n}
+\rput(5.0160937,2.39){Benchmark}
+\usefont{T1}{ptm}{m}{n}
+\rput(1.1160938,3.57){Fork}
+\usefont{T1}{ptm}{m}{n}
+\rput(1.1309375,3.21){Compute}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.8392186,-3.19){Store}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.838594,-3.69){Limit}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.964375,-0.13){Send Old Limit}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.985,-0.49){\& Benchmarks}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.9034376,-1.69){Recieve}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.8885937,-2.15){New Limit}
+\usefont{T1}{ptm}{m}{n}
+\rput(11.710313,2.49){While $<$ Limit}
+\usefont{T1}{ptm}{m}{n}
+\rput(9.433594,1.37){Check}
+\usefont{T1}{ptm}{m}{n}
+\rput(9.488594,0.99){Perfect}
+\usefont{T1}{ptm}{m}{n}
+\rput(10.568594,-0.27){If Perfect}
+\usefont{T1}{ptm}{m}{n}
+\rput(10.428594,-1.53){If not}
+\usefont{T1}{ptm}{m}{n}
+\rput(10.428594,-1.93){Perfect}
+\usefont{T1}{ptm}{m}{n}
+\rput(14.474375,-0.11){Send Perfect}
+\usefont{T1}{ptm}{m}{n}
+\rput(14.444531,-0.45){To Server}
+\usefont{T1}{ptm}{m}{n}
+\rput(9.488594,-3.29){Increment}
+\usefont{T1}{ptm}{m}{n}
+\rput(1.2264062,-4.01){Listen For}
+\usefont{T1}{ptm}{m}{n}
+\rput(1.2092187,-4.35){Termination}
+\usefont{T1}{ptm}{m}{n}
+\rput(2.7934375,-6.11){If Terminate}
+\usefont{T1}{ptm}{m}{n}
+\rput(6.267031,-6.09){Kill Compute(s)}
+\psframe[linewidth=0.04,dimen=outer](2.34,5.26)(0.24,4.38)
+\psframe[linewidth=0.04,dimen=outer](2.16,3.86)(0.2,2.88)
+\psframe[linewidth=0.04,dimen=outer](6.26,2.76)(3.74,2.06)
+\psframe[linewidth=0.04,dimen=outer](6.06,1.6)(3.78,0.68)
+\psframe[linewidth=0.04,dimen=outer](6.42,0.2)(3.5,-0.84)
+\psframe[linewidth=0.04,dimen=outer](6.02,-1.42)(3.74,-2.44)
+\psframe[linewidth=0.04,dimen=outer](5.46,-2.94)(4.22,-3.96)
+\psframe[linewidth=0.04,dimen=outer](10.66,-2.88)(8.36,-3.6)
+\psframe[linewidth=0.04,dimen=outer](7.82,-5.7)(4.76,-6.44)
+\psframe[linewidth=0.04,dimen=outer](4.12,-5.66)(1.48,-6.5)
+\psframe[linewidth=0.04,dimen=outer](10.4,1.72)(8.6,0.68)
+\psframe[linewidth=0.04,dimen=outer](15.84,0.24)(13.08,-0.82)
+\psframe[linewidth=0.04,dimen=outer](11.58,0.14)(9.54,-0.58)
+\psframe[linewidth=0.04,dimen=outer](11.38,-1.16)(9.56,-2.22)
+\psframe[linewidth=0.04,dimen=outer](2.36,-3.62)(0.0,-4.66)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(1.2,5.72)(1.2,5.18)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(2.34,4.84)(2.98,4.82)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(6.3,4.84)(7.08,4.82)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(1.2,4.38)(1.22,3.82)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(1.18,2.86)(1.16,-3.66)
+\psline[linewidth=0.04cm,dotsize=0.07055555cm 2.0]{-o}(1.16,-4.68)(1.14,-6.06)
+\psline[linewidth=0.04cm,dotsize=0.07055555cm 2.0]{-o}(8.94,0.66)(8.94,-0.22)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(11.56,-0.26)(13.1,-0.28)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(4.94,2.04)(4.94,1.52)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(4.92,0.7)(4.94,0.14)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(4.94,-0.82)(4.94,-1.5)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(4.98,-2.4)(4.98,-2.98)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(4.12,-6.16)(4.76,-6.16)
+\psline[linewidth=0.04cm](9.0,-0.3)(9.56,-0.3)
+\psline[linewidth=0.04cm](8.96,-0.32)(8.98,-1.6)
+\psline[linewidth=0.04cm](8.98,-1.6)(9.58,-1.6)
+\psline[linewidth=0.04cm](14.54,-0.8)(14.56,-3.28)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(14.56,-3.24)(10.7,-3.24)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(10.38,-2.22)(10.38,-2.94)
+\usefont{T1}{ptm}{m}{n}
+\rput(9.274844,3.49){Compute Proccess}
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(6.82,-3.92)(7.8,-3.92)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(7.82,2.68)(6.78,2.66)
+\psline[linewidth=0.04cm](1.2,-6.1)(1.5,-6.1)
+\psline[linewidth=0.04cm](6.38,-5.72)(6.4,-4.36)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(2.16,3.38)(2.9,3.38)
+\end{pspicture} 
+}
+\begin{itemize} 
+\item Get start + stop range from \textbf{Manage} "Server".
+\item Calculate weather number is perfect or not within the range.*
+\item Within the timed loop calculate know number of operations store how long they take.
+\item Send performance information to \textbf{Manage} "Server", Use [FLOPS/IOPS].
+\item Have one process or thread that is dedicated to monitoring for a control socket to terminate.
+\end{itemize}
+*Note - The time to check the range from start to stop for perfect numbers should be 15 seconds.\\ \\
+The \textbf{Compute} function will have multiple processes running in parallel, one of which will only be looking for the termination key sent from the server. This program will have to benchmark itself to receive the correct limit where it will only take 15 seconds to completely check every number in the range given to see if it is perfect of not. I will do this with a infinite loop that will use a \textit{volatile} variable which means that for every iteration through the loop it will recheck the variable for changes. Once 15 seconds is reached it will return the number of modulo operations were executed to the server to get a new limit. The \textbf{Compute} function will continue checking for perfects, benchmarking itself, and requesting a new limit until an interrupt signal is received.
+\subsection*{manage.py Program}
+\begin{itemize} 
+\item Get weather the number is perfect or not from \textbf{Compute}.
+\item Keep track of the threads or processes from the \textbf{Compute} program, so signals can be sent to each. 
+\item Send \textbf{Compute} a range of numbers to check for perfect numbers within.*
+\item Receive interrupts from \textbf{Report} and send received signal to all processes or threads.
+\end{itemize}
+*Note - This should take 15 seconds for \textbf{Compute} to check for perfect numbers. \\ \\
+\textbf{Manage} is really the brains of this operation. \textbf{Manage} controls everything and is the only process that will talk to all of the other processes. \textbf{Manage} will first receive a connection request from any of the other programs and store their address in the connected clients list. The reason for storing these addresses is eventually we will need to kill them and this provides a nice way to access them all. \textbf{Manage} will receive benchmark statistics from \textbf{Compute} and calculate what the next limit should be for \textbf{Compute} to check for perfect numbers up to. \textbf{Manage} will also when requested by \textbf{Report} send How many perfect numbers \textbf{Compute} has found, the number of clients connected to \textbf{Manage}, and the number of numbers checked so far. When \textbf{Report} invokes the termination process for all the connected clients \textbf{Manage} will receive the kill key and be in charge of shutting every other process down. \\ \\
+% Generated with LaTeXDraw 2.0.8
+% Sun Dec 08 12:05:52 PST 2013
+% \usepackage[usenames,dvipsnames]{pstricks}
+% \usepackage{epsfig}
+% \usepackage{pst-grad} % For gradients
+% \usepackage{pst-plot} % For axes
+\scalebox{.96} % Change this value to rescale the drawing.
+{
+\begin{pspicture}(0,-7.6)(19.64,7.6)
+\definecolor{color929b}{rgb}{0.0,0.803921568627451,1.0}
+\psframe[linewidth=0.04,dimen=outer,fillstyle=solid,fillcolor=color929b](19.64,5.68)(15.92,-1.04)
+\usefont{T1}{ptm}{m}{n}
+\rput(1.554375,7.13){Start}
+\psframe[linewidth=0.04,dimen=outer](2.28,7.6)(0.92,6.78)
+\usefont{T1}{ptm}{m}{n}
+\rput(1.5964062,5.87){Begin Server}
+\usefont{T1}{ptm}{m}{n}
+\rput(1.5320313,4.57){If New}
+\usefont{T1}{ptm}{m}{n}
+\rput(1.5260937,4.15){Client}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.924375,4.53){Store Client}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.881094,4.15){Information}
+\usefont{T1}{ptm}{m}{n}
+\rput(8.288125,4.67){Wait For}
+\usefont{T1}{ptm}{m}{n}
+\rput(8.2734375,4.21){Handshake}
+\usefont{T1}{ptm}{m}{n}
+\rput(12.119219,4.43){Send Handshake}
+\usefont{T1}{ptm}{m}{n}
+\rput(1.6634375,2.83){If Message}
+\psframe[linewidth=0.04,dimen=outer](3.02,6.42)(0.2,5.46)
+\psframe[linewidth=0.04,dimen=outer](2.32,4.92)(0.7,3.82)
+\psframe[linewidth=0.04,dimen=outer](2.84,3.28)(0.48,2.42)
+\psframe[linewidth=0.04,dimen=outer](6.24,4.8)(3.66,3.9)
+\psframe[linewidth=0.04,dimen=outer](9.42,4.98)(7.08,3.86)
+\psframe[linewidth=0.04,dimen=outer](13.8,4.84)(10.48,4.1)
+\usefont{T1}{ptm}{m}{n}
+\rput(4.3234377,2.79){Determine}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.3721876,2.39){Sender}
+\usefont{T1}{ptm}{m}{n}
+\rput(5.0485935,-4.15){If Report}
+\usefont{T1}{ptm}{m}{n}
+\rput(5.0234375,0.85){If Compute}
+\usefont{T1}{ptm}{m}{n}
+\rput(17.654844,4.67){Clients}
+\usefont{T1}{ptm}{m}{n}
+\rput(17.767813,4.29){Connected}
+\usefont{T1}{ptm}{m}{n}
+\rput(17.81922,2.41){Number of}
+\usefont{T1}{ptm}{m}{n}
+\rput(17.857344,2.09){Perfects}
+\usefont{T1}{ptm}{m}{n}
+\rput(17.816406,0.55){Number}
+\usefont{T1}{ptm}{m}{n}
+\rput(17.928438,0.19){Tested}
+\psellipse[linewidth=0.04,dimen=outer](17.73,4.46)(1.35,0.74)
+\psellipse[linewidth=0.04,dimen=outer](17.82,2.25)(1.28,0.61)
+\psellipse[linewidth=0.04,dimen=outer](17.84,0.39)(1.0,0.57)
+\psframe[linewidth=0.04,dimen=outer](5.54,3.2)(3.22,2.12)
+\psframe[linewidth=0.04,dimen=outer](6.24,1.24)(3.86,0.52)
+\psframe[linewidth=0.04,dimen=outer](6.06,-3.82)(4.16,-4.48)
+\usefont{T1}{ptm}{m}{n}
+\rput(8.721562,0.97){Type}
+\usefont{T1}{ptm}{m}{n}
+\rput(8.718594,0.55){New Limit}
+\usefont{T1}{ptm}{m}{n}
+\rput(13.821563,1.03){Type}
+\usefont{T1}{ptm}{m}{n}
+\rput(13.748593,0.61){Perfect}
+\usefont{T1}{ptm}{m}{n}
+\rput(8.301562,-3.95){Type}
+\usefont{T1}{ptm}{m}{n}
+\rput(8.388594,-4.27){Report}
+\usefont{T1}{ptm}{m}{n}
+\rput(10.536094,-5.59){IF -k}
+\usefont{T1}{ptm}{m}{n}
+\rput(1.4417187,-7.03){If Data = NULL}
+\usefont{T1}{ptm}{m}{n}
+\rput(5.018594,-7.01){Remove Client}
+\usefont{T1}{ptm}{m}{n}
+\rput(13.759219,-0.35){Store}
+\usefont{T1}{ptm}{m}{n}
+\rput(8.703438,-0.57){Recieve}
+\usefont{T1}{ptm}{m}{n}
+\rput(8.756094,-0.89){Benchmark}
+\usefont{T1}{ptm}{m}{n}
+\rput(8.856093,-1.83){Calculate Limit}
+\psframe[linewidth=0.04,dimen=outer](9.92,1.26)(7.48,0.16)
+\psframe[linewidth=0.04,dimen=outer](9.9,-0.28)(7.6,-1.2)
+\psframe[linewidth=0.04,dimen=outer](10.38,-1.46)(7.4,-2.14)
+\psframe[linewidth=0.04,dimen=outer](14.56,1.32)(13.04,0.32)
+\psframe[linewidth=0.04,dimen=outer](14.48,0.0)(13.06,-0.66)
+\psframe[linewidth=0.04,dimen=outer](11.16,-5.24)(9.98,-5.86)
+\psframe[linewidth=0.04,dimen=outer](9.16,-3.72)(7.64,-4.58)
+\usefont{T1}{ptm}{m}{n}
+\rput(8.320156,-5.59){Get Info}
+\usefont{T1}{ptm}{m}{n}
+\rput(10.496094,-6.93){Send}
+\usefont{T1}{ptm}{m}{n}
+\rput(10.659219,-7.27){Terminiation}
+\psframe[linewidth=0.04,dimen=outer](9.22,-5.1)(7.5,-5.98)
+\psframe[linewidth=0.04,dimen=outer](12.06,-6.58)(9.18,-7.6)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(1.6,6.78)(1.6,6.4)
+\psline[linewidth=0.04cm,dotsize=0.07055555cm 2.0]{-o}(0.22,5.48)(0.22,4.36)
+\psline[linewidth=0.04cm](0.3,4.34)(0.74,4.34)
+\psline[linewidth=0.04cm,dotsize=0.07055555cm 2.0]{-o}(0.2,4.32)(0.2,2.84)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(2.34,4.34)(3.66,4.32)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(6.24,4.34)(7.06,4.34)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(9.44,4.34)(10.5,4.34)
+\psline[linewidth=0.04cm](4.92,4.78)(4.94,5.96)
+\psline[linewidth=0.04cm](4.94,5.92)(17.72,5.92)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(17.68,5.94)(17.7,5.16)
+\usefont{T1}{ptm}{m}{n}
+\rput(12.978437,-5.57){Send Info}
+\psframe[linewidth=0.04,dimen=outer](14.04,-5.08)(11.94,-6.0)
+\usefont{T1}{ptm}{m}{n}
+\rput(13.534375,-1.63){Send New Limit}
+\psline[linewidth=0.04cm,dotsize=0.07055555cm 2.0]{-oo}(3.42,2.14)(3.44,0.76)
+\psline[linewidth=0.04cm](3.54,0.82)(3.84,0.82)
+\psline[linewidth=0.04cm](3.44,0.72)(3.48,-4.12)
+\psline[linewidth=0.04cm](3.46,-4.14)(4.16,-4.14)
+\psline[linewidth=0.04cm](5.12,1.22)(5.14,1.58)
+\psline[linewidth=0.04cm,dotsize=0.07055555cm 2.0]{-o}(5.14,1.58)(8.58,1.58)
+\psline[linewidth=0.04cm](8.66,1.58)(13.84,1.58)
+\psline[linewidth=0.04cm](8.58,1.52)(8.58,1.28)
+\psline[linewidth=0.04cm](13.82,1.56)(13.82,1.34)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(8.62,0.16)(8.62,-0.3)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(8.68,-1.18)(8.68,-1.48)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(13.84,0.34)(13.86,-0.06)
+\psline[linewidth=0.04cm](14.48,-0.34)(15.42,-0.34)
+\psframe[linewidth=0.04,dimen=outer](15.24,-1.28)(11.84,-1.96)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(10.38,-1.66)(11.84,-1.66)
+\psline[linewidth=0.04cm](6.06,-4.1)(7.66,-4.1)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(8.32,-4.6)(8.34,-5.14)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(9.24,-5.5)(9.96,-5.52)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(10.54,-5.82)(10.56,-6.62)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(9.2,-5.14)(11.94,-5.16)
+\psline[linewidth=0.04cm](8.92,-5.12)(8.92,-4.84)
+\psline[linewidth=0.04cm](8.92,-4.84)(19.18,-4.86)
+\usefont{T1}{ptm}{m}{n}
+\rput(8.864375,-2.85){Store Old Limit}
+\psframe[linewidth=0.04,dimen=outer](10.36,-2.44)(7.42,-3.16)
+\psline[linewidth=0.04cm](10.38,-2.82)(17.98,-2.84)
+\psline[linewidth=0.04cm](0.26,2.82)(0.48,2.82)
+\psframe[linewidth=0.04,dimen=outer](2.9,-6.64)(0.0,-7.38)
+\psframe[linewidth=0.04,dimen=outer](6.62,-6.64)(3.56,-7.34)
+\psline[linewidth=0.04cm](0.2,2.78)(0.22,-6.6)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(2.92,-7.04)(3.56,-7.04)
+\psline[linewidth=0.04cm](15.4,-0.36)(15.38,2.32)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(15.38,2.3)(16.56,2.3)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(17.98,-2.84)(17.96,-0.16)
+\psline[linewidth=0.04cm](19.18,-4.86)(19.16,-1.04)
+\usefont{T1}{ptm}{m}{n}
+\rput{-90.0}(16.882187,21.950626){\rput(19.381094,2.51){Information}}
+\end{pspicture} 
+}
+\subsection*{report.py Program}
+The \textbf{Report} program has the least amount of work to do but has the most power out of all the programs. \textbf{Report} simply just receives the information regarding the number of perfect numbers found, the number of connected clients, and how many numbers have been checked so far from the server and prints this data out. The power comes from the -k flag used when running the program. When the -k flag is defined this will do the normal report stuff but once it has the information it goes on a killing spree killing every process it knows, no, but it does politely ask manage to kill every running process and then exits. 
+% Generated with LaTeXDraw 2.0.8
+% Sun Dec 08 12:50:44 PST 2013
+% \usepackage[usenames,dvipsnames]{pstricks}
+% \usepackage{epsfig}
+% \usepackage{pst-grad} % For gradients
+% \usepackage{pst-plot} % For axes
+\scalebox{1} % Change this value to rescale the drawing.
+{
+\begin{pspicture}(0,-3.37)(9.7,3.37)
+\usefont{T1}{ptm}{m}{n}
+\rput(1.454375,2.9){Start}
+\psframe[linewidth=0.04,dimen=outer](2.18,3.37)(0.82,2.55)
+\usefont{T1}{ptm}{m}{n}
+\rput(8.568125,1.96){Wait For}
+\usefont{T1}{ptm}{m}{n}
+\rput(8.553437,1.5){Handshake}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.8792186,1.66){Send Handshake}
+\psframe[linewidth=0.04,dimen=outer](9.7,2.27)(7.36,1.15)
+\psframe[linewidth=0.04,dimen=outer](6.56,2.07)(3.24,1.33)
+\usefont{T1}{ptm}{m}{n}
+\rput(1.5160937,1.82){Connect}
+\usefont{T1}{ptm}{m}{n}
+\rput(1.5045313,1.5){To Server}
+\psframe[linewidth=0.04,dimen=outer](2.6,2.13)(0.5,1.25)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(1.46,2.59)(1.46,2.05)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(2.6,1.71)(3.24,1.69)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(6.56,1.71)(7.34,1.69)
+\usefont{T1}{ptm}{m}{n}
+\rput(1.4185938,0.44){Request}
+\usefont{T1}{ptm}{m}{n}
+\rput(1.4410938,0.06){Information}
+\usefont{T1}{ptm}{m}{n}
+\rput(7.592656,0.24){Print Info}
+\usefont{T1}{ptm}{m}{n}
+\rput(0.55859375,-2.98){Exit}
+\usefont{T1}{ptm}{m}{n}
+\rput(1.7342187,-1.52){If -K}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.396094,-1.22){Send}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.5315623,-1.64){Terminate Key}
+\usefont{T1}{ptm}{m}{n}
+\rput(4.5226564,0.22){Recieve Info}
+\psframe[linewidth=0.04,dimen=outer](2.66,0.85)(0.2,-0.27)
+\psframe[linewidth=0.04,dimen=outer](5.86,0.57)(3.3,-0.07)
+\psframe[linewidth=0.04,dimen=outer](8.68,0.59)(6.56,-0.11)
+\psframe[linewidth=0.04,dimen=outer](6.16,-0.97)(2.96,-1.99)
+\psframe[linewidth=0.04,dimen=outer](2.44,-1.05)(1.08,-1.87)
+\psframe[linewidth=0.04,dimen=outer](1.24,-2.57)(0.0,-3.37)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(2.64,0.25)(3.28,0.25)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(5.86,0.29)(6.54,0.29)
+\psline[linewidth=0.04cm,dotsize=0.07055555cm 2.0]{-o}(0.62,-0.25)(0.62,-1.51)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(2.46,-1.47)(2.94,-1.47)
+\psline[linewidth=0.04cm](0.64,-1.49)(1.1,-1.49)
+\psline[linewidth=0.04cm](0.6,-1.57)(0.6,-2.55)
+\psline[linewidth=0.04cm,arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.4]{->}(1.42,1.23)(1.42,0.81)
+\end{pspicture} 
+}
+\begin{itemize} 
+\item Count the number of perfect numbers discovered from \textbf{Compute}.
+\item Count the number of numbers tested to be perfect.
+\item Count the number of processes or threads being used by \textbf{Compute}.
+\item -k will send an interrupt to \textbf{Manage} "Server" to kill all of the processes.
+\item Send a signal to \textbf{Manage} to kill \textbf{Report} and \textbf{Manage}.
+\end{itemize}
+\subsection*{Functions of Program Details}
+ 
+\section*{Work Log}
+\begin{verbatim}
+commit 80ef4b567f4e13c19b334e5b40f81d6a48eca811
+Author: Sam Quinn <quinnsa@os-class.engr.oregonstate.edu>
+Date:   Sun Dec 8 18:27:41 2013 -0800
+\end{verbatim}
+    Manage.py - Deleted one debug print.
+    
+\begin{verbatim}
+commit 59c88cd029ce7d5ba82d81295e62c34b6f07bf52
+Author: Sam Quinn <quinnsa@os-class.engr.oregonstate.edu>
+Date:   Sun Dec 8 18:23:43 2013 -0800
+\end{verbatim}
+    Manage.py - Final commit ready, Roger 1 Check!\\
+    Compute.c - Final Commit ready, Roger 2 Check!\\
+    Report.py - Final Commit ready, Roger 3 Check! Ready for lift off PSHHHHHHHHHEEEEWWWWWWWEWEWRRRHH!
+\begin{verbatim}
+commit 3f17d90ce65b229e45869f6d78651c1266fffca7
+Author: Sam Quinn <quinnsa@os-class.engr.oregonstate.edu>
+Date:   Sun Dec 8 17:34:51 2013 -0800
+\end{verbatim}
+    Manage.py - Fully funtional and works great. Need to add comments to finish her off.\\
+    Compute.c - Fully functional and works great too, adding comments now.\\
+    Report.py - Fully functional and works great, Added comments already.\\
+\begin{verbatim}
+commit e216478b3a3c148ff20f6e80ae6aef21836c210f
+Author: Sam Quinn <quinnsa@os-class.engr.oregonstate.edu>
+Date:   Sun Dec 8 14:49:22 2013 -0800
+\end{verbatim}
+    Manage.py - Receives perfect numbers from compute and stores them and sends the perfect numbers to report.\\
+    Compute.c - Working on the benchmark function. Have the check perfect function working good and sending the data to manage.\\
+    Report.py - Works good nothing really need to work on here.\\
+\begin{verbatim}
+commit 3fac1cdb36ad58c5778c701944257c843ca2cef8
+Author: Sam Quinn <quinnsa@os-class.engr.oregonstate.edu>
+Date:   Sat Dec 7 17:30:16 2013 -0800
+\end{verbatim}
+    Manage.py - Most of the functionality is there it can receive -k from report and kill all of the processes, it sends new limits to compute, and it stays active.\\
+    Compute.c - Haven't gotten the bench mark to function to be used yet I think I have it working though just need to use it. Need to test my check perfect function I don't think that works. I need to change the number of bytes to write back to manage when sending the perfect number. Got the signal handler working well and everything.\\
+    Report.py - Have the -k function working and it displays fake number of perfects and number of processes and everything so just need to have manage send correct values and should be good!
+\begin{verbatim}
+commit f2d6d3d19930d81e0e7f34f1abe81203a36c0005
+Author: Sam Quinn <quinnsa@os-class.engr.oregonstate.edu>
+Date:   Fri Dec 6 18:15:51 2013 -0800
+\end{verbatim}
+    Manage.py - Sill trying to get multiple Computes to connect.\\
+    Compute.c - Have the fork in place and figured out that the main function of the compute program will be the one always listening for the termination.\\
+    Report.py - Haven't made any progress, am working on next though.
+\begin{verbatim}
+commit a4be32c84184e3d581278ed73f49b1236fedf95a
+Author: Sam Quinn <quinnsa@os-class.engr.oregonstate.edu>
+Date:   Mon Dec 2 22:20:56 2013 -0800
+\end{verbatim}
+    manage.py - Receives XML data from both report and compute ans stores their address in an array. Have not implemented parsing XML by hand I think I might try to do that later if I have time.\\
+    report.py - Sends XML handshake data to manage.\\
+    compute.c - Sends handshake XML data to manage.
+\begin{verbatim}
+commit 593d2c2b8aa69e92ae883c3b05a5619ffb2f3c9d
+Author: Sam Quinn <quinnsa@os-class.engr.oregonstate.edu>
+Date:   Sat Nov 30 17:59:23 2013 -0800
+\end{verbatim}
+    manage.py - Got a basic ECHO server set up. receives and sends same message back.\\
+    report.py - Got basic client running sends Hello world from python and recives\\ message back from manage.
+    compute.c - Got basic client running sends Hello World and prints the message recived.
+\begin{verbatim}
+commit 6f4d627943405d053e1ea081e43140bda983108c
+Author: Sam Quinn <quinnsa@os-class.engr.oregonstate.edu>
+Date:   Thu Nov 28 20:43:29 2013 -0800
+\end{verbatim}
+    hw5\_write\_up.tex - Added for documentation of my design for this program.\\
+    compute.c - Added my code to find perfect numbers, I tested on paper and it worked never ran it on the computer yet.\\
+    report.py - Added some imports still no code just prints "Hello world!".\\
+    manage.py - No change from last commit just prints"Hello world!".\\
+    makefile - Added this I have changed the targets for the new programs and write up latex file.
+\begin{verbatim}
+commit 54bf68ad0806573c8d9575867cdbea97540441f1
+Author: Sam Quinn <quinnsa@os-class.engr.oregonstate.edu>
+Date:   Thu Nov 28 17:54:32 2013 -0800
+\end{verbatim}
+    Initial commit\\
+    Report.py - Prints "Hello World!"\\
+    Manage.py - Prints "Hello World!"\\
+    Compute.c - Prints "Hello World!"\\
+    Mentally preparing for this assignment and beginning design.
+\section*{Challenges Overcame}
+This project was especially difficult to complete not only was I trying to study for finals, working on the final for this class, doing multiple other final projects I was teaching myself how to program in python but I got it done. I was very impressed with myself for completing this assignment as well as I did, I even made peace with the idea of turning in a non functioning program because I was so stressed out. The hardest part at first was learning how to program in python but after a few hours getting the basics done I realized it was easier than the c programing part. I got hung up on the multiplexing aspect in the \textbf{Manage} program but after looking at some examples on line and reading through the very well documented python.org I got it all working the way it should. Another thing that I had a rough time with was the benchmarking code in the \textbf{Compute} program. The benchmark was not hard to program but figuring out what the next limit should be was the difficult part for me. I designed my \textbf{Compute} program to work with multiple proceses running \textbf{Compute} but I left only tested it with one process for computing and one for listening for the termination key since in the assignment description it says \"There may be more than one copy of compute running simultaneously`` but a quick change of the variable num\_pro would implement multiple process for compute.
+    
+\end{document}

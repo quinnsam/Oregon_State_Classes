@@ -1,0 +1,37 @@
+311-10-7
+...............................................................................
+names = [x[1;-1] for x in names][:]
+
+imports shlex, subprocess, os, time, stat
+
+ls = subprocess.Popen(command_sequence, stdout=subprocess.PIPE)
+
+**Reads The output.
+ls_out = ls.stdout.readlines() #bad Idea
+
+311-10-9
+...............................................................................
+in getopt 
+o= option, a= argument.
+
+311-11-15
+...............................................................................
+Project 4
+    You are in a cycle if you see the number twice
+    Bitmap must be synchronized. Locking the bitmaps.
+
+Sgared Memory
+    Must link with icc [file] -lrt.
+    On create the shared memory object is size 0. Use the ftruncate() to
+        resize.
+    To access the shared memory object you must use mmap(). NULL should be the 
+        location (first argument). Last argument should be 0.
+    Pointer artimatic changes with the size of the object (int, char).
+
+311-11-20
+...............................................................................
+Client Server
+    when you close one end of a socket it closes the other end.
+    If Bind gives you an error then something is usally worng elsewhere.
+    Select() will let you know if the client stream is ready for read.
+
