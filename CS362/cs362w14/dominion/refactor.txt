@@ -1,0 +1,14 @@
+I refactored the following cards:
+1) Council Room
+2) Remodel
+3) Great Hall
+4) Salvager
+5) Steward
+
+Refactoring, for purposes of this assignment refactoring was taking the code
+within the big switch statement and creating a new function called
+"cardNameEffect" that replaced the inner code with a function call.
+I maintained the semantics of what the code within the switch statement
+was doing. If the code within the switch statement was incorrect, it stayed
+incorrect, but the code within cardEffect was reduced by creating new function
+calls that performed the code. Two cards will still be incorrect.

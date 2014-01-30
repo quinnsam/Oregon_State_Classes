@@ -1,0 +1,3 @@
+Sam Quinn
+
+I refactored the original dominion.c file and removed council_room, feast, mine, remodel, and adventurer from the large switch statement and created functions for each. I have added multiple erros including not hadeling if the function returns something other than 0, not updating the "j" varible in remodel_card function, and i am sure I have added more that i dont even know about yet. 
