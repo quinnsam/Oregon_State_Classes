@@ -1,0 +1,304 @@
+\documentclass[letterpaper,10pt,notitlepage,fleqn]{article}
+
+\usepackage{nopageno} %gets rid of page numbers
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{url}
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+\usepackage{pstricks, pst-node}
+\usepackage{geometry}
+\geometry{textheight=9in, textwidth=6.5in} %sets 1" margins 
+\newcommand{\cred}[1]{{\color{red}#1}} %command to change font to red
+\newcommand{\cblue}[1]{{\color{blue}#1}} % ...blue
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage{natbib}
+\usepackage{indentfirst}
+
+\def\name{Sam Quinn}
+
+\parindent = 1 cm 
+\parskip = 0.1 in
+
+\title{Final}
+\author{Sam Quinn}
+
+\begin{document}
+\maketitle
+\hrule
+
+\section{CPU Scheduling}
+Because operating systems run multiple processes concurrently the kernel needs 
+to ensure each process is scheduled for execution. While many processes can run 
+together not every process can run at once. This is where the CPU Scheduler comes 
+into play. To understand how the kernel schedules these processes it is helpful to 
+know the different types of ``Multitasking'' \textit{cooperative Multitasking} and 
+\textit{preemptive multitasking}. Most modern operating systems implement a preemptive 
+algorithm for scheduling which means an external entity dictates what process should 
+be scheduled next. I will not be covering \textit{cooperative Multitasking} in 
+which the processes schedule themselves. 
+
+\subsection{Scheduling Algorithms}
+As you can imagine allowing each process to execute can be a hard task. Even with 
+modern systems the kernel has to be wary of how it allocates its resources. One 
+of the main concepts behind how the scheduling algorithms work is that when a 
+process does not have any work to be done that process can go into a \textit{block} 
+or \textit{sleep} state to allow for other process that have work to be done to execute.
+
+\subsubsection*{Linux} 
+In earlier versions of Linux the kernel implemented an \textit{O(1)} algorithm that 
+as the name suggests, ran at constant time. This was said to be a great algorithm 
+for larger systems but failed to perform well on I/O heavy devices. During the rise of
+Linux personal computers the \textit{CFS} (Completely fair scheduler) was created 
+to handle blocking I/O operations better and is the default is today~\cite{LKD3}.
+
+The Linux scheduler, like many other Linux features, can be customized by selecting 
+different algorithms. Linux allows changing of the CPU scheduling algorithm either system 
+wide or per process basis. The is done with the implementation of a \textit{Scheduler 
+Classes}. \textit{Scheduler Classes} allows different classes of processes to utilize 
+different algorithms with different policies concurrently~\cite{LKD3}.
+
+The way the processes are scheduled by the selected algorithm is based on their priority. In Linux there are 
+two types of priorities we need to worry about \textit{real-time} priority and \textit{nice}
+priority. The \textit{nice} value is supposed to essentially rank the process worthiness 
+for processor time. Linux has sort of a fun way of implementing the \textit{nice} 
+priority system. The scale ranges from [-20 to 19] with the highest priority being -20, and
+19 being the lowest or ``the most nice'' to other processes. The \textit{real-time} priorities are implemented opposing the 
+nice implementation with a scale from [0 to 99] with 99 being the highest priority.
+In normal configurations \textit{real-time} processes have a greater priority over 
+the system than normal processes~\cite{LKD3}. 
+
+\subsubsection*{Windows} 
+Windows also schedules processes with a priority base preemptive scheduling algorithm 
+with a few differences. Windows has had the same reliable scheduling algorithm since
+the first release of Windows NT with scalability improvement with each release thereafter.
+The Windows scheduler works by trying to equally share the processor or processors 
+only among other processes with the same priority. This causes the problem that 
+the Windows scheduler doesn't work well with different higher-level requirements 
+like distribution of CPU time with multiple users in a terminal environment. The 
+new scheduler named \textit{DFSS} (Distributed Fair Share Scheduling) solved this 
+problem later on. Windows determines what algorithm to use during 
+the \textit{PsBootPhaseComplete} final post-boot stage~\cite{WI16}. 
+
+Like mentioned before, Windows shares the use of priories with Linux but the values 
+are implemented differently. Windows seems to have a more understandable priority 
+value system than Linux's implementation. Windows separates scale of 32 values 
+into two groups, real-time levels and variable levels. The real-time values occupy 
+the upper 15 levels of the priority [16 to 31]. The variable levels range from [1 to 15] 
+reserving the priority 0 for the system which is one per system. The Windows priority 
+levels go in one uniform direction with the higher the priority value the higher 
+the priority~\cite{WI16}.
+
+\subsection*{Context Switches}
+When a new process has a turn in the queue or if their time slice expired the kernel 
+initial a \textit{context switch}. A \textit{context switch} is the live swapping 
+of one runnable task to another. Change a running process out has two aspects that
+must be done. First is that they need to map their own virtual memory. Second is 
+reimplement the processes stack information and registers. This context switch takes 
+place every time a new process begins or resumes. 
+
+\subsubsection*{Linux} 
+In the Linux system, context switches are executed by the \textbf{context\_switch()} 
+system call. Context switches are initiated by the Process scheduling algorithm 
+with the \textbf{schedule()} call. The \textbf{context\_switch()} system call, 
+like mentioned above, needs to remap the virtual memory and copy the stack information. 
+To remap the virtual memory the \textbf{context\_switch()} system call issues a 
+call for \textbf{switch\_mn()}, that removes the old processes mappings and replaces 
+them with its own. Copying of the stack information is completed with a different 
+call named \textbf{switch\_to()} which both saves and replaces the stack information 
+when a context switch occurs~\cite{LKD3}. 
+
+\subsubsection*{Windows}
+Windows also needs to perform the same general principle of switching execution 
+to a separate process. The Windows kernel must first save the information of the 
+old thread by creating a stack pointer to the underlaying \textit{KTHREAD} structure. 
+Once the old stack is safe the new process then pushes its own data on the current 
+running process stack. If the new process does not share the same address space as 
+the last running process it must also load the its page table. The new  process
+copies the old address and stores it for latter while loading its new page table 
+into one of the processors registers~\cite{WI16}.
+
+\subsection*{Comparison}
+\noindent \textbf{Similarities}\\
+\begin{itemize}
+    \item Have options to change algorithms.
+    \item Each process has a priority
+    \item Both have different priorities for real-time and normal processes.
+    \item Context switches are fundamentally the same.
+\end{itemize}
+\noindent \textbf{Differences}\\
+\begin{itemize}
+    \item Windows Windows implements only one priority value for both real-time and 
+    variable processes.
+    \item Linux's priority of nice values is backwards from Windows.
+
+\end{itemize}
+
+
+\section{Processes and Threads}
+To compute efficiently one very important concept to understand is how a programs operates in 
+a parallel environment. There are two ways a program may run in parallel, 
+threads and processes. While both treads and processes accomplish the same task of 
+running in parallel each have their correct application. One of the main difference 
+between these two and should be taken into consideration when choosing weather 
+you should use threads or processes, is that threads 
+share the same address space while each process has its own address space~\cite{PI}.
+
+\subsection{Processes}
+Processes are most useful when parallelization is required but sharing of system resources 
+is nonessential. Processes often times do not share the same address space and are independent 
+from all other process. The creation of a process can be an expensive task since 
+each process that is created has to allocate its own address space and force the 
+CPU to execute a context switch. 
+
+\subsubsection*{Linux}
+To create a process in a Linux operating system the \textbf{fork()} system call is 
+used. When the \textbf{fork()} system call is called it creates a child process from 
+the currently executing process which is refereed to as the parent. It is common to 
+initiate a new program after the \textbf{fork()} command. To create a new namespace 
+and begin executing a new program in Linux the \textbf{exec()} system call is used. 
+If the parent process relies on the child process it can inquire about the child's 
+status by using the \textbf{wait()} system call. Child processes when completed exit 
+using the \textbf{exit()} system call, however, these processes are not completely 
+destroyed from the system quite yet. When a child process calls \textbf{exit()} it is put 
+into a ``Zombie'' state until the parent calls \textbf{wait()}~\cite{LKD3}.
+
+Underneath the hood in Linux each process has its own ``Process Descriptor'' which 
+keeps all of the processes information stored at the end of its stack, which is linked 
+to a system wide doubly linked list. When \textbf{fork()} is called it initiates 
+the \textbf{clone()} system call which does just what you would expect clones the 
+parent process. The child and the parent at this point share the same copy of everything 
+including their process descriptors. At this stage of process creation the \textbf{clone()} 
+system call will differentiate the child process from the parent and pass required 
+information if the child would like shared address spaces, open files, and 
+namespaces. These flags are really the only thing that differentiates the creation 
+of a process from that of a Linux thread~\cite{LKD3}.
+
+\subsubsection*{Windows}
+Within a Windows operating system the main principles of threads and processes 
+are preserved with process having their own address spaces and threads sharing 
+the parents address space, however, Microsoft Windows does it slightly different. 
+Windows uses the \textbf{CreateProcess()} system call which functions similar to 
+the Linux \textbf{fork()} implementation. All of the information needed to execute 
+a program is passed in to the \textbf{CreateProcess()} function. Since Windows does 
+not clone the parent process like Linux does the \textbf{CreateProcess()} function 
+requires many more parameters to achieve the same effect but potentially has more 
+control of the child process~\cite{WI16}. 
+
+\subsection{Threads}
+Threads function very similar to that of processes in regards to performance but 
+with the added benefit of being able to share the same namespace as the parent. 
+Threads are essentially ``light weight'' process since they do not require their 
+own address space and namespace it is more memory efficient, however, threads can 
+not have threads of their own. 
+
+\subsubsection*{Linux}
+The Linux kernel views each thread as a unique process that merely shares resources 
+of another process. Every data structure that is used for a process is also used 
+for a thread within a Linux system. While Microsoft Windows has specific kernel 
+support for threads to allow threads to be simple forms of processes, Linux on the 
+other hand does not implement any thread improvements since Linux processes themselves 
+are already considered ``Light Weight''. 
+The Linux implementation of a thread is the same as that of a process and are created 
+the same way. Linux creates a thread with the same \textbf{clone()} system call 
+as with a process, with the exception of a few flags. 
+The flags passed to the \textbf{clone()} system call instruct the kernel to share 
+the address space, filesytem resources, file descriptors, and signal handlers to 
+the newly created thread~\cite{LKD3}. 
+
+\subsubsection*{Windows}
+Like mentioned above Windows has specific implementations to create a thread unlike 
+the universal \textbf{clone()} system call that Linux uses. To create a thread in 
+Windows the \textbf{CreateThread()} is used. Each thread created in Windows shares 
+the thread context of the main thread (parent process). The thread context includes 
+the thread's set of machine registers, the kernel stack, a thread environment block, 
+and a user stack in the address space. Windows threads also acquire the same security 
+context as that of their parent unless specifically setup to receive otherwise~\cite{WI16}. 
+
+\subsection*{Comparison}
+\noindent \textbf{Similarities}
+\begin{itemize}
+    \item Support both Threads, and Processes.
+    \item Processes do not share an address space while threads do.
+\end{itemize}
+\noindent \textbf{Differences}
+\begin{itemize}
+    \item Linux uses the \textbf{clone()} call to interact with the kernel directly 
+    where as Windows uses the \textbf{CreateProcess()} which must go through the 
+    Windows API first.
+    \item Windows threads are viewed as threads while Linux threads are just process
+    with shared memory.
+\end{itemize}
+
+\section{File Systems}
+File systems are the fundamental principle behind how data is transfered in I/O situations. 
+Every file store in a computer is stored and retrieved via a file system. Without 
+a file system all of the data on the disk would be a pile of bytes unknowing where one 
+file ends and another begins. Microsoft Windows has a very different way of approaching 
+filesystems than the Linux implementation.
+
+\subsection{Filesystem Support}
+For each filesystem there needs to be a way for the data structures to be written 
+and read from the physical volume. This is where the filesystem drivers come 
+in. Both Linux and Windows have the need for Drivers but the way they are implemented 
+with in the operating systems are very different.
+
+\subsubsection*{Linux} 
+Linux supports dozens of different filesystems with the most common being Minux, Ext[2,3,4] 
+and JFS. Linux has one of the most versatile filesystem support all because of the 
+\textit{VFS} (Virtual Filesystem). The \textit{VFS} creates the abstraction from 
+real underlaying file I/O operations. With all of the I/O operations flowing through
+the \textit{VFS} for Linux to support different filesystem all that is needed is 
+a driver to translates standardized \textit{VFS} data operations to the current 
+filesystem operations. This allows the Linux system to perform I/O operations without 
+even needing to know what the actual filesystem of the disk is.~\cite{LKD3}.
+
+\subsubsection*{Windows} 
+Windows on the other hand only supports a handful of filesystems. Since Microsoft 
+does not take advantage of a standardize virtual file system like Linux the operating 
+system must know each filesystem and how to specifically talk to the media. Windows 
+achieves this with an advanced \textit{I/O Manager} that in turn uses drivers just 
+like the Linux kernel to perform the actually operations on to the filesystem~\cite{WI16}. 
+
+Windows either at boot or when a new volume is mounted first tries to identify what 
+type of filesytem the volume contains. Every Widows supported filesystem contains 
+the information need for the \textit{FSD} (Filesystem Driver) in the volumes boot sector.
+If the filesystem format is unrecognized or 
+boot sector has been corrupt rendering the information Windows uses to identify the 
+volumes filesystem unreadable Windows will default to the \textit{RAW} \textit{FSD}. When Windows 
+declares a filesystem as \textit{RAW} the user is prompted to see if they would 
+like to format the volume. If the boot sector is intact and Windows identifies the 
+filesystem as a supported type Windows creates a \textit{Device Object} that the 
+operating system will use to map the requested I/O operations to the physical 
+media. After a \textit{FSD} claims a volume all of the I/O operations to that volume is 
+passed trough the \textit{FSD}. All of the I/O operations are mapped from the \textit{Device Object} 
+by the \textit{VPB} (Volume Parameter Block) to the volumes responsible \textit{FSD}.
+When Windows mounts a volume and assigns a drive letter to it, it is really just 
+a symbolic link to the \textit{Device Object}~\cite{WI26}.
+
+\subsection*{Comparison}
+
+\noindent \textbf{Similarities}\\
+\begin{itemize}
+    \item Read information from the MBR(master Boot Record).
+    \item Each filesystem gets a file descriptor mapped to unique location.
+    \item Need a filesystem driver to write to actual volume.
+\end{itemize}
+\noindent \textbf{Differences}\\
+\begin{itemize}
+    \item Windows kernel needs to be aware of what the underlaying filesystem is.
+    \item Volumes in Windows get assigned letters, Volumes are assigned devices 
+    with numbers in Linux.
+\end{itemize}
+
+\bibliographystyle{plain}
+\bibliography{ref}
+
+\end{document}

@@ -1,0 +1,22 @@
+\begin{thebibliography}{1}
+
+\bibitem{LKD3}
+Robert Love.
+\newblock {\em Linux Kernel Development, 3rd Edition}.
+\newblock Pearson Education, Inc, Crawfordsville, Indiana, 2010.
+
+\bibitem{WI16}
+ALex~Lonescu Mark~Russinovich, David A.~Solomon.
+\newblock {\em Windows Internals, Part 1, 6th Edition}.
+\newblock Microsoft Press, Redmond, Washington, 2012.
+
+\bibitem{WI26}
+ALex~Lonescu Mark~Russinovich, David A.~Solomon.
+\newblock {\em Windows Internals, Part 2, 6th Edition}.
+\newblock Microsoft Press, Redmond, Washington, 2012.
+
+\bibitem{PI}
+Varron Sahgal.
+\newblock Programmer interview, 2013.
+
+\end{thebibliography}
