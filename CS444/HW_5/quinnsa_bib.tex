@@ -1,0 +1,135 @@
+\documentclass[letterpaper,10pt,notitlepage,fleqn]{article}
+
+\usepackage{nopageno} %gets rid of page numbers
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{url}
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+\usepackage{pstricks, pst-node}
+\usepackage{geometry}
+\geometry{textheight=9in, textwidth=6.5in} %sets 1" margins 
+\newcommand{\cred}[1]{{\color{red}#1}} %command to change font to red
+\newcommand{\cblue}[1]{{\color{blue}#1}} % ...blue
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage{cite}
+
+\def\name{Sam Quinn}
+
+\parindent = 0.0 in
+\parskip = 0.2 in
+
+\title{Annotated Bibliography}
+\author{Sam Quinn}
+
+\begin{document}
+\maketitle
+\hrule
+
+\section{Processes and Threads}
+\textbf{Linux} \\ \\ \\
+\textit{Linux Kernel Development, 3rd Edition} is apart 
+of the \textit{Developer's Library} which are a set of books that are written by 
+expert technology practitioners who are especially skilled at organizing and 
+presenting information in a way that's useful for other programmers. While writing 
+the ``Process and Threads'' section of my report I looked at Chapter 3 ``Process 
+Management''. Chapter 3 covers the life of processes and threads within a Linux system 
+and how they function on a lower level than the abstraction we are familiar with. 
+Reading this chapter has given me the information needed to compare how a process 
+and thread differers from Linux and Windows ~\cite{LKD3}.
+\\ \\
+\textit{Linux Man Pages} is a collection of manuals created by developers to explain Linux functions.
+Every manual is installed with the program or are preinstalled for Linux system calls. 
+These manual pages are a great way to get information 
+about Linux commands and are very easy to access from any Linux machine. I specifically 
+used the \textit{Linux Man Pages} for the system calls used by Linux to create both process and threads. 
+My \textit{Linux Man Page} research consisted of reading the manuals for \textbf{fork()} and
+\textbf{clone()}. The information gathered gave more detail on the specific flags 
+\textbf{clone()} needs to create either a thread or a process ~\cite{LMP}.
+
+\textbf{Windows} \\ \\ \\
+\textit{Windows Internals, 5th Edition} is intended for advanced computer professionals 
+who want to understand how the core components of the Windows operating system 
+works internally. This book has three Microsoft developers that have incorporated 
+their knowledge into this book which increase credibility and accuracy. While 
+comparing how processes and threads are created in both Linux and Windows I specifically 
+examined \textit{Windows Internals} Chapter 5. 
+Chapter 5 ``Processes, Threads, and Jobs'', which covers all of the relevant information 
+about the creation, data structures used, and termination of both processes and 
+threads within a windows system ~\cite{WI5}. 
+\\ \\
+\textit{Microsoft TechNet} is hosted on the Microsoft.com domain which means that 
+it has been approved by the Microsoft team as an adequate source of information. The 
+TechNet Library contains technical documentation for IT professionals using Microsoft 
+products , tools, and technologies. For the ``Process and Threads'' section of my 
+report I specifically referenced Chapter 3 ``Developing Phase: Process and Thread 
+Management'' from the \textit{UNIX Custom Application Migration Guide} document. 
+This chapter went into details about the fundamental differences in process and 
+thread implementations of UNIX and Windows applications ~\cite{TN}. 
+
+\section{File Systems}
+\textbf{Linux} \\ \\ \\
+\textit{Linux Kernel Development, 3rd Edition} Chapter 13 ``The Virtual Filesystem''
+explains the process of how Linux interacts with filesystems. This chapter covers 
+in great detail how Linux takes advantage of a \textbf{VFS} (Virtual Filesystem) 
+that abstracts the underlying filesystem completely. From this chapter I acquired 
+information that I can use to contrast the filesystem models of Windows and Linux. 
+The \textbf{VFS} is one of the more unique functions of Linux which allows Linux 
+to support many different filesystem structures 
+~\cite{LKD3}. 
+
+
+\textbf{Windows} \\ \\ \\
+\textit{Windows Internals, Part 2, 6th Edition} Chapter 12 ``File Systems'' explains 
+in detail how Microsoft Windows filesystems are implemented and the differences 
+between the common filesystems. The section of this chapter I was most interested 
+in was about the ``File System Diver Architecture'' which explains how the operating 
+system interacts with the filesystem through the kernel. There are two different 
+filesystem drivers that I will be comparing, local and remote.~\cite{WI26}.
+
+\textit{Windows Internals, Part 2, 6th Edition} Chapter 8 ``I/O System'' gives some 
+more specific detail  about how Windows preforms certain I/O operations to a 
+filesystem. The majority of the information I used from this chapter during the 
+``Filesystems'' section was how Windows handles Diver objects and Device objects, which, 
+are a critical portion of the functionality of a Windows filesystem. From this chapter
+I was able to compare the number of drivers needed between Windows and Linux 
+~\cite{WI26}.
+
+
+
+\section{CPU Scheduling}
+
+\textbf{Linux} \\ \\ \\
+\textit{Linux Kernel Development, 3rd Edition} Chapter 4 ``Process Scheduling'' 
+discusses how the Linux CPU is scheduled and the various scheduling algorithms used.  
+This information was useful in my research for the Linux portion of the CPU scheduling 
+comparison. With \textit{Linux Kernel Development, 3rd Edition} and the infromation I found
+about how the CPU is 
+scheduled for multitasking, the scheduling algorithms used, how context switching is executed, and scheduling  
+related system calls function I was able to find similarities and differences between Linux and Windows. This chapter also displays many of the data structures and 
+functions that the kernel uses to manipulate the current CPU scheduler ~\cite{LKD3}. 
+
+\textbf{Windows} \\ \\ \\
+\textit{Windows Internals, Part 1, 6th Edition} Chapter 5 ``Processes, Threads, and Jobs'' 
+covers a multitude of topics about processes, threads, and jobs with very detailed 
+descriptions of how the kernel handles each of these individually. The section I 
+mainly focused on for the purpose of CPU Scheduling was the ``Overview of Windows 
+scheduling''. This section covers the topics priority levels, context switching, 
+and scheduling scenarios that I would like to compare to the Linux implementation. 
+Because Windows implements their own CPU scheduler there is no information covering 
+the benefits and impairments of different algorithms ~\cite{WI16}. 
+\\
+
+
+\bibliography{ref}{}
+\bibliographystyle{plain}
+
+
+\end{document}
