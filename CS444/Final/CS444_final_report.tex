@@ -27,6 +27,26 @@
 \parindent = 1 cm 
 \parskip = 0.1 in
 
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+  language=c,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
 \title{Final}
 \author{Sam Quinn}
 
@@ -114,6 +134,18 @@ call for \textbf{switch\_mn()}, that removes the old processes mappings and repl
 them with its own. Copying of the stack information is completed with a different 
 call named \textbf{switch\_to()} which both saves and replaces the stack information 
 when a context switch occurs~\cite{LKD3}. 
+\begin{lstlisting}
+    
+context_switch(struct rq *rq, struct task_struct *prev,struct task_struct *next){
+    struct mm_struct *mm, *oldmm;
+    
+    prepare_task_switch(rq, prev, next);
+    my_trace_sched_switch(rq, prev, next);
+    
+    mm = next->mm;
+    oldmm = prev->active_mm;
+...
+\end{lstlisting}
 
 \subsubsection*{Windows}
 Windows also needs to perform the same general principle of switching execution 
@@ -180,7 +212,26 @@ system call will differentiate the child process from the parent and pass requir
 information if the child would like shared address spaces, open files, and 
 namespaces. These flags are really the only thing that differentiates the creation 
 of a process from that of a Linux thread~\cite{LKD3}.
+\begin{lstlisting}
+...
+    char *stack;
+    char *stacktop;
+    pid_t pid;
 
+    // Processes
+    pid = clone(childFunc, stackTop, CLONE_NEWUTS | SIGCHLD, argv[1]);    
+    if (pid == -1)
+        errExit("clone");
+    printf("clone() returned %ld\n", (long) pid);
+
+    // Threads
+    pid = clone(childFunc, staktop, CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND);
+    if (pid == -1)
+        errExit("clone");
+    printf("clone() returned %ld\n", (long) pid);
+
+...
+\end{lstlisting}
 \subsubsection*{Windows}
 Within a Windows operating system the main principles of threads and processes 
 are preserved with process having their own address spaces and threads sharing 
@@ -191,14 +242,32 @@ a program is passed in to the \textbf{CreateProcess()} function. Since Windows d
 not clone the parent process like Linux does the \textbf{CreateProcess()} function 
 requires many more parameters to achieve the same effect but potentially has more 
 control of the child process~\cite{WI16}. 
-
+\begin{lstlisting}
+...
+// Start the child process. 
+    if( !CreateProcess( NULL,   // No module name (use command line)
+        argv[1],        // Command line
+        NULL,           // Process handle not inheritable
+        NULL,           // Thread handle not inheritable
+        FALSE,          // Set handle inheritance to FALSE
+        0,              // No creation flags
+        NULL,           // Use parent's environment block
+        NULL,           // Use parent's starting directory 
+        &si,            // Pointer to STARTUPINFO structure
+        &pi )           // Pointer to PROCESS_INFORMATION structure
+    ) 
+    {
+        printf( "CreateProcess failed (%d).\n", GetLastError() );
+        return;
+    }
+...
+\end{lstlisting}
 \subsection{Threads}
 Threads function very similar to that of processes in regards to performance but 
 with the added benefit of being able to share the same namespace as the parent. 
 Threads are essentially ``light weight'' process since they do not require their 
 own address space and namespace it is more memory efficient, however, threads can 
 not have threads of their own. 
-
 \subsubsection*{Linux}
 The Linux kernel views each thread as a unique process that merely shares resources 
 of another process. Every data structure that is used for a process is also used 
@@ -221,6 +290,18 @@ the thread context of the main thread (parent process). The thread context inclu
 the thread's set of machine registers, the kernel stack, a thread environment block, 
 and a user stack in the address space. Windows threads also acquire the same security 
 context as that of their parent unless specifically setup to receive otherwise~\cite{WI16}. 
+\begin{lstlisting}
+// Create the thread to begin execution on its own.
+
+        hThreadArray[i] = CreateThread( 
+            NULL,                   // default security attributes
+            0,                      // use default stack size  
+            MyThreadFunction,       // thread function name
+            pDataArray[i],          // argument to thread function 
+            0,                      // use default creation flags 
+            &dwThreadIdArray[i]);   // returns the thread identifier 
+\end{lstlisting}
+
 
 \subsection*{Comparison}
 \noindent \textbf{Similarities}
@@ -259,6 +340,16 @@ the \textit{VFS} for Linux to support different filesystem all that is needed is
 a driver to translates standardized \textit{VFS} data operations to the current 
 filesystem operations. This allows the Linux system to perform I/O operations without 
 even needing to know what the actual filesystem of the disk is.~\cite{LKD3}.
+\begin{lstlisting}
+   ...
+   #include <linux/fs.h>
+
+   // Registering a Filesystem
+   extern int register_filesystem(struct file_system_type *);
+   // Unregistering a Filesystem
+   extern int unregister_filesystem(struct file_system *);
+   ...
+\end{lstlisting}
 
 \subsubsection*{Windows} 
 Windows on the other hand only supports a handful of filesystems. Since Microsoft 
