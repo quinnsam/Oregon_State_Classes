@@ -1,7 +1,5 @@
 module HW1 where
 
--- http://pastebin.com/MDSfmH9N
-
 -- ** Exercise 1. Mini Logo **
 -- a) Define the abstract syntax for Mini Logo as a Haskell data type.
 -- b) Write a Mini Logo macro vector that draws a line from a given position (x1, y1)
@@ -9,8 +7,8 @@ module HW1 where
 --    is, as a Haskell data type value.
 -- c) Define a Haskell function steps :: Int -> Cmd that constructs a Mini Logo program
 --    which draws a stair of n steps. 
---
 
+-- A
 type Name = String
 type Number = Int
 type Position = (Pos, Pos)
@@ -27,10 +25,12 @@ data Pos  = Pos_Int Number | Pos_String Name deriving Show
 data Pars = Plist [Name] deriving Show
 data Vals = Vlist [Number] deriving Show
 
+-- B
 vector = Def "vector" (Plist ["x1", "y1", "x2", "y2"]) (Clist [(Pen Up), (Moveto (Pos_String "x1", Pos_String "y1")), (Pen Down), (Moveto(Pos_String "x2", Pos_String "y2")), (Pen Up)])
 
 return = Call "vector" (Vlist[1,2,3,4])
 
+-- C
 steps :: Int -> Cmd
 steps 0 = Clist []
 steps x = Clist [Call "vector" (Vlist [x-1, x-1, x-1, x]), Call "vector" (Vlist [x-1, x, x, x]), steps (x-1)]
@@ -43,14 +43,17 @@ steps x = Clist [Call "vector" (Vlist [x-1, x-1, x-1, x]), Call "vector" (Vlist 
 -- c) Define a Haskell function that implements a pretty printer for the abstract
 --    syntax.
 
+-- A
 data Circuit = Cirs Gates Links | NoCir deriving Show
 data Gates = Gat Number GateFn Gates | NoGates deriving Show
 data GateFn = AND | OR | XOR | NOT deriving Show
 data Links = From Number Number Number Number Links | NoLinks deriving Show
 
+-- B
 halfAddr :: Circuit 
 halfAddr = Cirs (Gat 1 XOR (Gat 2 AND (NoGates))) (From 1 1 2 1 (From 1 2 2 2 (NoLinks)))
 
+-- C
 printGates :: Gates -> String
 printGates NoGates = ""
 printGates (Gat gn gfn remaining) = show gn ++ ": " ++ printGateFn gfn ++ " " ++ printGates remaining
@@ -77,6 +80,7 @@ printCir (Cirs gates links) = printGates gates ++ printLinks links
 -- c) Define a function translate :: Expr -> Exp that translates expressions given 
 --    in the first abstract syntax into equivalent expressions in the second syntax.
 
+-- A
 data Expr = N Int
           | Plus Expr Expr
           | Times Expr Expr
@@ -89,6 +93,7 @@ data Exp = Num Int
 
 applyOps = Apply Multiply [Apply Negate [Apply Add [Num 3, Num 4]], Num 7]
 
+-- B
 -- Exp has a simpler syntax tree that allows for quicker parsing. However, the 
 -- language can be cumbersome when representing complex arithmatic equations.
 
@@ -96,10 +101,9 @@ applyOps = Apply Multiply [Apply Negate [Apply Add [Num 3, Num 4]], Num 7]
 -- operations to N numbers simultaneously. The downside is that parsing is more
 -- difficult due to the presence of two data types.
 
+-- C
 translate :: Expr -> Exp
 translate (N i) = Num i
 translate (Plus e1 e2) = Apply Add (map translate [e1,e2])
 translate (Times e1 e2) = Apply Multiply (map translate [e1,e2])
 translate (Neg e1) = Apply Negate (map translate [e1])
-
-
