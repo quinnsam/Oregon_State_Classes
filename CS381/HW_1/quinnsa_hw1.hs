@@ -43,7 +43,7 @@ steps x = Clist [Call "vector" (Vlist [x-1, x-1, x-1, x]), Call "vector" (Vlist 
 -- c) Define a Haskell function that implements a pretty printer for the abstract
 --    syntax.
 
-data Circuit = Cirs Gates Links deriving Show
+data Circuit = Cirs Gates Links | NoCir deriving Show
 data Gates = Gat Number GateFn Gates | NoGates deriving Show
 data GateFn = AND | OR | XOR | NOT deriving Show
 data Links = From Number Number Number Number Links | NoLinks deriving Show
@@ -53,7 +53,7 @@ halfAddr = Cirs (Gat 1 XOR (Gat 2 AND (NoGates))) (From 1 1 2 1 (From 1 2 2 2 (N
 
 printGates :: Gates -> String
 printGates NoGates = ""
-printGates (Gat gn gfn remaining) = show gn ++ ":" ++ printGateFn gfn ++ "\n" ++ printGates remaining
+printGates (Gat gn gfn remaining) = show gn ++ ": " ++ printGateFn gfn ++ " " ++ printGates remaining
 
 printGateFn :: GateFn -> String
 printGateFn AND = "AND"
@@ -61,6 +61,15 @@ printGateFn OR  = "OR"
 printGateFn XOR = "XOR"
 printGateFn NOT = "NOT"
 
+printLinks :: Links -> String
+printLinks NoLinks = ""
+printLinks (From x1 x2 y1 y2 links) = "From: X: " ++ show x1 ++ " to " ++ show x2
+                                     ++ " From: Y: " ++ show y1 ++ " to " ++ show y2
+                                     ++ " " ++ printLinks links
+
+printCir :: Circuit -> String
+printCir NoCir = ""
+printCir (Cirs gates links) = printGates gates ++ printLinks links
 
 -- ** Exercise 3. Designing Abstract Syntax **
 -- a) Represent the expression -(3+4)*7 in the alternative abstract syntax.
@@ -78,10 +87,19 @@ data Op = Add | Multiply | Negate
 data Exp = Num Int
          | Apply Op [Exp]
 
+applyOps = Apply Multiply [Apply Negate [Apply Add [Num 3, Num 4]], Num 7]
 
---translate :: Expr -> Exp
---translate Plus  = Add
---translate Times = Multiply
---translate Neg   = Negate
+-- Exp has a simpler syntax tree that allows for quicker parsing. However, the 
+-- language can be cumbersome when representing complex arithmatic equations.
+
+-- Meanwhile, Expr uses lists in its representation, so it is much easier to apply
+-- operations to N numbers simultaneously. The downside is that parsing is more
+-- difficult due to the presence of two data types.
+
+translate :: Expr -> Exp
+translate (N i) = Num i
+translate (Plus e1 e2) = Apply Add (map translate [e1,e2])
+translate (Times e1 e2) = Apply Multiply (map translate [e1,e2])
+translate (Neg e1) = Apply Negate (map translate [e1])
 
 
