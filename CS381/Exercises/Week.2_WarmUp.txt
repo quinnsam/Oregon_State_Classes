@@ -1,0 +1,198 @@
+Haskell Warm-Up Exercises
+-------------------------
+
+
+To test your answers, put definitions into a file "Num.hs" and load that
+file into ghci. The first three lines should look exactly as follows.
+
+
+module Num where
+
+import Prelude hiding (Enum.succ, Enum.pred)
+ 
+
+
+
+(1) Define a Haskell *data type* Nat for representing natural numbers.
+    
+    Hint: It might help if you first defined a grammar and then
+    translated it into a data type. You might also want to look on
+    the slides for the exercise about the grammar for "e".
+
+    You should add "deriving (Eq,Show)" to the data definition, just
+    as shown here:
+
+data Nat = ...
+           deriving (Eq,Show)
+
+    Note that Nat can also be viewed as the 'language' of natural numbers.
+
+
+
+(2) Define Haskell *values* to represent the numbers 1, 2, and 3 as 
+    values of the data type Nat and bind them to the variables one, two, 
+    and three, respectively.
+   
+    Note that values are bound to variables like so:
+
+      one = <expression>
+
+    where <expression> represents the number value built using the constructors
+    of the data type Nat.
+
+    Note that names for values (which are called variables) always have to 
+    start with a lowercase letter.
+
+
+
+(3) Define a Haskell *function* pred that computes the predecessor of a number 
+    represented as a value of type Nat. Note that functions are values. 
+    Therefore, their names also must start with a lowercase letter. 
+
+    Hint: Functions on data types are defined using equations with patterns on 
+    the left and expressions giving the result on the right.
+
+    As an example here is a solution for the succ function. The first line 
+    gives the type of the function.
+
+succ :: Nat -> Nat
+succ Zero     = Succ Zero
+succ (Succ n) = Succ (Succ n)
+
+    Note that patterns on the left contain variables, here n (remember: 
+    lowercase letters). Those variables are bound when a pattern matches
+    the value the function is applied to and can be used in the expression
+    on the right to build the result expression. It seems that in the above 
+    case the patterns are reused unchanged on the right. In fact, the 
+    definition can be simplified to:
+
+succ :: Nat -> Nat
+succ Zero = Succ Zero
+succ n    = Succ n
+
+    Or (since the first case is covered by the second):
+
+succ :: Nat -> Nat
+succ n = Succ n
+
+    We can even write more simply:
+
+succ :: Nat -> Nat
+succ = Succ
+
+    This underlines that constructors are like functions.
+
+
+
+(4) Define a function isZero that determines whether a number is 0. isZero has
+    the following type
+
+isZero :: Nat -> Bool
+
+    where Bool is just another data type, predefined in Haskell as
+    "data Bool = True | False".
+
+
+
+(5) Define a function add that adds two Nat numbers. add should have
+    the following type
+
+add :: Nat -> Nat -> Nat
+
+    which indicates that add takes two arguments (of type Nat) and produces
+    one result.
+
+
+
+(6) Define a function equal of type equal :: Nat -> Nat -> Bool.
+
+
+
+(7) Define a function gt ('greater than') of type gt :: Nat -> Nat -> Bool.
+
+
+
+(8) Define a function mult :: Nat -> Nat -> Nat to multiply two Nat numbers. 
+    You can, and should, reuse previously defined functions.
+ 
+
+
+You may skip exercises (9) and (10).
+
+If the above exercises were too easy, here are some that are a bit more
+difficult. First, here is the definition of two data types to represent binary
+numbers. (Don't worry about the Show/Eq stuff for now. I'll explain this later.)
+
+data Digit = O | I
+             deriving (Eq,Show)
+
+data Bin = Single Digit 
+         | Comp   Digit Bin
+
+instance Show Bin where
+  show (Single d) = show d
+  show (Comp d b) = show d ++ show b
+
+
+
+(9) Define a *function* sucC :: Bin -> (Digit,Bin) that computes the successor
+    of a binary number plus a carry bit/digit. Note that the type (Digit,Bin)
+    contains all pairs whose first component is a Digit and whose second
+    component is a Bin. Tuples are constructed using the same notation. 
+    E.g. (False,'a') is a tuple of type (Bool,Char).
+
+
+
+(10) Using sucC, define a function suc :: Bin -> Bin that  computes the 
+successor of a binary number.
+
+
+
+Here are some more exercises that prepare for the programming with lists.
+First, here is a data type definition for integer lists.
+
+data List = Empty | Cons Int List
+            deriving Show
+
+
+(11) Define a value that represents the list [1,2,3] and bind it to the
+     variable l.
+
+
+
+(12) Define a function rest :: List -> List that removes the first element
+     from a list.
+
+
+
+(13) Define a function member :: Int -> List -> Bool that determines
+     whether an integer is an element of a list.
+
+
+
+(14) Define a function snoc :: Int -> List -> List that adds an integer to
+     the end of a list.
+
+
+
+(15) Define a function rev :: List -> List that reverses the elements in a
+     list.
+
+
+In Haskell, lists are a predefined data type with a special syntax. In
+particular, the empty list (represented by Empty) is written [], and the Cons
+constructor is given by a binary infix (right-associative) operator :, i.e.,
+a list of three numbers can be constructed as follows.
+
+1:2:3:[]
+
+Moreover, the type of integer lists is written as [Int]. As an abbreviation
+for the : notation we can also write
+
+[1,2,3]  for  1:2:3:[], or 
+[1]      for  1:[]
+
+
+
+(16) Redo exercises (11-15) using Haskell's built-in list representation.
+

@@ -1,0 +1,205 @@
+Haskell Work-Out Exercises
+--------------------------
+
+These exercises assumes that you have understood the examples in the warm-up
+exercises.
+
+To test your answers, put definitions into a file "List2.hs" and load that
+file into ghci. The first four lines should look exactly as follows.
+
+module List2 where
+
+import Test
+import Data.List (nub)
+
+The module Test.hs can be found on the class web page.
+
+
+
+Haskell lists can store, of course, more than just integers. They can
+contain booleans, strings, pairs of numbers, other lists, and even functions.
+However, lists are homogeneous, that is, all the elements of a list must be
+of the same type.
+
+
+(1) Define a function exch that exchanges the first two elements in a 
+    list. Since this function doens't care what type the elements in 
+    the list have, it can be given the following, polymorphic type.
+
+exch :: [a] -> [a]
+ 
+
+
+(2) Define a function selMin that finds the minimum value in a list. You 
+    can use the following type for selMin.
+
+selMin :: [Int] -> Int
+
+    It is, however, possible for selMin to be more general and work for
+    all types that have a '<' (and '==') operation defined. This more
+    general type can be defined as follows.
+
+selMin :: Ord a => [a] -> a
+
+    Note that you probably need a guard or conditional (see function 
+    member in List1.hs) to compare the first element of the rest to
+    the minimum of the rest list to determine the overall minimum.
+
+    Note also that this approach will lead to *two* separate, but 
+    identical, recursive calls to selMin. To avoid unnecessary
+    recomputation, Haskell offers a where construct to bind results
+    of recursive function calls to local variables. E.g. a function to
+    compute the fourth power of a number x can be defined by multiplying
+    the square of x with itself.
+
+sqr x = x*x
+fourth x = sqr x * sqr x
+
+    To avoid the recomputation of sqr x, we can employ a where clause
+    as follows.
+
+fourth x = y * y
+           where y = x*x
+
+    The same idea can be used in the definition of selMin for the 
+    recursive call by using a where clause to bind the minimum of the
+    rest list to a variable, which can then be used twice.  
+
+
+
+(3) Define a function splitMin that finds the minimum value of a list
+    and returns it together with the list from which this minimum has
+    been removed. Returning two values can be accomplished by returning
+    a pair of values. E.g. (3,True) is a pair of type (Int,Bool).
+
+splitMin :: Ord a => [a] -> (a,[a])
+
+    Here are some examples illustrating how splitMin should work.
+
+      splitMin [4]         = (4,[])
+      splitMin [6,4,5]     = (4,[6,5])
+      splitMin [7,3,6,4,5] = (3,[7,6,4,5])
+
+    This means that a simple generalization of selMin probably won't
+    work, because it will reinsert temporary minima at the wrong place.
+    (It will be similar to bubble sort in the sense that in the process
+    of finding a minimum, the function will move temporary minima to the
+    front of a list.)
+
+    Therefore, a good strategy to implement splitMin is to first define
+    a function
+
+splitVal :: Eq a => a -> [a] -> (a,[a])
+
+    which finds the value given as a first argument in the list given
+    as the second argument and splits the list at that point, returning
+    the value and the list from which the value is removed. 
+
+    Note that splitVal fails if the first argument is not an element of
+    the list.
+
+    Then we can define splitMin using function calls to splitVal and
+    selMin.
+
+    Here is a way to test your function definitions. The value "test"
+    defines a test suite consisting of three input/output pairs. The
+    function runTest applies the function to be tested to all inputs
+    and compares the computed output with the expected output and 
+    produces a test report.
+
+test = TestSuite "splitMin" 
+        [[4]         ==> (4,[]),
+         [6,4,5]     ==> (4,[6,5]),
+         [7,3,6,4,5] ==> (3,[7,6,4,5])]
+
+res = runTest splitMin test
+
+
+
+(4) Implement the function selSort that performs selection sort by
+    repeatedly calling splitMin.
+
+selSort :: Ord a => [a] -> [a]
+
+
+
+In Haskell lists can also be built using the following notation. E.g.
+
+[2 .. 11]
+
+produces a list of numbers between 2 and 11. Moreover, lists can be
+built using a feature called "list comprehensions", which are 
+expressions of the following form.
+
+[e | x <- e1, ..., y <- e2, ...]
+
+Here "x <- e1" is a generator for values to be bound to x, and bound
+variables, such as x and y, can be used in the expression e, which 
+defines the elements of the list that is constructed. The ... indicates
+that there can be more generators, but there can also be predicates that
+restrict the values to be considered in e. E.g.
+
+[x*x | x <- [1..9], odd x]
+
+constructs the squares of the odd digits. The following expression
+computes all ordered pairs of digits.
+
+[(n,m) | n <- [1..9], m <- [n+1..9]]
+
+
+
+(5) Using list comprehensions, define a function divisors that computes 
+    the list of divisors (that are greater than 1) for a given integer. 
+    Note that div is the function for integer division (div 17 3 = 5) and
+    that mod computes the rest after integer division (mod 8 3 = 2).
+
+
+
+(6) Using the function divisors, define a function prime that tests whether
+    an integer is a prime number.
+
+
+
+A binary relation can be represented in Haskell as a list of pairs. The above
+given example of ordered pairs of digits represents a relation. Instead of 
+repeating a type expression, such as [(a,a)], we can introduce a type
+abbreviation for relations as follows.
+
+type Rel a = [(a,a)]
+
+
+
+(7) Define two functions dom and rng that computes the list of elements that
+    make up the domain and range of a relation, respectively. You should use
+    the function nub imported from the standard Haskell List library to remove
+    duplicates.
+
+dom :: Eq a => Rel a -> [a]
+rng :: Eq a => Rel a -> [a]
+
+
+
+(8) Define a function comp :: Eq a => Rel a -> Rel a -> Rel a that computes 
+    the composition of two relations.
+
+
+
+A relation represents a directed graph. We use integers as nodes and can
+therefore use the following type abbreviations to make the types of the 
+following functions look more appropriate.
+
+type Node = Int
+type Graph = Rel Node
+type Path = [Node]
+
+
+(9) Define a function suc :: Graph -> Node -> [Node] that computes the 
+    successors of a given node in a given graph.
+
+
+
+(10) Define a function paths that computes all paths between two nodes
+     in a given graph.
+
+paths :: Graph -> Node -> Node -> [Path]
+
