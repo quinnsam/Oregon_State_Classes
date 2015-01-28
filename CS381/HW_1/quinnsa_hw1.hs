@@ -1,5 +1,7 @@
 module HW1 where
 
+-- Authors Sam Quinn, Anton Dovzhik
+
 -- ** Exercise 1. Mini Logo **
 -- a) Define the abstract syntax for Mini Logo as a Haskell data type.
 -- b) Write a Mini Logo macro vector that draws a line from a given position (x1, y1)
@@ -21,12 +23,12 @@ data Cmd = Pen Mode
          deriving Show
 
 data Mode = Up | Down deriving Show
-data Pos  = Pos_Int Number | Pos_String Name deriving Show
+data Pos  = Int Number | String Name deriving Show
 data Pars = Plist [Name] deriving Show
 data Vals = Vlist [Number] deriving Show
 
 -- B
-vector = Def "vector" (Plist ["x1", "y1", "x2", "y2"]) (Clist [(Pen Up), (Moveto (Pos_String "x1", Pos_String "y1")), (Pen Down), (Moveto(Pos_String "x2", Pos_String "y2")), (Pen Up)])
+vector = Def "vector" (Plist ["x1", "y1", "x2", "y2"]) (Clist [(Pen Up), (Moveto (String "x1", String "y1")), (Pen Down), (Moveto(String "x2", String "y2")), (Pen Up)])
 
 return = Call "vector" (Vlist[1,2,3,4])
 
@@ -85,11 +87,13 @@ data Expr = N Int
           | Plus Expr Expr
           | Times Expr Expr
           | Neg Expr
+          deriving Show
 
-data Op = Add | Multiply | Negate
+data Op = Add | Multiply | Negate deriving Show
 
 data Exp = Num Int
          | Apply Op [Exp]
+         deriving Show
 
 applyOps = Apply Multiply [Apply Negate [Apply Add [Num 3, Num 4]], Num 7]
 
