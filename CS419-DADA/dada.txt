@@ -1,0 +1,57 @@
+* Goals:
+    - Use stealth during intrusion to avoid detection
+    - Create backdoor to allow greater access
+    - Initiating the primary mission 
+    - Leave undetected
+
+Patient Zero = First infected user.
+
+* Forensics In a Nut Shell:
+    - Identify evidence
+    - Preserve evidence
+    - Analyze evidence 
+    - Present results
+
+First Contact
+    - Email
+    - Instat Messaging
+    - Poisoned search results
+    - Watering hole (Regular site)
+    - Physical access
+
+Blend in or Hide
+    - Appear Legitimate
+        * OS-like filenames or wrong path
+        * Change Creation/Modification Timestamp
+        * Signed
+    - Hide
+        * Bootkit
+        * Rootkit
+Persist
+    - System startup
+    - Windoes startup
+
+
+
+* Tools
+    - Wireshark
+    - volatility
+    - Procmon
+    - procexp
+    - INSTDRV
+    - flypaper
+    - FileInsight
+    - FakeNet
+    - AntiSpy
+    * Windows Internals
+        - WinDbg
+        - Tuluka
+        - ProcessHacker
+        - GMER
+        - Kernel Detective
+    - testdisk
+    - aod (sandbox)
+    - Yara
+
+
+
