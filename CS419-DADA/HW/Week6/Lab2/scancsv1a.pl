@@ -1,0 +1,1 @@
+print "numPackets:",scalar(map $_{$_->[0]}+=$_->[1],map @$_,map [[" numBytes:", $_->[0]],["\n".$_->[1].": ",1]],grep$_->[0]>0,map[/(\d+),(\d+)/],<>)/2,join("",map $_.$_{$_},sort {$a<=>$b}keys %_),"\n";

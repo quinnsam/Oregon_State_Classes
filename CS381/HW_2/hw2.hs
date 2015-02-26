@@ -17,8 +17,8 @@ data Cmd = LD Int
 
 semCmd :: Cmd -> D
 semCmd (LD i) (Just s)          = Just (i:s)
+-- @ grabs everything in the list including the first character.
 semCmd DUP    (Just vs@(v:_))   = Just (v:vs)
---semCmd DUP    (Just (v:vs))   = Just (v:vs)
 semCmd ADD    (Just (v1:v2:vs)) = Just (v1+v2:vs)
 semCmd MULT   (Just (v1:v2:vs)) = Just (v1*v2:vs)
 semCmd _      _                 = Nothing

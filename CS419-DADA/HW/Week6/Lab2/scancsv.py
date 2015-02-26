@@ -20,14 +20,19 @@ GRE = {}
 OSPF = {}
 
 CON = {}
+class IpStruct:
+    def __init__(self):
+        self.countT = {}
+        self.countU = {}
+        self.count = 0
 
 csvfile = open(sys.argv[1],'r')
 
 for arg in sys.argv:
-    if arg == "-ports":
+    if arg == "-stats":
         pports = 1
 
-    if arg == "-count":
+    if arg == "-countip":
         pcount = 1
 
     if arg == "-connto":
@@ -80,30 +85,60 @@ for pkt in CSVPackets(csvfile):
                 OSPF[pkt.ipdst] = 1
 
     if connto:
-        if(pkt.ipdst in CON):
-            CON[pkt.ipdst][0] += 1
-        else:
-            CON[pkt.ipdst][0] = 0
-
+        if(pkt.ipdst not in CON):
+            CON[pkt.ipdst] = IpStruct()
+        t = None
+        if(pkt.proto == 6):
+            if (pkt.tcpdport < 1024):
+                t = (proto, pkt.tcpdport)
         if(pkt.proto == 17):
-            CON[pkt.ipdst][1].append( "UDP/%d" (pkt.udpdport))
-        elif(pkt.proto == 6):
-            CON[pkt.ipdst][1].append("TCP/%d" (pkt.tcpdport))
+            if (pkt.udpdport < 1024):
+                t = (proto, pkt.udpdport)
+
+        if(t != None):
+            if(pkt.proto == 6):
+                if( t in CON[pkt.ipdst].countT):
+                    CON[pkt.ipdst].countT[t] += 1
+                else:
+                    CON[pkt.ipdst].countT[t] = 1
+            if(pkt.proto == 17):
+                if( t in CON[pkt.ipdst].countU):
+                    CON[pkt.ipdst].countU[t] += 1
+                else:
+                    CON[pkt.ipdst].countU[t] = 1
 
 
 
+#
+#
+#
+#            CON[pkt.ipdst][0] += 1
+#        else:
+#            CON[pkt.ipdst] = (0, [])
+#
+#        if(pkt.proto == 17):
+#            buf = "UDP/%d" % (pkt.udpdport)
+#            if buf not in CON[pkt.ipdst][1]:
+#                CON[pkt.ipdst][1].append(buf)
+#        el
+#            buf = "TCP/%d" % (pkt.tcpdport)
+#            if buf not in CON[pkt.ipdst][1]:
+#                CON[pkt.ipdst][1].append(buf)
+#
 
 
 
-
-print "numPackets:%u numBytes:%u" % (numPackets,numBytes)
-for i in range(256):
-    if IPProtos[i] != 0:
-        print "%3u: %9u" % (i, IPProtos[i])
 
 
 
 if pports:
+    print "numPackets:%u numBytes:%u" % (numPackets,numBytes)
+    for i in range(256):
+        if IPProtos[i] != 0:
+            print "%3u: %9u" % (i, IPProtos[i])
+
+
+
     print "------------------TCP-------------------"
     for x in range(0, len(TCPPorts)):
         if (TCPPorts[x] > 0):
@@ -141,7 +176,18 @@ if pcount:
         print ip[1], "\t: ", ip[0]
 
 if connto:
-    print "In conto", CON
-    for ip in sorted(CON.items(), key=operator.itemgetter(1), reverse=True):
-        print ip[0], "\t", ip[1]
+    print "IP Connections"
+    for ip in CON:
+        for tcp in CON[ip].countT:
+            CON[ip].count += CON[ip].countT[tcp]
+        for udp in CON[ip].countU:
+            CON[ip].count += CON[ip].countU[udp]
+
+    for ip in sorted(CON.items(), key= lambda x: x[1].count, reverse=True):
+        print "ipdst", ip[0], "\thas", ip[1].count, " sources on ports: ",
+        for tcp in ip[1].countT:
+            print "tcp/"+ str(tcp[1]),
+        for udp in ip[1].countU:
+            print "udp/"+ str(udp[1]),
+        print ""
 
