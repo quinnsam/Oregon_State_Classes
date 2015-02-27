@@ -84,7 +84,7 @@ def main(argv):
 
     if sus > 3:
         bad += 1
-        print "SUSPISIOUS",
+        print "SUSPICIOUS",
         print record["host"]
     else:
         if record["malicious_url"] == 1:
