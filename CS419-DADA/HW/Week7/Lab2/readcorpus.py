@@ -32,49 +32,60 @@ def main(argv):
 
     # Do something with the URL record data...
     sus = 0
-    if record["domain_age_days"] < 50:
-        sus += 1
-    if record["port"] != 80:
-        sus += 1
-
-    if record["alexa_rank"] > 500:
+    if record["domain_age_days"] < 365:
+        sus += 2
+    if record["port"] not in (80, 443):
         sus += 1
 
-    if record["file_extension"] != ("html" or "htm"):
+    if record["alexa_rank"] == None:
+        sus = sus + 2
+    elif record["alexa_rank"] > 500:
+        sus += 1
+    elif record["alexa_rank"] < 100:
+        sus = sus - 1
+
+    if record["file_extension"] not in ("html", "htm","php", "mp4", "flv"):
         sus += 1
 
     if record["num_domain_tokens"] > 3:
         sus += 1
 
+    host = ""
+    for c in record["host"]:
+        if c == '.':
+            c = ''
+        host += c
+
+    if host.isdigit() == True:
+        sus += 2
+
     for i in range(0, len(record["path_tokens"])):
-    #for path in record["path_tokens"]:
         path =["paypal", "google", "wallet", "amazon", "Google", "Amazon"]
         for p in  path:
             if record["path_tokens"][i].find(p) != -1:
-                print record["url"]
+                #print record["url"]
                 sus += 1
 
-    for i in range(0, len(record["domain_tokens"])-1):
-    #for path in record["path_tokens"]:
+    for i in range(0, len(record["domain_tokens"])-2):
         path =["paypal", "google", "wallet", "amazon", "Google", "Amazon"]
         for p in  path:
             if record["domain_tokens"][i].find(p) != -1:
-                print record["url"]
+                #print record["url"]
                 sus += 1
 
-    if record["url_len"] > 40:
+    if record["path_len"] > 60:
         sus += 1
 
-    if record["tld"] != 'com':
+    if record["tld"] not in ('jp', 'com', 'org'):
         sus += 1
+
+    if record["registered_domain"] == "yahoo.co.jp":
+        sus = 0
 
     if sus > 3:
-        if record["malicious_url"] == 1:
-            bad += 1
-        else:
-            false += 1
+        bad += 1
         print "SUSPISIOUS",
-        print record["host"] #, record["ips["ip"]"]
+        print record["host"]
     else:
         if record["malicious_url"] == 1:
             missed += 1
@@ -82,7 +93,7 @@ def main(argv):
   corpus.close()
   ratio = (float(bad)/float(total)) * 100
   print "------------------------------------------------------------"
-  print str(ratio) + "% Bad \nFalse:", false, 'Missed:', missed#, total, bad
+  print str(ratio) + "% Bad \nTotal:", total, "\nBad:", bad
 
 if __name__ == "__main__":
   main(sys.argv[1:])
