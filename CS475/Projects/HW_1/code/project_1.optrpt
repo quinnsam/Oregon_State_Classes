@@ -1,0 +1,26 @@
+
+Begin optimization report for: main(int, char **)
+
+    Report from: Vector optimizations [vec]
+
+
+LOOP BEGIN at project_1.c(104,1)
+   remark #15410: vectorization support: conversion from int to float will be emulated   [ project_1.c(47,24) ]
+   remark #15410: vectorization support: conversion from int to float will be emulated   [ project_1.c(48,24) ]
+   remark #15300: LOOP WAS VECTORIZED
+   remark #15475: --- begin vector loop cost summary ---
+   remark #15476: scalar loop cost: 235 
+   remark #15477: vector loop cost: 191.000 
+   remark #15478: estimated potential speedup: 1.220 
+   remark #15479: lightweight vector operations: 130 
+   remark #15480: medium-overhead vector operations: 2 
+   remark #15481: heavy-overhead vector operations: 2 
+   remark #15482: vectorized math library calls: 2 
+   remark #15487: type converts: 2 
+   remark #15488: --- end vector loop cost summary ---
+LOOP END
+
+LOOP BEGIN at project_1.c(104,1)
+<Remainder>
+LOOP END
+===========================================================================

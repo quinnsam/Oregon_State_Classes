@@ -2,6 +2,20 @@ module Study where
 
 import Prelude hiding (succ, pred)
 
+
+xs = [1,2,3]
+ys = [4,5]
+zs = [6]
+ll = [xs,ys,zs]
+
+maxl :: [Int] -> Int
+maxl [x] = x
+maxl (x:y:xs) = maxl (max x y : xs)
+
+g :: [Int] -> [Int]
+g (x:y:xs) = y:g (x:xs)
+g _ = []
+
 data Nat = Zero 
          | Succ Nat
          deriving(Eq, Show)
