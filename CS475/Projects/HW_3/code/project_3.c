@@ -3,11 +3,19 @@
 #include <math.h>
 #include <omp.h>
 
+#ifndef NUMT
+#define NUMT           4
+#endif
+#ifndef NUM
+#define NUM            4
+#endif
 
 struct s
 {
     float value;
-    int pad[NUM];
+#if FIX == 1
+    int pad[ NUM ];
+#endif
 } Array[4];
 
 
@@ -17,9 +25,9 @@ int main( int argc, char *argv[ ] ) {
 	fprintf( stderr, "OpenMP is not available\n" );
 	return 1;
 #endif
-    . . .
+    //. . .
 
-        omp_set_num_threads( NUMT );
+    omp_set_num_threads( NUMT );
 
     unsigned int someBigNumber = 1000000000;        // if > 4B, use "long unsigned int"
 
@@ -27,6 +35,9 @@ int main( int argc, char *argv[ ] ) {
 #pragma omp parallel for
     for( int i = 0; i < 4; i++ )
     {
+#if FIX == 2
+            float tmp=Array[i].value;
+#endif
         for( unsigned int j = 0; j < someBigNumber; j++ )
         {
             Array[ i ].value = Array[ i ].value + 2.;
@@ -34,4 +45,6 @@ int main( int argc, char *argv[ ] ) {
     }
 	time1 = omp_get_wtime( );
     time = (time1 - time0);
+    //printf("%f,", (double)((NUMBODIES*NUMBODIES*NUMSTEPS)/time)/1000000);
+    printf("%f,", (double)time);
 }
