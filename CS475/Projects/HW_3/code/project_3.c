@@ -43,7 +43,6 @@ int main( int argc, char *argv[ ] ) {
         }
         Array[ i ].value = tmp;
 #elif FIX == 1
-        printf("One\n");
         for( unsigned int j = 0; j < someBigNumber; j++ )
         {
             Array[ i ].value = Array[ i ].value + 2.;
@@ -53,5 +52,5 @@ int main( int argc, char *argv[ ] ) {
 	time1 = omp_get_wtime( );
     time = (time1 - time0);
     //printf("%f,", (double)((NUMBODIES*NUMBODIES*NUMSTEPS)/time)/1000000);
-    printf("%f,", (double)time);
+    printf("%f,", (4*someBigNumber/(double)time)/100000000);
 }
