@@ -36,12 +36,19 @@ int main( int argc, char *argv[ ] ) {
     for( int i = 0; i < 4; i++ )
     {
 #if FIX == 2
-            float tmp=Array[i].value;
-#endif
+        float tmp=Array[i].value;
+        for( unsigned int j = 0; j < someBigNumber; j++ )
+        {
+            tmp = tmp + 2.;
+        }
+        Array[ i ].value = tmp;
+#elif FIX == 1
+        printf("One\n");
         for( unsigned int j = 0; j < someBigNumber; j++ )
         {
             Array[ i ].value = Array[ i ].value + 2.;
         }
+#endif
     }
 	time1 = omp_get_wtime( );
     time = (time1 - time0);
