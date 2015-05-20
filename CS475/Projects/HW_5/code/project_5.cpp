@@ -188,10 +188,10 @@ main( int argc, char *argv[ ] )
 
 	// 11. enqueue the kernel object for execution:
 
-	//size_t globalWorkSize[3] = { NUM_ELEMENTS, 1, 1 };
-	//size_t localWorkSize[3]  = { LOCAL_SIZE,   1, 1 };
-	size_t globalWorkSize[3] = { GLOB_WORK_GROUP, 1, 1 };
-	size_t localWorkSize[3]  = { LOC_WORK_GROUP,   1, 1 };
+	size_t globalWorkSize[3] = { NUM_ELEMENTS, 1, 1 };
+	size_t localWorkSize[3]  = { LOCAL_SIZE,   1, 1 };
+	//size_t globalWorkSize[3] = { GLOB_WORK_GROUP, 1, 1 };
+	//size_t localWorkSize[3]  = { LOC_WORK_GROUP,   1, 1 };
 
 	Wait( cmdQueue );
 
@@ -235,6 +235,7 @@ main( int argc, char *argv[ ] )
 
 	fprintf( stderr, "%8d\t%4d\t%10d\t%10.3lf GigaMultsPerSecond\n",
 		NUM_ELEMENTS, LOCAL_SIZE, NUM_WORK_GROUPS, (double)NUM_ELEMENTS/(time1-time0)/1000000000. );
+	fprintf( stdout, "%10.3lf,",(double)NUM_ELEMENTS/(time1-time0)/1000000000. );
 
 #ifdef WIN32
 	Sleep( 2000 );
