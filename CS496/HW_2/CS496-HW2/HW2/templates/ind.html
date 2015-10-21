@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <title>Individual Template</title>
+</head>
+<body>
+    <h1>Public Keys</h1>
+    {% if indkey %}
+    <section>
+        <h2>{{ indkey.fullname }} Key</h2>
+        <h3>Email:</h3>{{ indkey.email }}
+        <h3>Comment:</h3>{{ indkey.comment }}
+        <h3>Encryption Type:</h3>{{ indkey.encryptionType }}
+        <h3>Bit Strength:</h3>{{ indkey.bit }}
+        <h3>Experation:</h3>{{ indkey.exp }}
+        <h3>Experation Date:</h3>{{ indkey.expDate }}
+        <h3>Experation Time:</h3>{{ indkey.expTime }}
+        <h3>Public Key:</h3>{{ indkey.pubkey }}
+        <br><br><a href='/edit?key={{ urlsafekey }}&action=edit'>Edit {{ indkey.fullname }}</a>
+    </section>
+    {% endif %}
+
+
+</body>
+</html>

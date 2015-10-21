@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <title>View Template</title>
+</head>
+<body>
+    <h1>Public Keys</h1>
+    {% if pubkeys|length > 0 %}
+    <section>
+        <h2>List of Keys</h2>
+        {% for pub in pubkeys %}
+        <a href='/ind?key={{ pub.key }}&type=ind'> {{ pub.fullname }}</a><br>
+        {% endfor %}
+    </section>
+    {% endif %}
+
+
+</body>
+</html>

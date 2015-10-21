@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <title>View Template</title>
+</head>
+<body>
+    <section>
+    {% if is_err == 1 %}
+        <h1>Debug</h1>
+    {% endif %}
+    {% if fullname_err %}
+        <h4>Full Name: {{ fullname_err }}</h4>
+    {% elif test %}
+        <p>Full Name: Passed</p>
+    {% endif %}
+    {% if email_err %}
+        <h2>Email:</h2> {{ email_err }}
+    {% elif test %}
+        <p>Email: Passed</p>
+    {% endif %}
+    {% if encryptiontype_err %}
+        <h2>Encryption Type:</h2> {{ encryptiontype_err }}
+    {% elif test %}
+        <p>Encryption Type: Passed</p>
+    {% endif %}
+    {% if expdate_err %}
+        <h2>Expiration Date:</h2> {{ expdate_err }}
+    {% elif test %}
+        <p>Expiration Date: Passed</p>
+    {% endif %}
+    {% if exptime_err %}
+        <h2>Expiration Time:</h2> {{ exptime_err }}
+    {% elif test %}
+        <p>Expiration Time: Passed</p>
+    {% endif %}
+    {% if bitstrength_err %}
+        <h2>Bit Strength:</h2> {{ bitstrength_err }}
+    {% elif test %}
+        <p>Bit Strength: Passed</p>
+    {% endif %}
+    {% if pubkey_err %}
+        <h2>Public Key:</h2> {{ pubkey_err }}
+    {% elif test %}
+        <p>Public Key: Passed</p>
+    {% endif %}
+    </section>
+
+
+</body>
+</html>

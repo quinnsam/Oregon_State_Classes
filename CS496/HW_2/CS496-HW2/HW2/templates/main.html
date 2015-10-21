@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'>
+    <title>Main Template</title>
+</head>
+<body>
+    <h1>Public Key Saver</h1>
+
+    <form action="/" method="post">
+        {% if edit %}
+        <input type="hidden" name="action" value="edit">
+        <input type="hidden" name="editkey" value="{{ urlsafe }}">
+        {% else %}
+        <input type="hidden" name="action" value="add_key">
+        {% endif %}
+        <fieldset>
+        {% if edit %}
+            <legend>Edit Full Name</legend>
+            <input type="text" name="full-name" value="{{ edit.fullname }}">
+        {% else %}
+            <legend>Full Name</legend>
+            <input type="text" name="full-name">
+        {% endif %}
+        </fieldset>
+        <fieldset>
+        {% if edit %}
+            <legend>Edit Email Address</legend>
+            <input type="email" name="email" value="{{ edit.email }}">
+        {% else %}
+            <legend>Email Address</legend>
+            <input type="email" name="email">
+        {% endif %}
+        </fieldset>
+        <fieldset>
+        {% if edit %}
+            <legend>Edit Comment</legend>
+            <input type="text" name="comment" value="{{ edit.comment }}">
+        {% else %}
+            <legend>Comment</legend>
+            <input type="text" name="comment">
+        {% endif %}
+        </fieldset>
+        <fieldset>
+            <legend>Encryption Type</legend>
+            <input type="radio" name="Encryption-type" value="RSA" checked>RSA
+            <input type="radio" name="Encryption-type" value="DSA">DSA
+        </fieldset>
+        <fieldset>
+        {% if edit %}
+            <legend>Edit Bit Strength</legend>
+            <input type="number" name="bit-strength" min="768" max="4096" value="{{ edit.bit }}">
+        {% else %}
+            <legend>Bit Strength</legend>
+            <input type="number" name="bit-strength" min="768" max="4096">
+        {% endif %}
+        </fieldset>
+        <fieldset>
+        {% if edit %}
+            <legend>Edit Experation Date</legend>
+        {% else %}
+            <legend>Experation Date</legend>
+        {% endif %}
+            <table>
+                <tr>
+                    <td>
+                       Experation Date: <input type="date" name="exp-date">
+                   </td>
+                   <td>
+                       Time: <input type="time" name="exp-time">
+                   </td>
+                   <td>
+                       <input type="checkbox" name="expiration" value="False" checked>Never Expires
+
+                   </td>
+               </tr>
+           </table>
+        </fieldset>
+        <fieldset>
+        {% if edit %}
+            <legend>Edit Public Key</legend>
+            <textarea name="pubkey" rows="20" cols="60">{{ edit.pubkey }} </textarea>
+        {% else %}
+            <legend>Public Key</legend>
+            <textarea name="pubkey" rows="20" cols="60">
+                Add Public key here
+            </textarea>
+        {% endif %}
+        </fieldset>
+        <fieldset>
+        {% if edit %}
+            <legend>Save Edited Encryption Key</legend>
+        {% else %}
+            <legend>Save Encryption Key</legend>
+        {% endif %}
+            <input type="submit" value="save">
+            <input type="checkbox" name="test" value="True">Debug
+        </fieldset>
+    </form>
+    {% if message %}
+    <section>
+        <h3>Result</h3>
+        <p>{{ message }}
+    </section>
+    {% endif %}
+    <table>
+        <tr>
+            <td><a href="/">Main Page</a></td>
+            <td><a href="/view">Veiw keys</a></td>
+        </tr>
+    </table>
+</body>
+</html>
