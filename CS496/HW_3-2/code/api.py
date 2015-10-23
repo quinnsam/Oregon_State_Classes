@@ -3,7 +3,7 @@ from google.appengine.ext import ndb
 import db_defs
 import json
 
-class API(webapp2.RequestHandler):
+class PubKey(webapp2.RequestHandler):
     def post(self):
         fullname = ''
         email = ''
@@ -101,7 +101,67 @@ class API(webapp2.RequestHandler):
             results = { 'keys' : [x.id() for x in keys]}
             self.response.write(json.dumps(results))
 
+class People(webapp2.RequestHandler):
+    def post(self):
+        fullname = ''
+        email = ''
+        phone = ''
+        address = ''
+        contacts = []
 
+        """ Creates a Public Key object
+
+            POST Body Variables:
+                full-name - [required] fullname
+                email - [optional] email
+                phone - [optional] comment
+                address - [required] encryptionType
+                contacts - [required] bit
+        """
+
+        if 'application/json' not in self.request.accept:
+            self.response.status = 406
+            self.response.status_message = "Not Acceptable, API only supports Application Json MIME type."
+            return
+        new_person = db_defs.People()
+
+        fullname = self.request.get('full-name', default_value=None)
+        email = self.request.get('email', default_value=None)
+        phone = self.request.get('phone', default_value=None)
+        address = self.request.get('address', default_value=None)
+        contacts = self.request.get('contacts', default_value=None)
+
+        if fullname:
+            new_person.fullname = fullname
+        else:
+            self.response.status = 400
+            self.response.status_message = "Invalid request, 'fullname' is required."
+        if email:
+            new_person.email = email
+        if phone:
+            new_person.phone = phone
+        if address:
+            new_person.address = address
+        if contacts:
+            new_person.contacts = contacts
+
+        key = new_person.put()
+        out = new_person.to_dict()
+        self.response.write(json.dumps(out))
+
+    def get(self, **kwargs):
+        if 'application/json' not in self.request.accept:
+            self.response.status = 406
+            self.response.status_message = "Invaild get, API only accepts application/json."
+            return
+        if 'id' in kwargs:
+            out = ndb.Key(db_defs.People, int(kwargs['id'])).get().to_dict()
+            self.response.write(json.dumps(out))
+        else:
+            q = db_defs.People.query()
+            keys = q.fetch(keys_only=True)
+            results = { 'keys' : [x.id() for x in keys]}
+            self.response.write(json.dumps(results))
 
 class PublicKeySearch(webapp2.RequestHandler):
     def post(self):

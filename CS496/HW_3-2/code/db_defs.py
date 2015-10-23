@@ -24,7 +24,7 @@ class People(Model):
     email = ndb.StringProperty(required=True)
     phone = ndb.StringProperty(required=True)
     address = ndb.StringProperty(required=True)
-    contacts = ndb.KeyProperty
+    contacts = ndb.KeyProperty(repeated=True)
 
     def to_dict(self):
         d = super(People,self).to_dict()
