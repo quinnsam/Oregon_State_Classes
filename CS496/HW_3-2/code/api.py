@@ -57,7 +57,6 @@ class PubKey(webapp2.RequestHandler):
         pubkey = self.request.get('pubkey', default_value=None)
 
         if fullname:
-            print "Fullname is:" + fullname
             new_key.fullname = fullname
         else:
             self.response.status = 400
@@ -127,27 +126,28 @@ class People(webapp2.RequestHandler):
         address = ''
         contacts = []
 
-        """ Creates a Public Key object
+        """ Creates a Person object
 
             POST Body Variables:
                 full-name - [required] fullname
-                email - [optional] email
-                phone - [optional] comment
-                address - [required] encryptionType
-                contacts - [required] bit
+                email - [required] email
+                phone - [required] phone
+                address - [required] address
+                contacts - [optional] contacts
         """
 
         if 'application/json' not in self.request.accept:
             self.response.status = 406
             self.response.status_message = "Not Acceptable, API only supports Application Json MIME type."
             return
-        if self.request.get('id'):
+        if self.request.get('id', default_value=None):
+            new_person = ndb.Key(db_defs.People, int(self.request.get('id', default_value=None)))
             try:
-                new_person = ndb.Key(db_defs.People, int(self.request.get('id'))).get()
+                new_person = ndb.Key(db_defs.People, int(self.request.get('id', default_value=None)))
             except AttributeError:
                 self.response.status = 404
-                self.response.status_message = "Invaild request with key " + str(kwargs['id']) + " item not found."
-                self.response.write("Invaild request with key " + str(kwargs['id']) + " item not found.")
+                self.response.status_message = "Invaild request with key " + self.request.get('id') + " item not found."
+                self.response.write("Invaild request with key " + self.request.get('id') + " item not found.")
                 return
         else:
             new_person = db_defs.People()
@@ -163,12 +163,29 @@ class People(webapp2.RequestHandler):
         else:
             self.response.status = 400
             self.response.status_message = "Invalid request, 'fullname' is required."
+            self.response.write("Invalid request, 'fullname' is required.")
+            return
         if email:
             new_person.email = email
+        else:
+            self.response.status = 400
+            self.response.status_message = "Invalid request, 'email' is required."
+            self.response.write("Invalid request, 'email' is required.")
+            return
         if phone:
             new_person.phone = phone
+        else:
+            self.response.status = 400
+            self.response.status_message = "Invalid request, 'phone' is required."
+            self.response.write("Invalid request, 'phone' is required.")
+            return
         if address:
             new_person.address = address
+        else:
+            self.response.status = 400
+            self.response.status_message = "Invalid request, 'address' is required."
+            self.response.write("Invalid request, 'address' is required.")
+            return
         if contacts:
             for contact in contacts:
                 new_person.contacts.append(ndb.Key(db_defs.People, contact))
@@ -273,13 +290,13 @@ class DelPeople(webapp2.RequestHandler):
             return
 
 class DelPubKey(webapp2.RequestHandler):
-    def post(self, **kwargs):
+    def get(self, **kwargs):
         if 'application/json' not in self.request.accept:
             self.response.status = 406
             self.response.status_message = "Invaild get, API only accepts application/json."
             return
         if 'id' in kwargs:
-            d = ndb.Key(db_defs.PubKey, int(kwargs['id'])).get()
+            d = ndb.Key(db_defs.Public_Keys, int(kwargs['id']))
             if d:
                 d.delete()
                 self.response.write("PubKey: " + str(kwargs['id'] + "Deleted"))
@@ -293,6 +310,8 @@ class DelPubKey(webapp2.RequestHandler):
             self.response.status_message = "Invaild Delete, API needs a key."
             return
 
-
-
-        #d = db_defs.People.
+class API(webapp2.RequestHandler):
+    def get(self):
+        self.response.write("<a href=http://cs496-hw03-api.appspot.com/people>http://cs496-hw03-api.appspot.com/people</a>")
+        self.response.write("<br>")
+        self.response.write("<a href=http://cs496-hw03-api.appspot.com/pubkey>http://cs496-hw03-api.appspot.com/pubkey</a>")

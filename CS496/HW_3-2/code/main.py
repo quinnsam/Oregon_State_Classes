@@ -6,6 +6,7 @@ config = {'default-key':'base-data'}
 app = webapp2.WSGIApplication([
     ('/pubkey', 'api.PubKey'),
     ('/people', 'api.People'),
+    ('/*', 'api.API'),
     ], debug=True)
 
 # APP router stuff

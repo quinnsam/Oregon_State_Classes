@@ -1,0 +1,54 @@
+# Test adding a new public key
+Testing Public Key
+* Adding key:
+*-* Adding Normal key:
+curl --silent --data "full-name=Tester one&email=testone@testone.com&comment=testonecomment&expiration=False&pubkey=testonepubkeyone" -H "Accept: application/json" http://localhost:8080/pubkey 
+*-* Adding Blank 'fullname':
+curl --silent --data "full-name=&email=testone@testone.com&comment=testonecomment&expiration=False&pubkey=testonepubkeyone" -H "Accept: application/json" http://localhost:8080/pubkey
+*-* Adding Blank 'expiration':
+curl --silent --data "full-name=Tester one&email=testone@testone.com&comment=testonecomment&expiration=&pubkey=testonepubkeyone" -H "Accept: application/json" http://localhost:8080/pubkey 
+*-* Adding Blank 'email':
+curl --silent --data "full-name=Tester one&email=testone@testone.com&comment=testonecomment&expiration=False&pubkey=testonepubkeyone" -H "Accept: application/json" http://localhost:8080/pubkey 
+*Testing delete
+*-* Delete PubKey
+    Store public key and retrieve key
+---- curl --silent --data "full-name=Tester one&email=testone@testone.com&comment=testonecomment&expiration=False&pubkey=testonepubkeyone" -H "Accept: application/json" http://localhost:8080/pubkey 
+    Delete public key with key
+---- curl --silent  http://localhost:8080/pubkey/del/delpublickeyid
+    Delete public key with invalid key
+---- curl --silent  http://localhost:8080/pubkey/del/delpublickeyid
+*Test Modify
+*-* Modify person
+    Store person and retrieve key
+---- curl --silent --data "full-name=Tester One&email=testone@testone.com&phone=1234567890&address=&contacts[]=Tester Two&contacts[]=Tester Three" -H "Accept: application/json" http://localhost:8080/people
+    Modify person with key
+---- curl --silent --data "full-name=Tester Two&email=test@testtwo.com&phone=0987654321&address=Tester Two address 987656&contacts[]=Tester one&contacts[]=Tester Three&id=key" -H "Accept: application/json" http://localhost:8080/people
+    Modify person with invaild key
+---- curl --silent --data "full-name=Tester Two&email=test@testtwo.com&phone=0987654321&address=Tester Two address 987656&contacts[]=Tester one&contacts[]=Tester Three&id=invalidkey" -H "Accept: application/json" http://localhost:8080/people
+Testing People
+* Adding person:
+curl --silent --data "full-name=Tester One&email=testone@testone.com&phone=1234567890&address=Tester one deress 998765&contacts[]=Tester Two&contacts[]=Tester Three" -H "Accept: application/json" http://localhost:8080/people
+*-* Adding Blank fullname:
+curl --silent --data "full-name=&email=testone@testone.com&phone=1234567890&address=Tester one deress 998765&contacts[]=Tester Two&contacts[]=Tester Three" -H "Accept: application/json" http://localhost:8080/people
+*-* Adding Blank email:
+curl --silent --data "full-name=Tester One&email=&phone=1234567890&address=Tester one deress 998765&contacts[]=Tester Two&contacts[]=Tester Three" -H "Accept: application/json" http://localhost:8080/people
+*-* Adding Blank phone:
+curl --silent --data "full-name=Tester One&email=testone@testone.com&phone=&address=Tester one deress 998765&contacts[]=Tester Two&contacts[]=Tester Three" -H "Accept: application/json" http://localhost:8080/people
+*-* Adding Blank address:
+curl --silent --data "full-name=Tester One&email=testone@testone.com&phone=1234567890&address=&contacts[]=Tester Two&contacts[]=Tester Three" -H "Accept: application/json" http://localhost:8080/people
+*Testing delete
+*-* Delete Person
+    Store person and retrieve key
+---- curl --silent --data "full-name=Tester One&email=testone@testone.com&phone=1234567890&address=&contacts[]=Tester Two&contacts[]=Tester Three" -H "Accept: application/json" http://localhost:8080/people
+    Delete person with key
+---- curl --silent http://localhost:8080/people/del/key
+    Delete person with invalid key
+---- curl --silent http://localhost:8080/people/del/invaidkey
+*Test Modify
+*-* Modify person
+    Store person and retrieve key
+---- curl --silent --data "full-name=Tester One&email=testone@testone.com&phone=1234567890&address=&contacts[]=Tester Two&contacts[]=Tester Three" -H "Accept: application/json" http://localhost:8080/people
+    Modify person with key
+---- curl --silent --data "full-name=Tester Two&email=test@testtwo.com&phone=0987654321&address=Tester Two address 987656&contacts[]=Tester one&contacts[]=Tester Three&id=key" -H "Accept: application/json" http://localhost:8080/people
+    Modify person with invalid key
+---- curl --silent --data "full-name=Tester Two&email=test@testtwo.com&phone=0987654321&address=Tester Two address 987656&contacts[]=Tester one&contacts[]=Tester Three&id=invalidkey" -H "Accept: application/json" http://localhost:8080/people
