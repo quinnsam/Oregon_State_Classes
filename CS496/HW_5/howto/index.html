@@ -125,11 +125,11 @@
                 <h4 align="right">- Pushbullet.com<h4>
                     </blockquote>
 
-                <p>For this tutorial I will cover the Pushbullet API and expand on Devices, Pushing, Encryption, and Subscriptions.</p>
+                    <p>For this tutorial I will cover the Pushbullet API and expand on Devices, Pushing, Encryption, and Subscriptions.</p>
 
                     <br>
                     <br>
-<section id="auth" name="auth"></section>
+                    <section id="auth" name="auth"></section>
                     <h3>Authentication</h3>
                     <br>
                     <!-- ACCORDION -->
@@ -137,20 +137,20 @@
                         <div class="accordion-group">
                             <div class="accordion-heading">
                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                                    Access Token 
+                                    Access Token
                                 </a>
                             </div><!-- /accordion-heading -->
                             <div id="collapseOne" class="accordion-body collapse in">
                                 <div class="accordion-inner">
                                     <div class="col-lg-6">
-                                    <p>The Pushbullet API handles authentication for each request with an "access token". Each access token is unique to exactly one Pushbullet account. This access token should be handled with care since anyone with this token can send and receive pushes. Pushbullet is also able to authenticate users with an OAuth2 request. When OAuhth is used it will have the user authenticated form the Pushbullet website. For this howto I will be showing each code
-                                    example using an Access token. 
-                                    
-                                    Get your access token form <a class="norm", href="https://www.pushbullet.com/#settings/account">Account settings</a> . You can test if you access token is valid by executing this: </p>
-                                    <code>
-                                        curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ \
-                                        <br>&nbsp; https://api.pushbullet.com/v2/users/me
-                                    </code>
+                                        <p>The Pushbullet API handles authentication for each request with an "access token". Each access token is unique to exactly one Pushbullet account. This access token should be handled with care since anyone with this token can send and receive pushes. Pushbullet is also able to authenticate users with an OAuth2 request. When OAuhth is used it will have the user authenticated form the Pushbullet website. For this howto I will be showing each code
+                                        example using an Access token. 
+
+                                        Get your access token form <a class="norm", href="https://www.pushbullet.com/#settings/account">Account settings</a> . You can test if you access token is valid by executing this: </p>
+                                        <code>
+                                            curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ \
+                                            <br>&nbsp; https://api.pushbullet.com/v2/users/me
+                                        </code>
                                     </div>
                                     <div class="col-lg-6">
                                         <p>It should return JSON with your information including, Name, Email, Image, and when your account was created.</p> 
@@ -171,184 +171,193 @@
                                 </div><!-- /accordion-inner -->
                             </div><!-- /collapse -->
                         </div><!-- /accordion-group -->
-                    </div><!-- Accordion -->
-                </div>
-                    <br>
-                    <br>
-<section id="devices" name="devices"></section>
-                    <h3>Authentication</h3>
-                    <br>
-                    <!-- ACCORDION -->
-                    <div class="accordion ac" id="accordion2">
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                                    Access Token 
-                                </a>
-                            </div><!-- /accordion-heading -->
-                            <div id="collapseOne" class="accordion-body collapse in">
-                                <div class="accordion-inner">
-                                    <div class="col-lg-6">
-                                    <p>The Pushbullet API handles authentication for each request with an "access token". Each access token is unique to exactly one Pushbullet account. This access token should be handled with care since anyone with this token can send and receive pushes. Pushbullet is also able to authenticate users with an OAuth2 request. When OAuhth is used it will have the user authenticated form the Pushbullet website. For this howto I will be showing each code
-                                    example using an Access token. 
-                                    
-                                    Get your access token form <a class="norm", href="https://www.pushbullet.com/#settings/account">Account settings</a> . You can test if you access token is valid by executing this: </p>
+                <section id="devices" name="devices"></section>
+                <h3>Devices</h3>
+                <br>
+                <!-- ACCORDION -->
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsebOne">
+                                List Devices
+                            </a>
+                        </div><!-- /accordion-heading -->
+                        <div id="collapsebOne" class="accordion-body collapse in">
+                            <div class="accordion-inner">
+                                <div class="col-lg-6">
+                                    <p>It is often useful to send pushes to individual devices that you own. To get a list of the Pushsbullet devices that the current user owns you can execute this:</p>
                                     <code>
                                         curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ \
-                                        <br>&nbsp; https://api.pushbullet.com/v2/users/me
+                                        <br>
+                                        &nbsp;   https://api.pushbullet.com/v2/devices 
                                     </code>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <p>It should return JSON with your information including, Name, Email, Image, and when your account was created.</p> 
-                                        <pre>
+                                    <p><br>The <b color="red">Iden</b> value is an alphanumeric string that uniquely identifies the device. This will be used later to send pushes to this device. 
+                                    <br>
+                                    The <b color="red">Key_fingerprint</b> value is an alphanumeric string that is used for the encryption that I will cover in a later section, just remember how to get it.
+                                    <br><br>
+                                    This is all we need to know how to do for the device portion of this tutorial.
+                                    </p>
+
+                                </div>
+                                <div class="col-lg-6">
+                                    <p>It should return JSON with your information including, Name, Email, Image, and when your account was created.</p> 
+                                    <p>This returns an array of every device that has ever been connected to Pushbullet, even the devices that are no longer in use. Within the returned JSON each device will have an <b>Active</b> Value either True or False.  Only Active devices will be able to receive pushes.</p>
+
+                                    <pre>
 {
-   "active": true,
-   "iden": "udDBb",
-   "created": 1385410169.392102,
-   "modified": 1447436349.911026,
-   "email": "quinnsam1@gmail.com",
-   "email_normalized": "quinnsam1@gmail.com",
-   "name": "Sam Quinn",
-   "max_upload_size": 26214400
+    "active": true,
+    "iden": "uduautsq5nrps",
+    "created": 1447408071.4301739,
+    "modified": 1447736458.659032,
+    "type": "android",
+    "kind": "android",
+    "nickname": "Huawei Nexus 6P",
+    "generated_nickname": true,
+    "manufacturer": "Huawei",
+    "model": "Nexus 6P",
+    "fingerprint": "{\"android_id\":\"12bda62d667431\"}",
+    "push_token": "f4yppw7Wk:APA9YQQl-UIdBh7Epk7yPdek4_LMs",
+    "pushable": true,
+    "has_sms": true,
+    "icon": "phone",
+    "key_fingerprint": "XZrJnEUHuseo52tu534heTEUHS5223UMK1E="
 }
-                                        </pre>
-                                        <p> From here on out you will need to include your Pushbullet Access Token with all other code samples.</p>
-                                    </div>
-                                </div><!-- /accordion-inner -->
-                            </div><!-- /collapse -->
-                        </div><!-- /accordion-group -->
-                        <br>
-
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                                    Retina Ready Theme
-                                </a>
-                            </div>
-                            <div id="collapseTwo" class="accordion-body collapse">
-                                <div class="accordion-inner">
-                                    <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                                </div><!-- /accordion-inner -->
-                            </div><!-- /collapse -->
-                        </div><!-- /accordion-group -->
-                        <br>
-
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                                    Awesome Support
-                                </a>
-                            </div>
-                            <div id="collapseThree" class="accordion-body collapse">
-                                <div class="accordion-inner">
-                                    <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                                </div><!-- /accordion-inner -->
-                            </div><!-- /collapse -->
-                        </div><!-- /accordion-group -->
-                        <br>
-
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-                                    Responsive Design
-                                </a>
-                            </div>
-                            <div id="collapseFour" class="accordion-body collapse">
-                                <div class="accordion-inner">
-                                    <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                                </div><!-- /accordion-inner -->
-                            </div><!-- /collapse -->
-                        </div><!-- /accordion-group -->
-                        <br>			
-                    </div><!-- Accordion -->
-                </div>
-            </div><!--/ .container -->
-        </div><!--/ #features -->
-
-        <section id="showcase" name="showcase"></section>
-        <div id="showcase">
-            <div class="container">
-                <div class="row">
-                    <h1 class="centered">Some Screenshots</h1>
+                                    </pre>
+                                </div>
+                            </div><!-- /accordion-inner -->
+                        </div><!-- /collapse -->
+                    </div><!-- /accordion-group -->
                     <br>
-                    <div class="col-lg-8 col-lg-offset-2">
-                        <div id="carousel-example-generic" class="carousel slide">
-                            <!-- Indicators -->
-                            <ol class="carousel-indicators">
-                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                            </ol>
 
-                            <!-- Wrapper for slides -->
-                            <div class="carousel-inner">
-                                <div class="item active">
-                                    <img src="assets/img/item-01.png" alt="">
-                                </div>
-                                <div class="item">
-                                    <img src="assets/img/item-02.png" alt="">
-                                </div>
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsebTwo">
+                                Retina Ready Theme
+                            </a>
+                        </div>
+                        <div id="collapsebTwo" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                            </div><!-- /accordion-inner -->
+                        </div><!-- /collapse -->
+                    </div><!-- /accordion-group -->
+                    <br>
+
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsebThree">
+                                Awesome Support
+                            </a>
+                        </div>
+                        <div id="collapsebThree" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                            </div><!-- /accordion-inner -->
+                        </div><!-- /collapse -->
+                    </div><!-- /accordion-group -->
+                    <br>
+
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+                                Responsive Design
+                            </a>
+                        </div>
+                        <div id="collapseFour" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                            </div><!-- /accordion-inner -->
+                        </div><!-- /collapse -->
+                    </div><!-- /accordion-group -->
+                    <br>			
+                </div><!-- Accordion -->
+            </div>
+        </div><!--/ .container -->
+    </div><!--/ #features -->
+
+    <section id="showcase" name="showcase"></section>
+    <div id="showcase">
+        <div class="container">
+            <div class="row">
+                <h1 class="centered">Some Screenshots</h1>
+                <br>
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div id="carousel-example-generic" class="carousel slide">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                        </ol>
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <img src="assets/img/item-01.png" alt="">
+                            </div>
+                            <div class="item">
+                                <img src="assets/img/item-02.png" alt="">
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <br>
+            <br>
+            <br>	
+        </div><!-- /container -->
+    </div>	
+
+
+    <section id="contact" name="contact"></section>
+    <div id="footerwrap">
+        <div class="container">
+            <div class="col-lg-5">
+                <h3>Address</h3>
+                <p>
+                Av. Greenville 987,<br/>
+                New York,<br/>
+                90873<br/>
+                United States
+                </p>
+            </div>
+
+            <div class="col-lg-7">
+                <h3>Drop Us A Line</h3>
                 <br>
-                <br>
-                <br>	
-            </div><!-- /container -->
-        </div>	
-
-
-        <section id="contact" name="contact"></section>
-        <div id="footerwrap">
-            <div class="container">
-                <div class="col-lg-5">
-                    <h3>Address</h3>
-                    <p>
-                    Av. Greenville 987,<br/>
-                    New York,<br/>
-                    90873<br/>
-                    United States
-                    </p>
-                </div>
-
-                <div class="col-lg-7">
-                    <h3>Drop Us A Line</h3>
+                <form role="form" action="#" method="post" enctype="plain"> 
+                    <div class="form-group">
+                        <label for="name1">Your Name</label>
+                        <input type="name" name="Name" class="form-control" id="name1" placeholder="Your Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email1">Email address</label>
+                        <input type="email" name="Mail" class="form-control" id="email1" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label>Your Text</label>
+                        <textarea class="form-control" name="Message" rows="3"></textarea>
+                    </div>
                     <br>
-                    <form role="form" action="#" method="post" enctype="plain"> 
-                        <div class="form-group">
-                            <label for="name1">Your Name</label>
-                            <input type="name" name="Name" class="form-control" id="name1" placeholder="Your Name">
-                        </div>
-                        <div class="form-group">
-                            <label for="email1">Email address</label>
-                            <input type="email" name="Mail" class="form-control" id="email1" placeholder="Enter email">
-                        </div>
-                        <div class="form-group">
-                            <label>Your Text</label>
-                            <textarea class="form-control" name="Message" rows="3"></textarea>
-                        </div>
-                        <br>
-                        <button type="submit" class="btn btn-large btn-success">SUBMIT</button>
-                    </form>
-                </div>
+                    <button type="submit" class="btn btn-large btn-success">SUBMIT</button>
+                </form>
             </div>
         </div>
-        <div id="c">
-            <div class="container">
-                <p>Template by: <a href="http://www.blacktie.co">BLACKTIE.CO</a></p>
+    </div>
+    <div id="c">
+        <div class="container">
+            <p>Template by: <a href="http://www.blacktie.co">BLACKTIE.CO</a></p>
 
-            </div>
         </div>
+    </div>
 
 
-        <!-- Bootstrap core JavaScript
+    <!-- Bootstrap core JavaScript
     ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="assets/js/bootstrap.js"></script>
-        <script>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/bootstrap.js"></script>
+    <script>
 $('.carousel').carousel({
 interval: 3500
 })
-        </script>
-        </body>
-        </html>
+    </script>
+    </body>
+    </html>
