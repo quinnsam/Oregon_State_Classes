@@ -56,7 +56,25 @@ a:after {
     -o-transition: color 0.1s ease-in, background 0.1s ease-in;
     transition: color 0.1s ease-in, background 0.1s ease-in;
 }
+a.norm {
+    color: #123456;
+}
 
+a.norm:hover,
+a.norm:focus {
+    color: #c0392b;
+    text-decoration: none;
+    outline: 0;
+}
+
+a.norm:before,
+a.norm:after {
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
  hr {
     display: block;
     height: 1px;
@@ -157,4 +175,40 @@ a:after {
 #c p {
 	color: white
 }
+
+blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 5em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
+}
+blockquote.style5 {
+  font: 12px/18px normal "Courier New", sans-serif;
+  background-color: #000;
+  color: white;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  margin: 5px;
+  background-position: middle left;
+  background-repeat: no-repeat;
+  text-indent: 23px;
+  }
+  blockquote.style5 div {
+    padding-right: 50px;
+    display: block;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+} 
 
