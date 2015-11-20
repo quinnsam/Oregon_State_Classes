@@ -228,15 +228,57 @@
                     </div><!-- /accordion-group -->
                     <br>
 
+                <section id="devices" name="devices"></section>
+                <h3>Pushes</h3>
+                <br>
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsebTwo">
-                                Retina Ready Theme
+                                Viewing Pushes
                             </a>
                         </div>
                         <div id="collapsebTwo" class="accordion-body collapse">
                             <div class="accordion-inner">
-                                <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                <p>Pushing will require us to actually send more data than just the access token unlike the previous requests covered earlier in this tutorial. I will cover the required data that needs to be sent for each section below. </p>
+                                <div class="col-lg-6">
+                                    <code>
+                                        curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ 
+                                        <br>&nbsp;  --data-urlencode active="true" \
+                                        <br>&nbsp;  --data-urlencode modified_after="1447866000" \
+                                        <br>&nbsp;  --get \
+                                        <br>&nbsp;  https://api.pushbullet.com/v2/pushes
+                                    </code>
+                                    <p><br>You will notice that the parameters <b>active</b> and <b>modified_after</b> are added to the request. If you do not add these parameters you will get every Push that this account has sent, this could be desired but often times not.</p>
+                                    <p><br>The request above will return the data object listed on the right. As you might notice that this object is an array of pushes. Each push will be nested with in the array.</p>
+                                </div>
+                                <div class="col-lg-6">
+                                    <pre>
+{
+  "pushes": [
+    {
+      "active": true,
+      "body": "Space Elevator, Mars Hyperloop, Space Model S (Model Space?)",
+      "created": 1.412047948579029e+09,
+      "direction": "self",
+      "dismissed": false,
+      "iden": "ujpah72o0sjAoRtnM0jc",
+      "modified": 1.412047948579031e+09,
+      "receiver_email": "elon@teslamotors.com",
+      "receiver_email_normalized": "elon@teslamotors.com",
+      "receiver_iden": "ujpah72o0",
+      "sender_email": "elon@teslamotors.com",
+      "sender_email_normalized": "elon@teslamotors.com",
+      "sender_iden": "ujpah72o0",
+      "sender_name": "Elon Musk",
+      "title": "Space Travel Ideas",
+      "type": "note"
+    }
+  ]
+}
+                                    </pre>                                    
+                                </div>
+
+
                             </div><!-- /accordion-inner -->
                         </div><!-- /collapse -->
                     </div><!-- /accordion-group -->
@@ -245,7 +287,7 @@
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsebThree">
-                                Awesome Support
+                               Sending Pushes
                             </a>
                         </div>
                         <div id="collapsebThree" class="accordion-body collapse">
