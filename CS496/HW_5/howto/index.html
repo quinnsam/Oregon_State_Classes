@@ -89,22 +89,22 @@
             <br>
             <div class="col-lg-3">
                 <img src="assets/img/devices.png" alt="">
-                <h3>Devices</h3>
+                <h3><a href="#devices">Devices</a></h3>
                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
             </div>
             <div class="col-lg-3">
                 <img src="assets/img/PushbulletLogo.png" alt="">
-                <h3>Pushing</h3>
+                <h3><a href="#pushing">Pushing</a></h3>
                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
             </div>
             <div class="col-lg-3">
                 <img src="assets/img/sub.png" alt="">
-                <h3>Subscriptions</h3>
+                <h3><a href="#subs">Subscriptions</a></h3>
                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
             </div>
             <div class="col-lg-3">
                 <img src="assets/img/enc.png" alt="">
-                <h3>Encryption</h3>
+                <h3><a href="enc">Encryption</a></h3>
                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
             </div>
         </div>
@@ -181,7 +181,7 @@
                                 List Devices
                             </a>
                         </div><!-- /accordion-heading -->
-                        <div id="collapsebOne" class="accordion-body collapse in">
+                        <div id="collapsebOne" class="accordion-body collapse">
                             <div class="accordion-inner">
                                 <div class="col-lg-6">
                                     <p>It is often useful to send pushes to individual devices that you own. To get a list of the Pushsbullet devices that the current user owns you can execute this:</p>
@@ -228,16 +228,16 @@
                     </div><!-- /accordion-group -->
                     <br>
 
-                <section id="devices" name="devices"></section>
+                <section id="pushes" name="pushes"></section>
                 <h3>Pushes</h3>
                 <br>
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsebTwo">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsecOne">
                                 Viewing Pushes
                             </a>
                         </div>
-                        <div id="collapsebTwo" class="accordion-body collapse">
+                        <div id="collapsecOne" class="accordion-body collapse">
                             <div class="accordion-inner">
                                 <p>Pushing will require us to actually send more data than just the access token unlike the previous requests covered earlier in this tutorial. I will cover the required data that needs to be sent for each section below. </p>
                                 <div class="col-lg-6">
@@ -286,13 +286,115 @@
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsebThree">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsecTwo">
                                Sending Pushes
                             </a>
                         </div>
-                        <div id="collapsebThree" class="accordion-body collapse">
+                        <div id="collapsecTwo" class="accordion-body collapse">
                             <div class="accordion-inner">
-                                <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                <div class="col-lg-6">
+                                <p>To send a push you will need to take advantage of Curl’s data-binary function, which creates a dictionary object and is sent with a POST request.</p>
+                                <p>Each push will require the following in the dictionary sent to the API.
+                                <ul>
+                                    <li><b>Device_iden</b> or email (channel or client_iden is also accepted but not covered in this tutorial.)</li>
+                                    <li><b>type</b> [note, link, file]</li>
+                                    <li><b>title</b></li>
+                                    <li><b>body</b>
+                                    <li>[URL,File]</li>
+                                </ul></p>
+                                <code>
+                                    curl --header 'Access-Token: &ltACCESS TOKEN&gt' \
+                                    <br>&nbsp;--header 'Content-Type: application/json' \
+                                    <br>&nbsp;--data-binary '{"body":"This is Sam Quinns Pushbullet tutorial,
+                                    <br>&nbsp;sample Push.","title":"Testing Pushing","type":"note"}' \
+                                    <br>&nbsp;--request POST \
+                                    <br>&nbsp;https://api.pushbullet.com/v2/pushes
+                                </code>
+                                <p><br>If this push was pulled using the API form the "Viewing Pushes" section above, it will return a JSON object structured like.</p>
+                                <img src="assets/img/arrow1.png" alt="" align="right">
+                            </div><!--/left pannel -->
+                            <div class="col-lg-6">
+                                <p>The Pushes will send to all of the specified devices in your command and display them locally. Once the Push has been dismissed it will change the <b>active</b> value to false. If a push is dismised on one device it will be flaged as "non-active" and also be dismissed.<br></p>
+                                <img src="assets/img/screen.png" alt="">
+                                <h4><br></h4>
+                                <pre>
+{
+    "active": true,
+    "iden": "udDBbsjAmS57SVq0",
+    "created": 1448085928.267209,
+    "modified": 1448085928.2706769,
+    "type": "note",
+    "dismissed": false,
+    "direction": "self",
+    "sender_iden": "udDBb",
+    "sender_email": "quinnsam1@gmail.com",
+    "sender_email_normalized": "quinnsam1@gmail.com",
+    "sender_name": "Sam Quinn",
+    "receiver_iden": "udDBb",
+    "receiver_email": "quinnsam1@gmail.com",
+    "receiver_email_normalized": "quinnsam1@gmail.com",
+    "title": "Testing Pushing",
+    "body": "This is Sam Quinns Pushbullet tutorial, sample Push."
+}
+                                </pre>
+                            </div><!-- /accordion-inner -->
+                        </div><!-- /collapse -->
+                    </div><!-- /accordion-group -->
+                    <br>
+
+                <section id="subs" name="subs"></section>
+                <h3>Subscriptions</h3>
+                <br>
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsedOne">
+                               Viewing Subscriptions
+                            </a>
+                        </div>
+                        <div id="collapsedOne" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <div class="col-lg-6">
+                                <p>Pushbullet allows you to subscribe to “channels” that update every subscriber instantly with a push. Channels can be very useful if you want to either send notifications to a large group of followers or if you would like to keep up to date with a project. By default Pushbullet will send a push to every device for every user that is in the channel.</p>
+                                <code>
+                                    curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ \
+                                    <br>&nbsp; https://api.pushbullet.com/v2/subscriptions
+                                </code>
+                            </div><!--/left pannel -->
+                            <div class="col-lg-6">
+                                <pre>
+{
+    "subscriptions": [
+        {
+            "active": true,
+            "iden": "udDBbsjzW2UG21eK",
+            "created": 1447436353.236555,
+            "modified": 1447436353.2365608,
+            "channel": {
+                "iden": "ujxGq345NDEeoneuandewzdwpCC",
+                "tag": "chroma",
+                "name": "Chroma",
+                "description": "Pushbullet channel for Chroma ROM",
+                "image_url": "https://s3.amazonaws.com/pushbullet-uploads/ujxGqEDxxMy-ULANQjfgdr7iQ8LzGChppNPPIkhteUuP/chroma.png"
+            }
+        },
+        {
+            "active": true,
+            "iden": "udDBb#ODEenr1PZmQm",
+            "created": 1439304078.137908,
+            "modified": 1439304078.137913,
+            "channel": {
+                "iden": "ujAtwy7UGIesjAoKYuKfTM",
+                "tag": "am317866855",
+                "name": "AutoMate Updates",
+                "description": "Subscribe to all AutoMate Updates provided by APK Mirror",
+                "image_url": "https://dl.pushbulletusercontent.com/mnH7ufPgoAn2WefaNlY89cz7V6wNPpkB/5522d3c0ba34d.png"
+            }
+        }
+    ]
+}
+                                </pre>
+                                <p>The JSON object that is returned contans a list of all the channels you have subscribed to. This list contains deleted channels too, Only channels that have an <b>active</b> value of true are the still avalible.<p>
+                                
                             </div><!-- /accordion-inner -->
                         </div><!-- /collapse -->
                     </div><!-- /accordion-group -->
@@ -300,22 +402,77 @@
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-                                Responsive Design
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsedTwo">
+                               Subscribing a Channel
                             </a>
                         </div>
-                        <div id="collapseFour" class="accordion-body collapse">
+                        <div id="collapsedTwo" class="accordion-body collapse">
                             <div class="accordion-inner">
-                                <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                <div class="col-lg-6">
+                                    <p>To subcribe to a channel you must send a Pushbullet binary object again to the API. The binary object that you send must contain the <b>channel_tag</b>. Pushbullet will use this value to search the channel database, if <b>channel_tag</b> is not found an invalid request JSON object will be returned. </p>
+                                <code>
+                                    curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ \
+                                    <br>&nbsp; --header 'Content-Type: application/json' \
+                                    <br>&nbsp; --data-binary '{"channel_tag":"cyanogenmod-updates"}' \
+                                    <br>&nbsp; --request POST \
+                                    <br>&nbsp; https://api.pushbullet.com/v2/subscriptions
+                                </code>
+                                <p>
+                            </div><!--/left pannel -->
+                            <div class="col-lg-6">
+                                <p>If the command subscribe command worked as expected the API will return a JSON object with more information on the channel.</p>
+                                <pre>
+{
+    "active": true,
+    "iden": "udDBbsjAwcNAlh5U",
+    "created": 1448154793.5968027,
+    "modified": 1448154793.5968564,
+    "channel": {
+        "iden": "ujxPklLhvyKsjAfL6koz1w",
+        "tag": "cyanogenmod-updates",
+        "name": "CyanogenMod Updates",
+        "description": "Follow CyanogenMod progress, 
+pushing for updates every week or two.",
+        "image_url": "https://s3.amazonaws.com/pushbullet-up
+loads/ujxPklLhvyK-dGB6bTPOGJu0s3M6xdVzIODfPmWc7XBk/cyanogen.png"
+    }
+}
+                                </pre>
+                                <p>The JSON object that is returned will contain more information on the channel that you have just subscribed to. This gives you a easy way to check if your <b>channel_tag</b> that was returend from the search is in fact correct.<p>
+                                
                             </div><!-- /accordion-inner -->
                         </div><!-- /collapse -->
                     </div><!-- /accordion-group -->
-                    <br>			
+                    <br>
+
+                <section id="enc" name="enc"></section>
+                <h3>Encryption</h3>
+                <br>
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseeOne">
+                               End to End Encryption
+                            </a>
+                        </div>
+                        <div id="collapsedeOne" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                
+                                <div class="col-lg-6">
+                                </div><!--/left pannel -->
+                                <div class="col-lg-6">
+                                </div><!-- /right pannel-->
+                            </div><!-- /accordion-inner -->
+                        </div><!-- /collapse -->
+                    </div><!-- /accordion-group -->
+
                 </div><!-- Accordion -->
+            </div>
             </div>
         </div><!--/ .container -->
     </div><!--/ #features -->
+    <br>
 
+    <!--
     <section id="showcase" name="showcase"></section>
     <div id="showcase">
         <div class="container">
@@ -324,13 +481,11 @@
                 <br>
                 <div class="col-lg-8 col-lg-offset-2">
                     <div id="carousel-example-generic" class="carousel slide">
-                        <!-- Indicators -->
                         <ol class="carousel-indicators">
                             <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
                             <li data-target="#carousel-example-generic" data-slide-to="1"></li>
                         </ol>
 
-                        <!-- Wrapper for slides -->
                         <div class="carousel-inner">
                             <div class="item active">
                                 <img src="assets/img/item-01.png" alt="">
@@ -345,9 +500,8 @@
             <br>
             <br>
             <br>	
-        </div><!-- /container -->
+        </div>
     </div>	
-
 
     <section id="contact" name="contact"></section>
     <div id="footerwrap">
@@ -383,6 +537,7 @@
                 </form>
             </div>
         </div>
+    -->
     </div>
     <div id="c">
         <div class="container">
