@@ -1,0 +1,67 @@
+#!/bin/bash
+
+#Usage
+usage () {
+    echo "$0 [dmsuh] [push message]"
+    echo "      -d    Device to send to"
+    echo "      -m    Message to send"
+    echo "      -D    Displays Devices"
+    echo "      -S    Displays Subscriptions"
+    echo "      -U    Displays User"
+    echo "      -h    Print help message"
+    exit 0
+}
+
+dispDevice () {
+    curl --header "Access-Token: $PUSHBULLET_KEY" \
+        https://api.pushbullet.com/v2/devices | python -m json.tool
+    exit 0
+}
+
+dispSubs () {
+    curl --header "Access-Token: $PUSHBULLET_KEY" \
+        https://api.pushbullet.com/v2/subscriptions | python -m json.tool
+    exit 0
+}
+
+dispUser () {
+    curl --header "Access-Token: $PUSHBULLET_KEY" \
+        https://api.pushbullet.com/v2/users/me | python -m json.tool
+    exit 0
+}
+if [ -z $PUSHBULLET_KEY ]; then
+    echo "You need to define your Pushbullet API Access Token."
+    echo "export PUSHBULLET_KEY=<ACCESS TOKEN>"
+    exit 1
+fi
+
+
+while getopts m:d:DSUh option
+do
+    case "${option}"
+    in
+        d) device=${OPTARG};;
+        m) message=${OPTARG};;
+        D) dispDevice;;
+        S) dispSubs;;
+        U) dispUser;;
+        h) usage;;
+    esac
+done
+
+if [ message ]; then
+    if [ device ]; then
+        curl --header "Access-Token: $PUSHBULLET_KEY" \
+            --header 'Content-Type: application/json' \
+            --data-binary "{\"device_iden\":\"$device\",\"body\":\"$message\",\"type\":\"note\"}" \
+            --request POST \
+            https://api.pushbullet.com/v2/pushes
+    else
+        curl --header "Access-Token: $PUSHBULLET_KEY" \
+            --header 'Content-Type: application/json' \
+            --data-binary "{\"body\":\"$message\",\"type\":\"note\"}" \
+            --request POST \
+            https://api.pushbullet.com/v2/pushes
+    fi
+fi
+

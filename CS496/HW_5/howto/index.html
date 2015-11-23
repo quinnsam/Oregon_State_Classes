@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<!-- 
+    Template Heavily modified by
+    http://www.blacktie.co BLACKTIE.CO
+-->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -90,22 +94,22 @@
             <div class="col-lg-3">
                 <img src="assets/img/devices.png" alt="">
                 <h3><a href="#devices">Devices</a></h3>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                <p>How to view all of your devices and what values are important.</p>
             </div>
             <div class="col-lg-3">
                 <img src="assets/img/PushbulletLogo.png" alt="">
                 <h3><a href="#pushing">Pushing</a></h3>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                <p>How to view ative pushes, how to send pushes to all devices or individual.</p>
             </div>
             <div class="col-lg-3">
                 <img src="assets/img/sub.png" alt="">
                 <h3><a href="#subs">Subscriptions</a></h3>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                <p>How to show all of your subscriptions that you are apart of and how to add new ones.</p>
             </div>
             <div class="col-lg-3">
-                <img src="assets/img/enc.png" alt="">
-                <h3><a href="enc">Encryption</a></h3>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                <img src="assets/img/terminal.png" alt="">
+                <h3><a href="#app">Applications</a></h3>
+                <p>A few sample ideas of what you can do with the Pushbullet API in the real world.</p>
             </div>
         </div>
         <br>
@@ -124,8 +128,9 @@
                 Headquartered in San Francisco, Pushbullet was founded to make all of your devices work better for you, no matter which one you happen to be using at the time.
                 <h4 align="right">- Pushbullet.com<h4>
                     </blockquote>
-
-                    <p>For this tutorial I will cover the Pushbullet API and expand on Devices, Pushing, Encryption, and Subscriptions.</p>
+                    <h3 class="centered">Tutorial objective</h3>
+                    <p>Pushbullet does not have a command line interface, most of Pushbullets interactions are through the official Android app and through the web extension. For this tutorial I will cover the Pushbullet API and expand on Devices, Pushing, Applications, and Subscriptions from a Linux command line that will be easily ported to any application. I will mainly go through each topic I have listed and describe the  command as well as the returned JSON. While the official
+                    Pushbullet documentation listed <a class="norm" href="https://docs.pushbullet.com/#pushbullet-api">here</a> is very good, my goal is to provide only content that will allow you to interact with the Pushbullet API at a basic level. Please reference the official documentation if you ever need supplemental information. </p>
 
                     <br>
                     <br>
@@ -153,7 +158,7 @@
                                         </code>
                                     </div>
                                     <div class="col-lg-6">
-                                        <p>It should return JSON with your information including, Name, Email, Image, and when your account was created.</p> 
+                                        <p>It should return JSON with your information including, <b>name</b>, <b>email</b>, <b>image</b>, and when your account was created.</p> 
                                         <pre>
 {
    "active": true,
@@ -166,43 +171,40 @@
    "max_upload_size": 26214400
 }
                                         </pre>
-                                        <p> From here on out you will need to include your Pushbullet Access Token with all other code samples.</p>
-                                    </div>
+                                        <p> Once you have verifed your access token from here on out you will need to include your Pushbullet Access Token with all other code samples.</p>
+                                    </div><!-- /right pannel -->
                                 </div><!-- /accordion-inner -->
                             </div><!-- /collapse -->
                         </div><!-- /accordion-group -->
-                <section id="devices" name="devices"></section>
-                <h3>Devices</h3>
-                <br>
-                <!-- ACCORDION -->
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsebOne">
-                                List Devices
-                            </a>
-                        </div><!-- /accordion-heading -->
-                        <div id="collapsebOne" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <div class="col-lg-6">
-                                    <p>It is often useful to send pushes to individual devices that you own. To get a list of the Pushsbullet devices that the current user owns you can execute this:</p>
-                                    <code>
-                                        curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ \
-                                        <br>
-                                        &nbsp;   https://api.pushbullet.com/v2/devices 
-                                    </code>
-                                    <p><br>The <b color="red">Iden</b> value is an alphanumeric string that uniquely identifies the device. This will be used later to send pushes to this device. 
-                                    <br>
-                                    The <b color="red">Key_fingerprint</b> value is an alphanumeric string that is used for the encryption that I will cover in a later section, just remember how to get it.
-                                    <br><br>
-                                    This is all we need to know how to do for the device portion of this tutorial.
-                                    </p>
+                        <section id="devices" name="devices"></section>
+                        <h3>Devices</h3>
+                        <br>
+                        <!-- ACCORDION -->
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsebOne">
+                                    List Devices
+                                </a>
+                            </div><!-- /accordion-heading -->
+                            <div id="collapsebOne" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    <div class="col-lg-6">
+                                        <p>You can attach an unlimited amount of devices to your Pushbullet account so it is often useful to send pushes to individual devices that you own. To get a list of the Pushsbullet devices that the current user owns you can execute this;</p>
+                                        <code>
+                                            curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ \
+                                            <br>
+                                            &nbsp;   https://api.pushbullet.com/v2/devices 
+                                        </code>
+                                        <p><br>The <b>iden</b> value is an alphanumeric string that uniquely identifies the device. This will be used later to send pushes to this specific devices instead of to every device. 
+                                        <br><br>
+                                        This is all we need to know how to do for the device portion of this tutorial. you might want to write your <b>iden</b> value down since we will be using it in later sections.
+                                        </p>
 
-                                </div>
-                                <div class="col-lg-6">
-                                    <p>It should return JSON with your information including, Name, Email, Image, and when your account was created.</p> 
-                                    <p>This returns an array of every device that has ever been connected to Pushbullet, even the devices that are no longer in use. Within the returned JSON each device will have an <b>Active</b> Value either True or False.  Only Active devices will be able to receive pushes.</p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <p>This returns an array of every device that has ever been connected to Pushbullet, even the devices that are no longer in use. Within the returned JSON each device will have an <b>active</b> Value either True or False.  Only <b>active</b> devices will be able to receive pushes.</p>
 
-                                    <pre>
+                                        <pre>
 {
     "active": true,
     "iden": "uduautsq5nrps",
@@ -221,103 +223,102 @@
     "icon": "phone",
     "key_fingerprint": "XZrJnEUHuseo52tu534heTEUHS5223UMK1E="
 }
-                                    </pre>
-                                </div>
-                            </div><!-- /accordion-inner -->
-                        </div><!-- /collapse -->
-                    </div><!-- /accordion-group -->
-                    <br>
+                                        </pre>
+                                    </div><!-- /right pannel -->
+                                </div><!-- /accordion-inner -->
+                            </div><!-- /collapse -->
+                        </div><!-- /accordion-group -->
+                        <br>
 
-                <section id="pushes" name="pushes"></section>
-                <h3>Pushes</h3>
-                <br>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsecOne">
-                                Viewing Pushes
-                            </a>
-                        </div>
-                        <div id="collapsecOne" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <p>Pushing will require us to actually send more data than just the access token unlike the previous requests covered earlier in this tutorial. I will cover the required data that needs to be sent for each section below. </p>
-                                <div class="col-lg-6">
-                                    <code>
-                                        curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ 
-                                        <br>&nbsp;  --data-urlencode active="true" \
-                                        <br>&nbsp;  --data-urlencode modified_after="1447866000" \
-                                        <br>&nbsp;  --get \
-                                        <br>&nbsp;  https://api.pushbullet.com/v2/pushes
-                                    </code>
-                                    <p><br>You will notice that the parameters <b>active</b> and <b>modified_after</b> are added to the request. If you do not add these parameters you will get every Push that this account has sent, this could be desired but often times not.</p>
-                                    <p><br>The request above will return the data object listed on the right. As you might notice that this object is an array of pushes. Each push will be nested with in the array.</p>
-                                </div>
-                                <div class="col-lg-6">
-                                    <pre>
+                        <section id="pushes" name="pushes"></section>
+                        <h3>Pushes</h3>
+                        <br>
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsecOne">
+                                    Viewing Pushes
+                                </a>
+                            </div>
+                            <div id="collapsecOne" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    <p>Pushing will require us to actually send more data than just the access token unlike the previous requests covered earlier in this tutorial. I will cover the required data that needs to be sent for each section below. </p>
+                                    <div class="col-lg-6">
+                                        <code>
+                                            curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ 
+                                            <br>&nbsp;  --data-urlencode active="true" \
+                                            <br>&nbsp;  --data-urlencode modified_after="1447866000" \
+                                            <br>&nbsp;  --get \
+                                            <br>&nbsp;  https://api.pushbullet.com/v2/pushes
+                                        </code>
+                                        <p><br>You will notice that the parameters <b>active</b> and <b>modified_after</b> are added to the POST request. If you do not add these parameters you will get every Push that this account has sent, this could be desired but often times not.</p>
+                                        <p><br>The request above will return the data object listed on the right. As you might notice that this object is an array of pushes. Each push will be nested with in the array.</p>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <pre>
 {
   "pushes": [
     {
       "active": true,
-      "body": "Space Elevator, Mars Hyperloop, Space Model S (Model Space?)",
-      "created": 1.412047948579029e+09,
+      "body": "Sam Quinns test Push that is Active.",
+      "created": 1.4120479485332e+09,
       "direction": "self",
       "dismissed": false,
-      "iden": "ujpah72o0sjAoRtnM0jc",
-      "modified": 1.412047948579031e+09,
-      "receiver_email": "elon@teslamotors.com",
-      "receiver_email_normalized": "elon@teslamotors.com",
-      "receiver_iden": "ujpah72o0",
-      "sender_email": "elon@teslamotors.com",
-      "sender_email_normalized": "elon@teslamotors.com",
-      "sender_iden": "ujpah72o0",
-      "sender_name": "Elon Musk",
-      "title": "Space Travel Ideas",
+      "iden": "ujpah72o0dieuie0jc",
+      "modified": 1.41204743453579031e+09,
+      "receiver_email": "quinnsam1@gmail.com",
+      "receiver_email_normalized": "quinnsam1@gmail.com",
+      "receiver_iden": "ujpaeoo0",
+      "sender_email": "quinnsam1@gmail.com",
+      "sender_email_normalized": "quinnsam1@gmail.com",
+      "sender_iden": "ujieouh0",
+      "sender_name": "Sam Quinn",
+      "title": "Test Note",
       "type": "note"
     }
   ]
 }
-                                    </pre>                                    
-                                </div>
+                                        </pre>                                    
+                                    </div><!-- /right pannel -->
+                                </div><!-- /accordion-inner -->
+                            </div><!-- /collapse -->
+                        </div><!-- /accordion-group -->
+                        <br>
 
-
-                            </div><!-- /accordion-inner -->
-                        </div><!-- /collapse -->
-                    </div><!-- /accordion-group -->
-                    <br>
-
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsecTwo">
-                               Sending Pushes
-                            </a>
-                        </div>
-                        <div id="collapsecTwo" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <div class="col-lg-6">
-                                <p>To send a push you will need to take advantage of Curl’s data-binary function, which creates a dictionary object and is sent with a POST request.</p>
-                                <p>Each push will require the following in the dictionary sent to the API.
-                                <ul>
-                                    <li><b>Device_iden</b> or email (channel or client_iden is also accepted but not covered in this tutorial.)</li>
-                                    <li><b>type</b> [note, link, file]</li>
-                                    <li><b>title</b></li>
-                                    <li><b>body</b>
-                                    <li>[URL,File]</li>
-                                </ul></p>
-                                <code>
-                                    curl --header 'Access-Token: &ltACCESS TOKEN&gt' \
-                                    <br>&nbsp;--header 'Content-Type: application/json' \
-                                    <br>&nbsp;--data-binary '{"body":"This is Sam Quinns Pushbullet tutorial,
-                                    <br>&nbsp;sample Push.","title":"Testing Pushing","type":"note"}' \
-                                    <br>&nbsp;--request POST \
-                                    <br>&nbsp;https://api.pushbullet.com/v2/pushes
-                                </code>
-                                <p><br>If this push was pulled using the API form the "Viewing Pushes" section above, it will return a JSON object structured like.</p>
-                                <img src="assets/img/arrow1.png" alt="" align="right">
-                            </div><!--/left pannel -->
-                            <div class="col-lg-6">
-                                <p>The Pushes will send to all of the specified devices in your command and display them locally. Once the Push has been dismissed it will change the <b>active</b> value to false. If a push is dismised on one device it will be flaged as "non-active" and also be dismissed.<br></p>
-                                <img src="assets/img/screen.png" alt="">
-                                <h4><br></h4>
-                                <pre>
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsecTwo">
+                                    Sending Pushes
+                                </a>
+                            </div>
+                            <div id="collapsecTwo" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    <div class="col-lg-6">
+                                        <p>To send a push you will need to take advantage of curl’s data-binary function, which creates a dictionary object and is sent with a POST request.</p>
+                                        <p>Each push will require the following in the dictionary sent to the API.
+                                        <ul>
+                                            <li><b>Device_iden</b> or email (channel or client_iden is also accepted but not covered in this tutorial.)</li>
+                                            <li><b>type</b> [note, link, file]</li>
+                                            <li><b>title</b></li>
+                                            <li><b>body</b>
+                                            <li>[URL,File]</li>
+                                        </ul></p>
+                                        <code>
+                                            curl --header 'Access-Token: &ltACCESS TOKEN&gt' \
+                                            <br>&nbsp;--header 'Content-Type: application/json' \
+                                            <br>&nbsp;--data-binary '{"device_iden":"&ltDEVICE IDEN&gt","body": \
+                                            <br>&nbsp;"This is Sam Quinns Pushbullet tutorial, \
+                                            <br>&nbsp;sample Push.","title":"Testing Pushing","type":"note"}' \
+                                            <br>&nbsp;--request POST \
+                                            <br>&nbsp;https://api.pushbullet.com/v2/pushes
+                                        </code>
+                                        <p><br>If this push was pulled using the API form the "Viewing Pushes" section above, it will return a JSON object structured like.</p>
+                                        <img src="assets/img/arrow1.png" alt="" align="right">
+                                    </div><!--/left pannel -->
+                                    <div class="col-lg-6">
+                                        <p>The Pushes will send to all of the specified devices in your command and display them locally. Once the Push has been dismissed it will change the <b>active</b> value to false. If a push is dismised on one device it will be flaged as "non-active" and also be dismissed.<br></p>
+                                        <img src="assets/img/screen.png" alt="">
+                                        <h4><br></h4>
+                                        <pre>
 {
     "active": true,
     "iden": "udDBbsjAmS57SVq0",
@@ -336,32 +337,33 @@
     "title": "Testing Pushing",
     "body": "This is Sam Quinns Pushbullet tutorial, sample Push."
 }
-                                </pre>
-                            </div><!-- /accordion-inner -->
-                        </div><!-- /collapse -->
-                    </div><!-- /accordion-group -->
-                    <br>
+                                        </pre>
+                                    </div><!-- /right pannel -->
+                                </div><!-- /accordion-inner -->
+                            </div><!-- /collapse -->
+                        </div><!-- /accordion-group -->
+                        <br>
 
-                <section id="subs" name="subs"></section>
-                <h3>Subscriptions</h3>
-                <br>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsedOne">
-                               Viewing Subscriptions
-                            </a>
-                        </div>
-                        <div id="collapsedOne" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <div class="col-lg-6">
-                                <p>Pushbullet allows you to subscribe to “channels” that update every subscriber instantly with a push. Channels can be very useful if you want to either send notifications to a large group of followers or if you would like to keep up to date with a project. By default Pushbullet will send a push to every device for every user that is in the channel.</p>
-                                <code>
-                                    curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ \
-                                    <br>&nbsp; https://api.pushbullet.com/v2/subscriptions
-                                </code>
-                            </div><!--/left pannel -->
-                            <div class="col-lg-6">
-                                <pre>
+                        <section id="subs" name="subs"></section>
+                        <h3>Subscriptions</h3>
+                        <br>
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsedOne">
+                                    Viewing Subscriptions
+                                </a>
+                            </div>
+                            <div id="collapsedOne" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    <div class="col-lg-6">
+                                        <p>Pushbullet allows you to subscribe to “channels” that update every subscriber instantly with a push. Channels can be very useful if you want to either send notifications to a large group of followers or if you would like to keep up to date with a project. By default Pushbullet will send a push to every device for every user that is in the channel.</p>
+                                        <code>
+                                            curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ \
+                                            <br>&nbsp; https://api.pushbullet.com/v2/subscriptions
+                                        </code>
+                                    </div><!--/left pannel -->
+                                    <div class="col-lg-6">
+                                        <pre>
 {
     "subscriptions": [
         {
@@ -392,36 +394,37 @@
         }
     ]
 }
-                                </pre>
-                                <p>The JSON object that is returned contans a list of all the channels you have subscribed to. This list contains deleted channels too, Only channels that have an <b>active</b> value of true are the still avalible.<p>
-                                
-                            </div><!-- /accordion-inner -->
-                        </div><!-- /collapse -->
-                    </div><!-- /accordion-group -->
-                    <br>
+                                        </pre>
+                                        <p>The JSON object that is returned contans a list of all the channels you have subscribed to. This list contains deleted channels too, Only channels that have an <b>active</b> value of true are the still avalible.<p>
 
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsedTwo">
-                               Subscribing a Channel
-                            </a>
-                        </div>
-                        <div id="collapsedTwo" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <div class="col-lg-6">
-                                    <p>To subcribe to a channel you must send a Pushbullet binary object again to the API. The binary object that you send must contain the <b>channel_tag</b>. Pushbullet will use this value to search the channel database, if <b>channel_tag</b> is not found an invalid request JSON object will be returned. </p>
-                                <code>
-                                    curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ \
-                                    <br>&nbsp; --header 'Content-Type: application/json' \
-                                    <br>&nbsp; --data-binary '{"channel_tag":"cyanogenmod-updates"}' \
-                                    <br>&nbsp; --request POST \
-                                    <br>&nbsp; https://api.pushbullet.com/v2/subscriptions
-                                </code>
-                                <p>
-                            </div><!--/left pannel -->
-                            <div class="col-lg-6">
-                                <p>If the command subscribe command worked as expected the API will return a JSON object with more information on the channel.</p>
-                                <pre>
+                                    </div><!-- /right pannel -->
+                                </div><!-- /accordion-inner -->
+                            </div><!-- /collapse -->
+                        </div><!-- /accordion-group -->
+                        <br>
+
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsedTwo">
+                                    Subscribing a Channel
+                                </a>
+                            </div>
+                            <div id="collapsedTwo" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    <div class="col-lg-6">
+                                        <p>To subcribe to a channel you must send a Pushbullet binary object again to the API. The binary object that you send must contain the <b>channel_tag</b>. Pushbullet will use this value to search the channel database, if <b>channel_tag</b> is not found an invalid request JSON object will be returned. </p>
+                                        <code>
+                                            curl --header ‘Access-Token: &ltACCESS TOKEN&gt’ \
+                                            <br>&nbsp; --header 'Content-Type: application/json' \
+                                            <br>&nbsp; --data-binary '{"channel_tag":"cyanogenmod-updates"}' \
+                                            <br>&nbsp; --request POST \
+                                            <br>&nbsp; https://api.pushbullet.com/v2/subscriptions
+                                        </code>
+                                        <p>
+                                    </div><!--/left pannel -->
+                                    <div class="col-lg-6">
+                                        <p>If the command subscribe command worked as expected the API will return a JSON object with more information on the channel.</p>
+                                        <pre>
 {
     "active": true,
     "iden": "udDBbsjAwcNAlh5U",
@@ -437,64 +440,67 @@ pushing for updates every week or two.",
 loads/ujxPklLhvyK-dGB6bTPOGJu0s3M6xdVzIODfPmWc7XBk/cyanogen.png"
     }
 }
-                                </pre>
-                                <p>The JSON object that is returned will contain more information on the channel that you have just subscribed to. This gives you a easy way to check if your <b>channel_tag</b> that was returend from the search is in fact correct.<p>
-                                
-                            </div><!-- /accordion-inner -->
-                        </div><!-- /collapse -->
-                    </div><!-- /accordion-group -->
-                    <br>
+                                        </pre>
+                                        <p>The JSON object that is returned will contain more information on the channel that you have just subscribed to. This gives you a easy way to check if your <b>channel_tag</b> that was returend from the search is in fact correct.<p>
 
-                <section id="enc" name="enc"></section>
-                <h3>Encryption</h3>
-                <br>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseeOne">
-                               End to End Encryption
-                            </a>
-                        </div>
-                        <div id="collapsedeOne" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                
-                                <div class="col-lg-6">
-                                </div><!--/left pannel -->
-                                <div class="col-lg-6">
-                                </div><!-- /right pannel-->
-                            </div><!-- /accordion-inner -->
-                        </div><!-- /collapse -->
-                    </div><!-- /accordion-group -->
+                                    </div><!-- /right pannel -->
+                                </div><!-- /accordion-inner -->
+                            </div><!-- /collapse -->
+                        </div><!-- /accordion-group -->
+                        <br>
 
-                </div><!-- Accordion -->
+                        <section id="app" name="app"></section>
+                        <h3>Applying the API</h3>
+                        <br>
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsedeOne">
+                                    Unix Applications
+                                </a>
+                            </div>
+                            <div id="collapsedeOne" class="accordion-body collapse">
+                                <div class="accordion-inner">
+
+                                    <div class="col-lg-6">
+                                        <p>Now that you are familiar with basics of the Pushbullet API I would like to show you a few things that you can use this tool for. I have included a Bash script <a href="assets/files/push">here</a> that is named “push” and for simplicity I will use this script in these examples. This script is written in Bash, and uses basic Unix utilities that should work out of the box on most Unix machines. 
+
+                                        You can use this script to go through the tutorial as I have added all of the topics that I have covered excluding the option to add subscriptions to this script.
+                                        <br><br>
+                                        You can now use Pushbullet to notify you when a large download has finished like this;</p>
+                                        <code>
+                                            wget lage_file; push -m “Your download is done”
+                                        </code>
+
+                                        <p><br>If you add this to your crontab profile you can have a notification every mornig with a fortune.</p> 
+                                        <code>
+                                            push -m “$(fortune)”
+                                        </code>
+                                    </div><!--/left pannel -->
+                                    <p>One of the things that I have added to my computer is a Pushbullet Linux Pam.d authentication module. Now I have Pushbullet send me a notification when ever anyone has SSHed into my computer. With the reliability and speed that Pushbullet offers it is a first choice utility for this type of security notification.
+                                    <br><br>
+                                    The possibilities are endless, while I did not cover it in this particular tutorial you may even send files with slight modification to the script provided.</p>
+                                    <div class="col-lg-6">
+                                    </div><!-- /right pannel-->
+                                </div><!-- /accordion-inner -->
+                            </div><!-- /collapse -->
+                        </div><!-- /accordion-group -->
+
+                    </div><!-- Accordion -->
+                </div>
             </div>
-            </div>
-        </div><!--/ .container -->
-    </div><!--/ #features -->
-    <br>
+        </div>
+    </div><!--/ .container -->
+</div><!--/ #features -->
+<br>
 
-    <!--
-    <section id="showcase" name="showcase"></section>
     <div id="showcase">
         <div class="container">
             <div class="row">
-                <h1 class="centered">Some Screenshots</h1>
+                <h1 class="centered">Final Words</h1>
                 <br>
                 <div class="col-lg-8 col-lg-offset-2">
-                    <div id="carousel-example-generic" class="carousel slide">
-                        <ol class="carousel-indicators">
-                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                        </ol>
-
-                        <div class="carousel-inner">
-                            <div class="item active">
-                                <img src="assets/img/item-01.png" alt="">
-                            </div>
-                            <div class="item">
-                                <img src="assets/img/item-02.png" alt="">
-                            </div>
-                        </div>
-                    </div>
+                    <p class="centered" style="color:white">I hope that this tutorial has show you the great uses that Pushbullet offers and gives you at least an introduction into how the API works. I have personally while writing this tutorial implemented the API features into my computing environment. It is really nice having a way to get updates from your computer
+                    on your phone or other device without having to deal with email or really anything that does not come preinstalled on a Linux machine.</p>
                 </div>
             </div>
             <br>
@@ -503,47 +509,12 @@ loads/ujxPklLhvyK-dGB6bTPOGJu0s3M6xdVzIODfPmWc7XBk/cyanogen.png"
         </div>
     </div>	
 
-    <section id="contact" name="contact"></section>
-    <div id="footerwrap">
-        <div class="container">
-            <div class="col-lg-5">
-                <h3>Address</h3>
-                <p>
-                Av. Greenville 987,<br/>
-                New York,<br/>
-                90873<br/>
-                United States
-                </p>
-            </div>
-
-            <div class="col-lg-7">
-                <h3>Drop Us A Line</h3>
-                <br>
-                <form role="form" action="#" method="post" enctype="plain"> 
-                    <div class="form-group">
-                        <label for="name1">Your Name</label>
-                        <input type="name" name="Name" class="form-control" id="name1" placeholder="Your Name">
-                    </div>
-                    <div class="form-group">
-                        <label for="email1">Email address</label>
-                        <input type="email" name="Mail" class="form-control" id="email1" placeholder="Enter email">
-                    </div>
-                    <div class="form-group">
-                        <label>Your Text</label>
-                        <textarea class="form-control" name="Message" rows="3"></textarea>
-                    </div>
-                    <br>
-                    <button type="submit" class="btn btn-large btn-success">SUBMIT</button>
-                </form>
-            </div>
-        </div>
-    -->
     </div>
     <div id="c">
-        <div class="container">
-            <p>Template by: <a href="http://www.blacktie.co">BLACKTIE.CO</a></p>
+<div class="container">
+    <p>Tutorial by: <b>Sam Quinn</b></p>
 
-        </div>
+</div>
     </div>
 
 
@@ -551,10 +522,5 @@ loads/ujxPklLhvyK-dGB6bTPOGJu0s3M6xdVzIODfPmWc7XBk/cyanogen.png"
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="assets/js/bootstrap.js"></script>
-    <script>
-$('.carousel').carousel({
-interval: 3500
-})
-    </script>
     </body>
     </html>
