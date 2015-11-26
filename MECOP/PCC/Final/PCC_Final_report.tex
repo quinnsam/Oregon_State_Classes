@@ -158,100 +158,85 @@ we would all have a role in getting the issue resolved.
 
 \section{Projects}
 
-\subsection{Tinstall}
-\indent Tinstall was one of the first projects I worked on. Tinstall's purpose is to create 
-a more uniform, organized, and easy to maintain directory for internally created 
-tools and utilities. Tinstall reads from a configuration file to get instructions 
-on which files to install and where. Each file must be CVS revision controlled and 
-up to date or else Tinstall will error out. Tinstall must verify that the user has 
-permissions to install to the requested directory. Tinstall will create necessary folders and only overwrite 
-a file if it has been updated. If Tinstall determines that everything checks 
-out, it will install all of the files to the correct directories and create desired 
-symbolic links. In the case of an installation failing, Tinstall will automatically restore the 
-contents of the install directory to the state before Tinstall attempted the install. After a successful 
-install, Tinstall creates a ``bill of materials'' file and updates the log with the 
-user who executed the installed.
+\subsection{Aras Innovator Upgrade}
+\indent The first large project that I had the opportunity to work on was upgrading 
+Aras Innovator. The drive for the MIS department to upgrade Innovator was that the 
+current version when I began at PCC only worked on Internet Explorer 9. We wanted 
+to move all of our computers to Internet Explorer 11 and to do this we had to make 
+sure that Innovator would continue to work. Innovator is a unique process control 
+visualization tool that is used company wide and a seamless upgrade with no errors
+was required. I worked very closely with Kyle Grotjohn who was the lead in the 
+upgrade. We both had to create a comprehensive test plan that would get as close 
+to 100\% coverage as possible. This plan was huge we if there was a check box that 
+could be clicked there was a whole test just to test that one check box. I spent 
+about 4 weeks going through the test plan and creating bug reports for any errors 
+I came across. The bug report contained screenshots, the steps taken to reproduce 
+the error, and my description of the what was supposed to happen. Aras corp were 
+actually the ones in charge of fixing the bugs, so I would package all of my 
+reports up and send it to them. 
 \\
-\indent This was the first time I have been introduced to the programing language Tcl. 
-Since Eric Martinson had begun to create this tool before me, there were 
-some files in place that I studied to become familiar with Tcl. It was really 
-nice to have some skeleton code in place before I started, and to view how a professional
-laid out the base of the program. Mimicking the coding style helped me create a well designed 
-tool. I ended up liking Tickle a lot, even though many people seem to dislike it. 
+\indent This was the first time I have been introduced to the Aras Innovator Application. 
+Since Kyle had begun to test this tool before me, he was a great mentor on the application. 
+It was really nice to have some tests in place before I started, and to view how a professional
+laid out the base of the test plan. Mimicking the style helped me create and execute 
+a well designed test plan.
 \\
-\indent One of the biggest takeaways from this project was the importance of error checking.
-In my past projects that I completed for school and personal use, I often 
-never implemented error logs or error checking. Studying the code before beginning 
-my work on this project, I noticed that there were comments and error checks everywhere.
-Since I mimicked Eric's coding style, I too used an abundance of comments and checks.
-I soon came to the realization of how much easier it is to find and 
-take care of bugs when you know where they come from. \\
+\indent One of the biggest takeaways from this project was the importance of clear 
+and easy to read documentation. In my past projects that I developed tests for I 
+never created a test plan which probably resulted in many functions not getting coverage.
+Studying the test plan before beginning my work on this project, I noticed that 
+there were clear comments everywhere. Since I mimicked Kyle's testing style, I too 
+used an abundance of comments. I soon came to the realization of how much easier 
+it is to understand and take care of bugs when you know where they come from. \\
 
 
 \textbf{Things Learned:}
 \begin{itemize} 
-        \item Tcl
-        \item Unix Permissions
-        \item Semaphores
-        \item Following design guidelines
-        \item Fail-Safe programing techniques
+        \item .Net framework
+        \item Internet Explorer compatibility
+        \item Creating Bug reports
+        \item Work with others following a plan
     \end{itemize}
 
-\subsection{DFM FILL WRAP QA}
-\indent The majority of my time spent at Mentor Graphics was helping Sam with testing and 
-debugging the new DFM Fill Wrap feature. There was an existing DFM Fill Wrap in place 
-when I started but with how much smaller the IC layouts are getting it was causing 
-problems. Developers decided to make a new Wrap function that can handle smaller 
-layouts like 10nm designs. It was very interesting to be apart of this new product 
-and to understand the need for it.
+\subsection{Security Audit}
+\indent With many of the contracts that PCC has the cyber security has to be top 
+notch.  PCC would conduct bimonthly security audits that would check every computer 
+that is in our domain. We would get separate lists of computers that have reported 
+computers that are missing our mandatory security software. Each list would have 
+a lot of computers that would require us to manually connect to each machine and 
+verify that the computer either reported a false-positive or was indeed missing 
+the software. I saw this as a great opportunity to implement automation. I began 
+creating scripts that would make the audit process quicker and more accurate. The 
+first Script that I wrote would take all the computer names and try to gather more 
+info on them. The script would ping each computer to see if they are currently 
+online, get the last user who logged into the workstation, and the last time time 
+the computer was logged into. 
 \\
-\indent Eugene explained to me that the reason the old Wrap Fill will no longer 
-work is that designs now require precision cuts that are smaller than the light wave used for 
-optical cutting. This problem can be solved passing 
-the light through a viscous chemical that concentrates the light into multiple 
-parallel straight lines. This is the root of the problem with generating fill shapes. 
-The old Fill Wrap would place dummy fill shapes in a bi-directional 
-manner, since now the cuts are only created in parallel straight lines there 
-cannot be bi-directional fill shapes only uni-directional. 
+\indent
+At first the other PC techs were skeptical to use my scripts since they have been 
+doing the security audits many times in the past and did not want to cause more 
+problems, but after a while they began to see the usefulness in what they did. 
+Each script needed to increase the productivity of the audit process. I spent time 
+developing the scripts which put me behind schedule on the first audit but the 
+audits that came prior both the scripts increase my productivity tremendously.
 \\
-\indent  Sam was really good about including me in on all of the Wrap related 
-emails and always invited me to the meetings. I created many test cases 
-and felt like I was a real addition to the team. Also the fact that we are 
-now creating microchips that need precision smaller than the width of a light wave 
-fascinates me, and I am very fortunate to have worked on a bleeding edge product. 
+\indent Before the first security audit I had not used Powershell to create scripts.
+It was a slight learning curve that I had to over come. I am very familiar with the 
+Unix shell environment and Powershell shared many of the same characteristics. One 
+challenge that I had to overcome was that Windows would not actually run any Powershell 
+script that had not been signed. This was a problem since I did not have access to 
+a Windows development key for signing, I ended up creating a wrapper batch script 
+that would enable unsigned execution and then after executing set the execution 
+policy back to default. Needless to say writing the batch script wrapper was more 
+difficult than the Powershell script. The Batch script syntax was very different 
+from the familiar Unix shell environment. 
 
 \textbf{Things Learned:}
 \begin{itemize} 
-        \item How IC are cut using light and chemicals
-        \item CVS Repositories
-        \item Creating test cases
-        \item Working with a QA team
-        \item How to use Calibre software
-    \end{itemize}
-
-\subsection{PERC QA}
-\indent With about a month left in my internship, I was asked to help with 
-PERC QA. PERC is a part of the LVS tool, which compares a finished layout with the schematic 
-to ensure that the physical implementation of the circuit matches its logical definition 
-thus the name Layout Vs. Schematic. Specifically PERC is Programmable Electronic Rule 
-Checking that verifies layouts with advanced electrostatic discharge checks.
-\\
-\indent I was called on board to help out with PERC to help gather information about around 
-400 tests that fail when ran in forced parallel mode. The PERC test suite was built 
-much differently than that of the DFM tests I was used to. The PERC test utilized an intricate 
-and intelligent harness that would analyze each test case and figure out how to run 
-it automatically. It was fairly difficult to get caught up on the PERC QA logic 
-because of how different it was from DFM. I will be creating a dictionary of all 
-the PERC built-ins that will be correlated to existing tests that are failing. 
-Special analysis and repair efforts can be stream lined to built-ins with low 
-coverage or failing patterns.
-
-\textbf{Things Learned:}
-\begin{itemize} 
-        \item More Tcl
-        \item Using a harness to run test cases
-        \item How to creating a dictionary for debugging purposes
-        \item How to analyze a core file after a core dump
+        \item Powershell scripts
+        \item SCCM reporting
+        \item Active Directory
+        \item Windows CLI
     \end{itemize}
 
 \section{Minor Projects}

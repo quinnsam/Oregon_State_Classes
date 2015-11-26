@@ -4,8 +4,8 @@
 \contentsline {subsection}{\numberline {2.2}MIS}{2}{subsection.2.2}
 \contentsline {subsection}{\numberline {2.3}Mentor/Supervisors}{2}{subsection.2.3}
 \contentsline {section}{\numberline {3}Projects}{3}{section.3}
-\contentsline {subsection}{\numberline {3.1}Tinstall}{3}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}DFM FILL WRAP QA}{3}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.1}Aras Innovator Upgrade}{3}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Security Audit}{3}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}PERC QA}{4}{subsection.3.3}
 \contentsline {section}{\numberline {4}Minor Projects}{5}{section.4}
 \contentsline {subsection}{\numberline {4.1}TWiki Upgrade}{5}{subsection.4.1}
