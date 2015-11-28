@@ -103,13 +103,13 @@
 \newpage
 
 \section{Introduction}
-\indent For my second MECOP internship I was fortunate to be placed at Precision Castpart Corp. This 
+\indent For my second MECOP internship I was fortunate to be placed at Precision Castpart Corp.. This 
 was my second time being immersed into a professional atmosphere in the field that 
-I am studying and I enjoyed it equally as the first. I am computer science student with a focus 
-in security and even thought that Precision Castparts Corp. was more of an old school 
-non-tech company, I was greatly mistaken. Precision Castparts Corp. had a lot of advanced 
-technology and very intricate security, which was great for me to get hands on with. It was 
-good for me to learn the basics of how a large corporation like Precision Castpart Corp. 
+I am studying and I enjoyed it equally as much as the first. I am a computer science student with a focus 
+on security and I thought that Precision Castparts Corp. was more of an "old school" 
+non-tech company before my internship. I was greatly mistaken. Precision Castparts Corp. has a lot of advanced 
+technology and very intricate security. It was 
+beneficial for me to learn the basics of how a large corporation like Precision Castpart Corp. 
 handles security. I now feel more well rounded and have at least some experience relating to
 my security focus.
 
@@ -117,7 +117,7 @@ my security focus.
 
 \subsection{What does Precision Castpart Corp. do?}
 \indent When I was first placed at Precision Castpart Corp. I had not heard much about them. I 
-definitely was not a ware that they were one of Oregon's two fortune 500 companies.
+was not aware that they were one of Oregon's two fortune 500 companies.
 Precision Castparts Corporation specializes in the casting of metal aerospace parts. 
 They are the world leader in investment casting, forged components, and airfoil castings. 
 The company was started over 60 years ago in Portland, OR by Joseph Cox, the owner of 
@@ -149,11 +149,11 @@ to large issues that were halting production like robotic arms.
 \indent My mentors were the managers of the MIS department Steve Jessie and Dave 
 Rajkumar. Both Steve and 
 Dave were responsible for keeping all of Precision Castparts Corp technology up 
-to date and secure. There management encompassed the LAN Admins, Programmers, 
-Helpdesk, and the Telecom employees. Even though I was often at my desk in the 
+to date and secure. Management encompassed the LAN Admins, Programmers, 
+Helpdesk, and the Telecom employees. I was often at my desk in the 
 helpdesk which was separate from the MIS department we kept a close relationship 
 with the other programmers, LAN admins, and techs. I worked with a lot of individuals 
-during my time at Precision Castpart Corp. Often times when a problem would arise 
+during my time at Precision Castpart Corp. often times when a problem would arise 
 we would all have a role in getting the issue resolved. 
 
 \section{Projects}
@@ -167,7 +167,7 @@ sure that Innovator would continue to work. Innovator is a unique process contro
 visualization tool that is used company wide and a seamless upgrade with no errors
 was required. I worked very closely with Kyle Grotjohn who was the lead in the 
 upgrade. We both had to create a comprehensive test plan that would get as close 
-to 100\% coverage as possible. This plan was huge we if there was a check box that 
+to 100\% coverage as possible. This plan was huge, if there was a check box that 
 could be clicked there was a whole test just to test that one check box. I spent 
 about 4 weeks going through the test plan and creating bug reports for any errors 
 I came across. The bug report contained screenshots, the steps taken to reproduce 
@@ -182,11 +182,11 @@ laid out the base of the test plan. Mimicking the style helped me create and exe
 a well designed test plan.
 \\
 \indent One of the biggest takeaways from this project was the importance of clear 
-and easy to read documentation. In my past projects that I developed tests for I 
+and easy to read documentation. In my past projects that I developed tests, I 
 never created a test plan which probably resulted in many functions not getting coverage.
 Studying the test plan before beginning my work on this project, I noticed that 
 there were clear comments everywhere. Since I mimicked Kyle's testing style, I too 
-used an abundance of comments. I soon came to the realization of how much easier 
+used an abundance of comments. I soon came to the realization how much easier 
 it is to understand and take care of bugs when you know where they come from. \\
 
 
@@ -199,35 +199,34 @@ it is to understand and take care of bugs when you know where they come from. \\
     \end{itemize}
 
 \subsection{Security Audit}
-\indent With many of the contracts that PCC has the cyber security has to be top 
-notch.  PCC would conduct bimonthly security audits that would check every computer 
-that is in our domain. We would get separate lists of computers that have reported 
-computers that are missing our mandatory security software. Each list would have 
-a lot of computers that would require us to manually connect to each machine and 
+\indent Many of the contracts that Precision Castparts Corp. has, cyber security has to be top 
+notch. Precision Castparts Corp. would conduct bimonthly security audits that would check every computer 
+that is in our domain. We would get separate lists of computers that had reported 
+missing mandatory security software. Each list would have the computers that would require us to manually connect to each machine and 
 verify that the computer either reported a false-positive or was indeed missing 
 the software. I saw this as a great opportunity to implement automation. I began 
 creating scripts that would make the audit process quicker and more accurate. The 
 first Script that I wrote would take all the computer names and try to gather more 
 info on them. The script would ping each computer to see if they are currently 
 online, get the last user who logged into the workstation, and the last time time 
-the computer was logged into. 
+the computer was logged in. 
 \\
 \indent
-At first the other PC techs were skeptical to use my scripts since they have been 
+At first the other PC techs were skeptical of using my scripts since they had been 
 doing the security audits many times in the past and did not want to cause more 
-problems, but after a while they began to see the usefulness in what they did. 
+problems. After a while they began to see the usefulness in what the scripts accomplished. 
 Each script needed to increase the productivity of the audit process. I spent time 
 developing the scripts which put me behind schedule on the first audit but the 
-audits that came prior both the scripts increase my productivity tremendously.
+audits that came after the scripts increase my productivity tremendously.
 \\
 \indent Before the first security audit I had not used Powershell to create scripts.
-It was a slight learning curve that I had to over come. I am very familiar with the 
+It was a slight learning curve that I had to overcome. I am very familiar with the 
 Unix shell environment and Powershell shared many of the same characteristics. One 
 challenge that I had to overcome was that Windows would not actually run any Powershell 
 script that had not been signed. This was a problem since I did not have access to 
-a Windows development key for signing, I ended up creating a wrapper batch script 
-that would enable unsigned execution and then after executing set the execution 
-policy back to default. Needless to say writing the batch script wrapper was more 
+a Windows development key for signing, I ended up creating a wrapper Batch script 
+that would enable unsigned execution and then, after executing, set the execution 
+policy back to the default. Needless to say writing the batch script wrapper was more 
 difficult than the Powershell script. The Batch script syntax was very different 
 from the familiar Unix shell environment. 
 
@@ -241,87 +240,85 @@ from the familiar Unix shell environment.
 
 \section{Minor Projects}
 
-\subsection{TWiki Upgrade}
-\indent During my down time while working with Sam debugging the Fill Wrap feature I had 
-the opportunity to gain knowledge in website hosting. I was asked to investigate 
-what needed to be done to upgrade DFM QA's internal Wiki site. The DFM QA Wiki 
-site was created with TWiki and open source wiki interface and hosted locally at Mentor 
-Graphics. Before diving head first into this project, I had no prior experience working 
-with Apache, CGI scripts, or really any web tools for that matter, but I was very 
-excited to learn. \\
-\indent I spent about a week creating an exact replica of the DFM QA TWiki site on my local 
-machine with the updated version. I ran into a lot of problems with permissions 
-and how Apache can own files that even root can't access. With help from Sam and 
-ICV BIG, I eventually got a working copy running on my computer. Since the TWiki 
-was accessed by all of the DFM QA team, there was too much information for me to 
-verify everything copied correctly during the upgrade. The way Sam and I tested 
-everything was correct, was we did a live switch and allowed all of the team to 
-poke around the new version to check that all of their paths and normal day links 
-continued to work. After we got our good results back from the team, we copied my 
-local copy to the permanent server location. \\
-
+\subsection{PC Builds}
+\indent One of the main tasks that the PC technicians at the helpdesk were responsible 
+for were building computers for the employees. The first step in building a PC was 
+to either construct a computer for previously deployed machines or taking one out 
+of stock. My previous experience of building my own computers helped a lot in this 
+task. Once we had a working computer we would have to image it with a working OS.
+With all of the standard applications that need to be installed on each machine, it would 
+take a long time to get each computer installed with the required applications. 
+SCCM actually allows you to build a PC with a set of Applications preinstalled. 
+I never knew this was a feature of SCCM and it made the build process much faster 
+and easier.\\
+\indent After the SCCM image was complete the computer still needed some manual tech 
+work. Each computer must be fully encrypted. All the PC we would build have 
+an on-board hardware encryption module called TPM (Trusted Platform Module). With 
+my security interest I enjoyed learning how to enable the TPM and preform a full 
+disk encryption. \\
 \textbf{Things Learned:}
     \begin{itemize} 
-        \item Apache configuration
-        \item Unix Permissions
-        \item CGI scripts
-        \item General web hosting 
+        \item Determining hardware requirements
+        \item SCCM Network Images
+        \item TPM Encryption 
     \end{itemize}
 
-\subsection{Test Suite Search Tool}
-\indent After working with Dave in my Tinstall project, Dave approached me with a problem 
-that he thought I could help with. Dave's problem was that when he finds a bug within 
-the test suite he often times did a series of greps and pipes to narrow down his 
-search. Since there wasn't really any built-in UNIX or inside tool that could search 
-for multiple terms, I decided to help him with this. \\ 
-\indent Dave gave me the freedom to use whatever language I thought best, since I was writing 
-this program from scratch. After enjoying learning TCL so much in the Tinstall 
-program, I decided to learn a new language and went with Perl for the code and Tk 
-for the GUI. Dave thought Perl and Tk were a good choice and after explaining to 
-him that I have never programmed in Perl before he showed me our company library, 
-which was a great resource in later projects.
+\subsection{Application Installs}
+\indent Many of the Precision Castparts Corp. employees needed specialized non-standard 
+applications. A lot of the applications that I had to install were in-house applications
+that had very vague and abnormal installation procedures. I became very familiar 
+with asking other techs and sometimes the developers how to install the requested 
+application. I enjoyed the learning curve that was required to install some of the applications. 
+It was rewarding knowing the very unique installation procedure the second time 
+around and giving advice to the new techs on how to install the application. 
+
+\indent Before working at the helpdesk I never had to provide remote assistance 
+to anyone. It was pretty weird remoting into peoples computers even when 
+I was on the phone with them. I felt like I was invading their privacy. After I became 
+more familiar with remote assistance etiquette I no longer felt this way.\\ 
 
 \textbf{Things Learned:}
 \begin{itemize} 
-        \item Tk
-        \item Perl
-        \item Making a GUI
-        \item Grep to a higher degree
+        \item Asking developers for install instructions
+        \item Remote Control assistance
+        \item Analyzing install time
     \end{itemize}
 
 \section{Conclusion}
 \subsection{What I learned}
 \indent During my 6 month internship I learned a comparable amount of degree related knowledge
-than I would have at school. The main difference was that the things I learned while 
-Working at Mentor Graphics no class could teach. One of my most exciting things 
+to what I would have at school. The main difference was that the things I learned while 
+Working at Precision Castparts Corp. no class could teach. One of my most exciting things 
 I learned during my internship is how to be efficient. I consider myself 100\% more 
-comfortable in a UNIX environment. I believe that I will be a much better programmer 
-and will be able to produce a higher quality of work from the small tips and tricks 
-that were taught to me during my time at Mentor Graphics. The real world work environment seems 
+comfortable in a Windows environment. I believe that I will be a much more well rounded programmer 
+and will be able to produce a higher quality of work from the tips and tricks 
+that I learned during my time at Precision Castparts Corp. The real world work environment seems 
 far less scary to me now that I have had a slight taste of it. It was very neat 
 to see how my background knowledge from school got integrated into the work place.
 I would often times recall information from previous classes that would help me 
 solve problems I faced during my internship. 
 \\
 \subsection{How the internship benefited me}
-\indent This internship has greatly benefited me in many ways. One of the greatest 
+\indent This internship has benefited me in many ways. One of the best 
 benefits I will takeaway from this internship is knowing that I can work in the 
-industry. It was great to see that I was working on real projects that full time 
-employees were working on and helped solve unsolved problems. I liked working on 
-nonstandard problems in contrast to how at school I felt like I was finishing 
-a homework assignment that I know every other CS student has solved before me. 
+industry. It was enlightening to see that I was working on real projects alongside full time 
+employees were working on and finding solutions to real time problems. I liked working on 
+nonstandard problems in contrast to school where I was finishing 
+a homework assignment that I knew every other CS student had solved before me.  
 \\
-\subsection{How I benefited Mentor Graphics}
-\indent I really didn't know how important my contributions were to Mentor Graphics until 
-I was talking to  one of the employees about what I was working on with the new Wrap function and he said "You 
-are working on probably the most important update in the upcoming release". After 
-I heard this I truly felt like Mentor Graphics valued my work and that I was actually
-making a difference. I created more than 30 test cases, upgraded a site most people 
-on the QA team access daily, and helped find which functions that need to be tested.\\ 
-\subsection{Presentations}
-\indent After finishing Mentor Graphic's internal tool, Tinstall, I was asked to present to 
-a majority of the QA employees explaining my tool. This presentation took place via 
-telecommunication with people viewing from Mentor Graphics locations all over the 
-world.
+\subsection{How I benefited Precision Castparts Corp.}
+\indent I didn't realize how important my contributions were to Precision 
+Castparts Corp. until Kyle one of my coworkers wrote a recommendation on my Linkedin 
+profile saying "I worked with Sam on the Aras Innovator System upgrade from version 
+9 SP3 to 11 SP2. Sam was invaluable as a testing resource throughout the entire 
+upgrade, have it be following test plans and bringing up issues or writing some 
+test plans himself that followed user procedure more closely. The learning curve 
+to the Aras UI is only trumped by the high level of customizability within the 
+solution and with all of those hurdles Sam still continued with a positive demeanor 
+and continued to exceed my expectations. His ability to understand and learn business 
+practices, customized programmatic solution, and following/creating test plans were 
+invaluable to me throughout the entire upgrade process. I am confident that Sam 
+possesses the determination and learning capability to succeed wherever his career 
+takes him.". After I heard this I truly felt that Precision Castparts Corp. valued my work 
+and that I was actually making a difference.\\ 
 \end{document}
-
