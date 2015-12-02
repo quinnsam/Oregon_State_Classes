@@ -14,6 +14,7 @@ class PubKey(webapp2.RequestHandler):
         expTime = ''
         exp = ''
         pubkey = ''
+        google = ''
         print "made it here"
         """ Creates a Public Key object
 
@@ -27,6 +28,7 @@ class PubKey(webapp2.RequestHandler):
                 exp-date - [optional] expDate
                 exp-time - [optional] expTime
                 pubkey - [required] pubkey
+                google - [optional] google
         """
 
         if 'application/json' not in self.request.accept:
@@ -55,6 +57,7 @@ class PubKey(webapp2.RequestHandler):
         expTime = self.request.get('exp-time', default_value=None)
         exp = self.request.get('expiration', default_value=None)
         pubkey = self.request.get('pubkey', default_value=None)
+        google = self.request.get('google', default_value=None)
 
         if fullname:
             new_key.fullname = fullname
@@ -95,6 +98,8 @@ class PubKey(webapp2.RequestHandler):
             self.response.status = 400
             self.response.status_message = "Invalid request, 'pubkey' is required."
             self.response.write("Invalid request, 'pubkey' is required.")
+        if google:
+            new_key.google = google
 
         key = new_key.put()
         out = new_key.to_dict()

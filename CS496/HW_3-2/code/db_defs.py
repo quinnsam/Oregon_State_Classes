@@ -17,6 +17,7 @@ class Public_Keys(Model):
     expTime  = ndb.StringProperty()
     exp = ndb.StringProperty(required=True)
     pubkey = ndb.StringProperty(required=True)
+    google = ndb.StringProperty(required=False)
 
 
 class People(Model):
