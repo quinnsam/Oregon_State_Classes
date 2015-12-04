@@ -98,13 +98,15 @@
 \newpage
 
 \section{Introduction}
-\indent This Project was developed as an extracraricular for computer science elective credit. 
+\indent This Project was developed as an extracurricular for computer science elective credit.  The main goal of this project is to create a smarter flight controller. There are many flight controllers available today but none of them run on powerful hardware or have the expandable options that a full computer has. Our project is meant to use an Intel powered x86 microcomputer to replace the standard flight controller. With a powerful processor controlling the UAV we will be able to expand the functionality to other useful features like video processing for object detection, wireless connectivity for WIFI traffic analysis, automated flight plans, and many other things. The core of this project is getting the UAV operable with standard components and connecting the peripherals to the Intel board. 
 
 
 \section{Platform}
 
 \subsection{What platform did we decide to use?}
-\indent 
+\indent During the initial stages of the project we wanted to use hardware that would be easy to setup and have decent developer community. With the nature of the project having to fly the ideal final product would be very small and light weight. There a few Intel boards that we considered for this project. The Intel NUC, the Intel Galileo, the Intel Edison. The NUC is the biggest but has the most powerful hardware, Intel i5; this is basically a 4x4 desktop computer. The NUC would be able to perform other tasks with the excessive performance and would be a good choice for when we implement smart control. The Intel Galileo is the least powerful at processing but is designed with a break out board built in. The Galileo would be the best for actually controlling the UAV peripherals since we could plug the components directly into the board its self. The Edison would be the Ideal board for this product since it bridges the gap between performance and breakout capabilities. The Intel Edison has the smallest form factor that would be able to fit neatly on any size UAV and would be able to be powered directly form the 5V output from the ESCs. 
+We decided to start development on the Intel NUC in the early stages of development with plans to eventually develop on the Edison. This decision came from the idea that we first need to get Ardupilot running on the NUC which is an x86 computer. Almost all of the flight controllers out there today are on the ARM architecture we figured once we understand how to get Ardupilot running on a x86 architecture we will be able to transition it the other Intel boards at a later time.
+
 \subsection{Other platforms}
 \indent 
 \subsection{Considerations}
