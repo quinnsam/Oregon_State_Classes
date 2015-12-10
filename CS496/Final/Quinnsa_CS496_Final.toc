@@ -1,6 +1,6 @@
 \contentsline {section}{\numberline {1}Portability}{2}{section.1}
 \contentsline {section}{\numberline {2}Usability}{2}{section.2}
-\contentsline {section}{\numberline {3}Reliability}{2}{section.3}
-\contentsline {section}{\numberline {4}Performance}{2}{section.4}
-\contentsline {section}{\numberline {5}Security}{2}{section.5}
-\contentsline {section}{\numberline {6}Interoperability}{2}{section.6}
+\contentsline {section}{\numberline {3}Reliability}{3}{section.3}
+\contentsline {section}{\numberline {4}Performance}{4}{section.4}
+\contentsline {section}{\numberline {5}Security}{4}{section.5}
+\contentsline {section}{\numberline {6}Interoperability}{5}{section.6}
