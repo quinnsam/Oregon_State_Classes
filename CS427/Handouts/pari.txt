@@ -1,0 +1,101 @@
+PARI/GP QUICK REFERENCE
+by Mike Rosulek for OSU Crypto course
+Last update: 9 OCT 2013
+
+Where to get Pari:  http://pari.math.u-bordeaux.fr/
+How to run Pari:    type `gp`
+
+Useful operators, syntax:
+
+    %               modulus operator
+    ^               exponentiation
+    ==              equality test
+
+    %1, %2, etc..   result of the 1st, 2nd, ... expression evaluated
+    %               result of previous expression (when not interpreted as
+                    modulus operator)
+    %` (backtick)   result of penultimate expression
+    #               enable/disable timer display for all expressions
+    ##              how long did previous operation take?
+    \p N            guarantee N digits of precision for real numbers
+    \l filename     log subsequent input/output to file (default = pari.log)
+    quit, \q        quit
+    \\              comment until end of line
+
+Useful builtin functions:
+
+    subst(f,x,v)    substitute v in place of variable x in polynomial f
+    polinterpolate([a1,...,at], [b1,...,bt])
+                    unique degree-(t-1) polynomial p satisfying bi=p(ai)
+    polinterpolate([b1,...,bt])
+                    same as above, taking a1=1, a2=2, ...
+
+    isprime(n)      determine whether n is prime
+    nextprime(n)    find the least prime number greater than n
+    Mod(x,n)        object representing the modular residue x in the group
+                    Z(n): all operations on the object will be in Z(n)
+    lift(x)         if x is a Mod object, convert it back to an integer
+    gcd(x,y)        greatest common divisor of x & y
+    bezout(x,y)     compute GCD of x & y along with the bezout coefficients
+    eulerphi(n)     Euler totient function of n: size of the multiplicative
+                    group Z*(n)
+    random(n)       return a random integer between 0 and n-1
+    factor(n)       return the factorization of n: infeasible when n is large
+    chinese(x,y)    if x and y are both Mod objects, computes inverse Chinese
+                    Remainder Theorem mapping (in another Mod object)
+    sqrtint(n)      square root over integers: avoids real-number precision
+                    problems of sqrt(n). returns floor(sqrt(n))
+    valuation(n,p)  computes largest number d such that p^d divides n
+
+
+Defining variables:
+
+    p = 12345678901234
+    p = nextprime( random(10^100) )
+
+    Use a trailing semicolon to supress display of the result.
+
+Defining your own functions:
+
+    f(x) = expr involving x
+    f(x,y) = expr involving x and y
+
+Useful user-defined functions:
+
+    randprime(d) = nextprime(random(10^d))  generate random d-digit prime
+
+    modinv(x,n) = lift(1/Mod(x,n))          modular inverse
+
+Programming in Pari:
+
+    for(i=j,k,expr)     evaluate expr for all values of i from j to k
+    forprime(...)       same as for(), but loop variable i only takes on prime
+                        values in the range
+    fordiv(i,n,expr)    similar to for(), but loop variable i only takes on
+                        values that are divisors of n
+    print(a)            print result of expression a
+    if(expr,a,b)        if expr evaluates to true, evaluate a, else evaluate b
+    if(expr,a)          "else branch" can be omitted
+    while(a,b)          while expression a evaluates to true, evaluate b
+    &&, ||, !           logical operators
+
+    {a;b}               evaluate expression a, then b (for use in above
+                        flow-control constructs)                  
+    local(v)            make v a local variable (within {..})
+
+Advanced examples:
+
+    \\ generate a random d-digit Sophie-Germain prime
+    sgprime(d) = {
+        local(p);
+        while( !isprime(2*p+1), p = nextprime(random(10^d)) );
+        p
+    }
+
+    \\ random degree-d polynomial, coefficients mod m, with p(0)=s
+    randpoly(d,m,s) = {
+        local(p);
+        p = Mod(s,m);
+        for(i=1, d, p = p + Mod(random(m),m) * x^i);
+        p;
+    }
