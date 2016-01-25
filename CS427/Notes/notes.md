@@ -86,3 +86,64 @@ BIG PICTURE Breaking Security:
     - Write down the code of adv (calling program)
     - Show that OTP-Real != OTP-Rand.
 
+
+Idea: When k chossen uniformly, F(k, .) :{0,1}^in -> {0,1}^out should "look like" randomly chosen function.
+
+Attacks:
+    Let F be a secure PRF
+    Define F'(k,x = F(k,x) xor F(k,x@) @Flip every bit
+
+Claim: F' is not a secure PRF, even if F is
+
+Hint: Dont't try to break F
+
+    Outputs of F on distinct inputs look random
+    -> try to get same input into F twice (by querying F')
+
+Adv: 
+    Pick any x
+    z1 = query(x)
+    z2 = query(xbar)
+
+    "Real Wold"
+        z1 = F(k,x) xor F(k,xbar)
+        z2 = F(k,xbar) xor F(k,x)
+        z1 = z2 always
+        pr[output true] = 1
+
+    "Ideal World"
+        z1 <- {0,1}^out
+        z2 <- {0,1}^out
+        pr[z1=z2] = 1/(2^out) ---- Not negilible
+
+    ** In a secure world PR's would be simmilar **
+
+*PsudoRandom Pormutations (PRPs)* - Block Cipher
+
+Basically a PRF, but 
+    in = out = blen (block lenght)
+and
+    there exists F^-1:                  F(k,x) and F^-'(k,x) are inverses
+    for each k: F^-1(k,F(k,x))=x
+
+PRP swithching lemma: 
+    If blen = lambda, then ideal permutation is indistinguishable from ideal rand func ( only diff is sampling with/without replacment)
+    (Construntions that require PRF con use PRP)
+
+Challenge:
+    A PRF F(k,x) somehow "scrambles" x
+    A PRP F(k,x) "scrambles" x but in a way that x is still recoverable via F^-1(k,x)
+
+Feistel Cipher: (Way to convert a PRF -> PRP)
+    (e.g. DES uses this idea)
+
+    Simplest idea:
+        Suppose F:{0,1}^n -> {0,1}^n F may not have an inverse
+        Def     Fhat:{0,1}^2n -> {0,1}^2n
+                Fhat(L,R)    = (R, F(R) xor L)
+                             = (x,y)                    ** Both use F in the forward direction, but is still inversable **
+                Fhat^-1(x,y) = (F(x) xor y, x)
+                             = (L, R)
+
+
+
