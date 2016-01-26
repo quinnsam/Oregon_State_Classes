@@ -1,0 +1,91 @@
+\documentclass[letterpaper,12pt,notitlepage,fleqn]{article}
+
+\usepackage{nopageno} %gets rid of page numbers
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{url}
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+\usepackage{pstricks, pst-node}
+\usepackage{geometry}
+\geometry{textheight=9in, textwidth=6.5in} %sets 1" margins 
+\newcommand{\cred}[1]{{\color{red}#1}} %command to change font to red
+\newcommand{\cblue}[1]{{\color{blue}#1}} % ...blue
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage[usestackEOL]{stackengine}
+\usepackage{multicol}
+
+\def\name{Sam Quinn}
+
+\parindent = 0.0 in
+\parskip = 0.2 in
+
+\title{Homework \#2}
+\author{Sam Quinn}
+
+\begin{document}
+\maketitle
+\hrule
+
+\section{}
+\textbf{Which of the following are negligible functions? Justify your answers.}
+\begin{itemize}
+	\item $\sqrt{\frac{\lambda}{2^{\lambda}}} \rightarrow 0$ - This happens because the denominator increases exponentialy.
+	\item $\frac{1}{2^{log(\lambda^{2})}} \rightarrow 0$ - This will also approach zero as the denominator continues to grow.
+	\item $\frac{1}{\lambda^{log(\lambda)}} \rightarrow 0$
+	\item $\frac{1}{\lambda^{2}} \rightarrow 0$
+	\item $\frac{1}{2^{(log\lambda)^{2}}} \rightarrow 0$
+	\item $\frac{1}{\sqrt{\lambda}} \rightarrow \infty$
+	\item $\frac{1}{2^{\sqrt{\lambda}}} \rightarrow 1$
+\end{itemize}
+\section{}
+\textbf{Let $G:\lbrace0,1\rbrace^{\lambda} \rightarrow \lbrace0,1\rbrace^{2\lambda}$ be a length doubling PRG, and consider then algorithm $H:\lbrace0,1\rbrace^{\lambda} \rightarrow \lbrace0,1\rbrace^{3\lambda}$ given below:}
+\begin{center}
+\begin{multicols}{2}
+\framebox{\Longstack[l]{
+	$\textbf{\underline{H(s):}}$ \\
+	\hspace{15pt}$x:=G(s)$ \\
+	\hspace{15pt}$y:=G(0^{\lambda})$ \\
+	\hspace{15pt}return $x \bigoplus y $\\
+	}
+}
+\columnbreak
+\end{multicols}
+\end{center}
+\section{}
+\textbf{Show that $H$ is \textbf{not} a secure PRG (even if \textit{G} is). Describe a successful distinguisher for $\iota^{H}_{prg-real}$ and $\iota^{H}_{prg-rand}$. Explicitly compute its advantage.}
+\begin{center}
+\begin{multicols}{2}
+\framebox{\Longstack[l]{
+	$\textbf{\underline{H(s):}}$ \\
+	\hspace{15pt}$x:=G(s)$ \\
+	\hspace{15pt}return $s \Vert x $\\
+	}
+}
+\columnbreak
+\end{multicols}
+\end{center}
+\section{}
+\textbf{Suppose $F$ is a secure PRF. Define the following function $F'$ as:\\ \\ $F'(k,x \Vert x')=F(k,x) \vert F(k,x \bigoplus x')$}\\\\
+\textbf{$x$ and $x'$ are each in bits long, where in is the input length of $F$ . Show that $F'$ is \textbf{not} a secure PRF (even if $F$ is). Describe a distinguisher and compute its advantage.\\ \\
+\textit{Hint:} Remember, you are not attacking $F$ . In fact, $F$ may be the best PRF in the world. You
+are attacking the faulty way in which $F'$ uses $F$.}
+\begin{multicols}{2}
+\begin{center}
+$x = 1111$ \\
+$x' = 0000$ \\
+$x \Vert x' = 11110000$
+\end{center}
+\columnbreak
+$F'(k,x \Vert x')=F(k,x) \Vert F(k,x \bigoplus x')$ \\
+$F'(k,x \Vert x')=1111 \Vert 1111 \bigoplus 0000$\\
+$F'(k,x \Vert x')=1111 1111$
+\end{multicols}
+We can exploit $F'$ by taking advantage of the $\bigoplus$ with a zero string. So now if we pass in a string where the second half of the string is all $0$'s then we can prove that we will get repeating results back consistently.
+	
+\end{document}
