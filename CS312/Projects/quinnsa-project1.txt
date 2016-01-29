@@ -1,0 +1,207 @@
+1.
+    a) 
+        # Save warning local2 messages to /var/log/cs312.log
+        local2.warn  /var/log/cs312.log
+
+    b) 
+        logger -p local2.warn "Hey this is a message that I am sending to CS312"
+    c)
+        $ sudo cat /var/log/cs312.log
+        Jan 29 22:28:03 cloud centos: Hey this is a message that I am sending to CS312
+
+2.
+3.
+    For raid5 you need at least 3 disk drives. 
+4.
+     $ cat /proc/mdstat
+     Personalities : [raid6] [raid5] [raid4]
+     md0 : active raid5 loop2[3] loop1[1] loop0[0]
+           202752 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+
+     unused devices: <none>
+
+     $ sudo mdadm -D /dev/md0
+     /dev/md0:
+             Version : 1.2
+       Creation Time : Fri Jan 29 23:22:59 2016
+          Raid Level : raid5
+          Array Size : 202752 (198.03 MiB 207.62 MB)
+       Used Dev Size : 101376 (99.02 MiB 103.81 MB)
+        Raid Devices : 3
+       Total Devices : 3
+         Persistence : Superblock is persistent
+     
+         Update Time : Fri Jan 29 23:25:48 2016
+               State : clean
+      Active Devices : 3
+     Working Devices : 3
+      Failed Devices : 0
+       Spare Devices : 0
+     
+              Layout : left-symmetric
+          Chunk Size : 512K
+     
+                Name : cloud.novalocal:0  (local to host cloud.novalocal)
+                UUID : 9053980c:ba78eb03:9abbd971:3851344b
+              Events : 18
+     
+         Number   Major   Minor   RaidDevice State
+            0       7        0        0      active sync   /dev/loop0
+            1       7        1        1      active sync   /dev/loop1
+            3       7        2        2      active sync   /dev/loop2
+     
+5.
+
+    $ sudo mdadm /dev/md0 -f /dev/loop1
+    mdadm: set /dev/loop1 faulty in /dev/md0
+    --------------------------------------------------------------------------------
+    $ sudo mdadm -D /dev/md0
+    /dev/md0:
+            Version : 1.2
+      Creation Time : Fri Jan 29 23:22:59 2016
+         Raid Level : raid5
+         Array Size : 202752 (198.03 MiB 207.62 MB)
+      Used Dev Size : 101376 (99.02 MiB 103.81 MB)
+       Raid Devices : 3
+      Total Devices : 3
+        Persistence : Superblock is persistent
+    
+        Update Time : Fri Jan 29 23:31:28 2016
+              State : clean, degraded
+     Active Devices : 2
+    Working Devices : 2
+     Failed Devices : 1
+      Spare Devices : 0
+    
+             Layout : left-symmetric
+         Chunk Size : 512K
+    
+               Name : cloud.novalocal:0  (local to host cloud.novalocal)
+               UUID : 9053980c:ba78eb03:9abbd971:3851344b
+             Events : 20
+    
+        Number   Major   Minor   RaidDevice State
+           0       7        0        0      active sync   /dev/loop0
+           2       0        0        2      removed
+           3       7        2        2      active sync   /dev/loop2
+    
+           1       7        1        -      faulty   /dev/loop1
+    --------------------------------------------------------------------------------
+    $ cat /proc/mdstat
+    Personalities : [raid6] [raid5] [raid4]
+    md0 : active raid5 loop2[3] loop1[1](F) loop0[0]
+          202752 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/2] [U_U]
+    
+    unused devices: <none>
+    --------------------------------------------------------------------------------
+    $ sudo mdadm /dev/md0 -r /dev/loop1
+    mdadm: hot removed /dev/loop1 from /dev/md0
+    --------------------------------------------------------------------------------
+    $ sudo mdadm -D /dev/md0
+    /dev/md0:
+            Version : 1.2
+      Creation Time : Fri Jan 29 23:22:59 2016
+         Raid Level : raid5
+         Array Size : 202752 (198.03 MiB 207.62 MB)
+      Used Dev Size : 101376 (99.02 MiB 103.81 MB)
+       Raid Devices : 3
+      Total Devices : 2
+        Persistence : Superblock is persistent
+    
+        Update Time : Fri Jan 29 23:33:47 2016
+              State : clean, degraded
+     Active Devices : 2
+    Working Devices : 2
+     Failed Devices : 0
+      Spare Devices : 0
+    
+             Layout : left-symmetric
+         Chunk Size : 512K
+    
+               Name : cloud.novalocal:0  (local to host cloud.novalocal)
+               UUID : 9053980c:ba78eb03:9abbd971:3851344b
+             Events : 21
+    
+        Number   Major   Minor   RaidDevice State
+           0       7        0        0      active sync   /dev/loop0
+           2       0        0        2      removed
+           3       7        2        2      active sync   /dev/loop2
+    --------------------------------------------------------------------------------
+    $ cat /proc/mdstat
+    Personalities : [raid6] [raid5] [raid4]
+    md0 : active raid5 loop2[3] loop0[0]
+          202752 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/2] [U_U]
+    
+    unused devices: <none>
+    --------------------------------------------------------------------------------
+    $ sudo mdadm /dev/md0 -a /dev/loop1
+    mdadm: added /dev/loop1
+    [centos@cloud ~]$ sudo mdadm -D /dev/md0
+    /dev/md0:
+            Version : 1.2
+      Creation Time : Fri Jan 29 23:22:59 2016
+         Raid Level : raid5
+         Array Size : 202752 (198.03 MiB 207.62 MB)
+      Used Dev Size : 101376 (99.02 MiB 103.81 MB)
+       Raid Devices : 3
+      Total Devices : 3
+        Persistence : Superblock is persistent
+    
+        Update Time : Fri Jan 29 23:34:44 2016
+              State : clean
+     Active Devices : 3
+    Working Devices : 3
+     Failed Devices : 0
+      Spare Devices : 0
+    
+             Layout : left-symmetric
+         Chunk Size : 512K
+    
+               Name : cloud.novalocal:0  (local to host cloud.novalocal)
+               UUID : 9053980c:ba78eb03:9abbd971:3851344b
+             Events : 40
+    
+        Number   Major   Minor   RaidDevice State
+           0       7        0        0      active sync   /dev/loop0
+           4       7        1        1      active sync   /dev/loop1
+           3       7        2        2      active sync   /dev/loop2
+    --------------------------------------------------------------------------------
+    $ cat /proc/mdstat
+    Personalities : [raid6] [raid5] [raid4]
+    md0 : active raid5 loop1[4] loop2[3] loop0[0]
+          202752 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+    
+    unused devices: <none>
+    --------------------------------------------------------------------------------
+    $ sudo mdadm -E /dev/loop1
+    /dev/loop1:
+              Magic : a92b4efc
+            Version : 1.2
+        Feature Map : 0x0
+         Array UUID : 9053980c:ba78eb03:9abbd971:3851344b
+               Name : cloud.novalocal:0  (local to host cloud.novalocal)
+      Creation Time : Fri Jan 29 23:22:59 2016
+         Raid Level : raid5
+       Raid Devices : 3
+    
+     Avail Dev Size : 202752 (99.02 MiB 103.81 MB)
+         Array Size : 202752 (198.03 MiB 207.62 MB)
+        Data Offset : 2048 sectors
+       Super Offset : 8 sectors
+       Unused Space : before=1960 sectors, after=0 sectors
+              State : clean
+        Device UUID : 7c2eb38b:ce92fe13:6b1656c4:c8d877f0
+    
+        Update Time : Fri Jan 29 23:34:44 2016
+      Bad Block Log : 512 entries available at offset 72 sectors
+           Checksum : 71b5e9d - correct
+             Events : 40
+    
+             Layout : left-symmetric
+         Chunk Size : 512K
+    
+       Device Role : Active device 1
+       Array State : AAA ('A' == active, '.' == missing, 'R' == replacing)
+
+6.
+
