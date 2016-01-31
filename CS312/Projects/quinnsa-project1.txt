@@ -10,6 +10,7 @@
         Jan 29 22:28:03 cloud centos: Hey this is a message that I am sending to CS312
 
 2.
+    see anaconda.log and ks.cfg.
 3.
     For raid5 you need at least 3 disk drives. 
 4.
@@ -215,13 +216,12 @@
     Description=Sample Systemd Unit for CS312
     
     [Service]
-    Type=simple
-    RemainAfterExit=yes
-    EnvironmentFile=/home/centos/.unit_parm
-    ExecStart=/bin/echo "Hello $ARG"
+    ExecStart=/bin/echo "Hello %i"
     StandardOutput=syslog
     StandardError=syslog
 
 8.
     a)
-        
+        ln -s /path/to/unit /etc/systemd/system/
+    b)
+        systemctl start foo@cs312.service
