@@ -1,0 +1,99 @@
+19:29:47,102 INFO anaconda: /sbin/anaconda 21.48.22.56-1
+19:29:47,535 INFO anaconda: created new libuser.conf at /tmp/libuser.4iUBss with instPath="/mnt/sysimage"
+19:29:47,537 INFO anaconda: 1048576 kB (1024 MB) are available
+19:29:47,558 INFO anaconda: check_memory(): total:1048576, needed:320, graphical:410
+19:29:47,569 INFO anaconda: anaconda called with cmdline = ['/sbin/anaconda']
+19:29:47,569 INFO anaconda: Default encoding = utf-8 
+19:29:47,630 INFO anaconda: Parsing kickstart: /run/install/ks.cfg
+19:29:47,861 INFO anaconda: 1048576 kB (1024 MB) are available
+19:29:48,382 DEBUG anaconda: scripts found for locale en_US.UTF-8: ['Latn']
+19:29:48,382 DEBUG anaconda: console fonts found for locale en_US.UTF-8: ['latarcyrheb-sun16']
+19:29:48,384 DEBUG anaconda: setting console font to latarcyrheb-sun16
+19:29:48,416 DEBUG anaconda: console font set successfully to latarcyrheb-sun16
+19:29:48,416 DEBUG anaconda: setting locale to: en_US.UTF-8
+19:29:48,436 DEBUG anaconda: network: devices found ['eno16777736']
+19:29:48,600 DEBUG anaconda: network: pre kickstart - updating settings of device eno16777736
+19:29:48,677 DEBUG anaconda: network: kickstart pre section applied for devices ['eno16777736']
+19:29:48,801 DEBUG anaconda: network: setting real kickstart ONBOOT value for devices ['eno16777736']
+19:29:48,898 DEBUG anaconda: updating hostname localhost.localdomain
+19:29:48,925 INFO anaconda: Running Thread: AnaWaitForConnectingNMThread (139841863898880)
+19:29:48,929 WARN anaconda.stdout: Not asking for VNC because of an automated install
+19:29:48,929 WARN anaconda.stdout: Not asking for VNC because text mode was explicitly asked for in kickstart
+19:29:48,937 INFO anaconda: Display mode = t
+19:29:48,938 INFO anaconda: 1048576 kB (1024 MB) are available
+19:29:48,955 INFO anaconda: check_memory(): total:1048576, needed:320, graphical:410
+19:29:49,034 DEBUG anaconda: updating hostname localhost.localdomain
+19:29:49,041 INFO anaconda: CentOS Linux is the highest priority installclass, using it
+19:29:49,090 INFO anaconda: got 0 NTP servers from DHCP
+19:29:49,092 INFO anaconda: Thread Done: AnaWaitForConnectingNMThread (139841863898880)
+19:29:49,921 INFO anaconda: boot loader GRUB2 on X86 platform
+19:29:49,950 INFO anaconda: boot loader GRUB2 on X86 platform
+19:29:49,952 INFO anaconda: Running Thread: AnaStorageThread (139841863898880)
+19:29:49,956 INFO anaconda: Running Thread: AnaTimeInitThread (139841818257152)
+19:29:49,983 INFO anaconda: Running Thread: AnaPayloadRestartThread (139841809864448)
+19:29:49,985 INFO anaconda: Thread Done: AnaPayloadRestartThread (139841809864448)
+19:29:49,985 INFO anaconda: Running Thread: AnaPayloadThread (139841801471744)
+19:29:50,081 INFO anaconda: Thread Done: AnaTimeInitThread (139841818257152)
+19:29:50,641 INFO anaconda: Running Thread: AnaSourceWatcher (139841818257152)
+19:29:50,643 INFO anaconda: Running Thread: AnaStorageWatcher (139841809864448)
+19:29:54,109 INFO anaconda: Thread Done: AnaStorageThread (139841863898880)
+19:29:54,375 INFO anaconda: Thread Done: AnaStorageWatcher (139841809864448)
+19:30:01,011 INFO anaconda: Thread Done: AnaPayloadThread (139841801471744)
+19:30:01,011 INFO anaconda: Thread Done: AnaSourceWatcher (139841818257152)
+19:30:02,879 DEBUG anaconda: new disk order: []
+19:30:04,077 DEBUG anaconda: new disk order: []
+19:30:04,131 DEBUG anaconda: _is_valid_disklabel(sda) returning True
+19:30:04,132 DEBUG anaconda: _is_valid_size(sda) returning True
+19:30:04,132 DEBUG anaconda: _is_valid_location(sda) returning True
+19:30:04,133 DEBUG anaconda: _is_valid_format(sda) returning True
+19:30:04,133 DEBUG anaconda: is_valid_stage1_device(sda) returning True
+19:30:04,155 DEBUG anaconda: _is_valid_disklabel(sda) returning True
+19:30:04,156 DEBUG anaconda: _is_valid_size(sda) returning True
+19:30:04,156 DEBUG anaconda: _is_valid_location(sda) returning True
+19:30:04,157 DEBUG anaconda: _is_valid_format(sda) returning True
+19:30:04,157 DEBUG anaconda: is_valid_stage1_device(sda) returning True
+19:30:04,179 DEBUG anaconda: _is_valid_disklabel(sda1) returning True
+19:30:04,181 DEBUG anaconda: _is_valid_size(sda1) returning True
+19:30:04,181 DEBUG anaconda: _is_valid_location(sda1) returning True
+19:30:04,182 DEBUG anaconda: _is_valid_partition(sda1) returning True
+19:30:04,182 DEBUG anaconda: _is_valid_format(sda1) returning True
+19:30:04,182 DEBUG anaconda: is_valid_stage2_device(sda1) returning True
+19:30:04,326 INFO anaconda: fs space: 18.46 GiB  needed: 2861.02 MiB
+19:30:04,368 INFO anaconda: Running Thread: AnaInstallThread (139841818257152)
+19:30:06,503 INFO anaconda: Setting up the installation environment
+19:30:06,503 INFO anaconda: Setting up the installation environment
+19:30:09,338 INFO anaconda: Creating disklabel on /dev/sda
+19:30:09,462 INFO anaconda: Created disklabel on /dev/sda
+19:30:10,183 INFO anaconda: Creating lvmpv on /dev/sda2
+19:30:10,479 INFO anaconda: Created lvmpv on /dev/sda2
+19:30:10,797 INFO anaconda: Creating swap on /dev/mapper/vg_cs312-lv_swap
+19:30:10,864 INFO anaconda: Created swap on /dev/mapper/vg_cs312-lv_swap
+19:30:11,086 INFO anaconda: Creating ext4 on /dev/mapper/vg_cs312-lv_root
+19:30:11,770 INFO anaconda: Created ext4 on /dev/mapper/vg_cs312-lv_root
+19:30:11,793 INFO anaconda: Creating xfs on /dev/sda1
+19:30:12,120 INFO anaconda: Created xfs on /dev/sda1
+19:35:47,815 INFO anaconda: Installing boot loader
+19:35:47,817 INFO anaconda: boot loader stage1 target device is sda
+19:35:47,818 INFO anaconda: boot loader stage2 target device is sda1
+19:35:47,832 DEBUG anaconda: new default image: <pyanaconda.bootloader.LinuxBootLoaderImage object at 0x7f2f7af8f590>
+19:35:48,074 INFO anaconda: bootloader.py: mbr will be updated for grub2
+19:35:48,916 INFO anaconda: bootloader.py: used boot args: crashkernel=auto rd.lvm.lv=vg_cs312/lv_root rd.lvm.lv=vg_cs312/lv_swap rhgb quiet 
+19:35:51,418 INFO anaconda: Installing boot loader
+19:35:51,419 INFO anaconda: Performing post-installation setup tasks
+19:35:51,442 INFO anaconda: Performing post-installation setup tasks
+19:35:51,444 INFO anaconda: Thread Done: AnaInstallThread (139841818257152)
+19:35:51,446 INFO anaconda: Running Thread: AnaConfigurationThread (139841801471744)
+19:35:51,449 INFO anaconda: Configuring installed system
+19:35:53,012 INFO anaconda: Configuring installed system
+19:35:53,013 INFO anaconda: Writing network configuration
+19:35:53,013 INFO anaconda: setting installation environment hostname to localhost.localdomain
+19:35:53,315 INFO anaconda: Writing network configuration
+19:35:53,316 INFO anaconda: Creating users
+19:35:53,316 INFO anaconda: Clearing libuser.conf at /tmp/libuser.4iUBss
+19:35:53,662 INFO anaconda: Creating users
+19:35:53,664 INFO anaconda: Configuring addons
+19:35:53,677 INFO anaconda: Configuring addons
+19:35:53,678 INFO anaconda: Generating initramfs
+19:36:32,157 INFO anaconda: Generating initramfs
+19:36:32,159 INFO anaconda: Running post-installation scripts
+19:36:32,160 INFO anaconda: Running kickstart %%post script(s)

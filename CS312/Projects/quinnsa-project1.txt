@@ -204,4 +204,24 @@
        Array State : AAA ('A' == active, '.' == missing, 'R' == replacing)
 
 6.
+    # m h  dom mon dow   command
+    MAILTO=foo@example.org
 
+    22 */3 * * 0,3,5 date
+
+7.
+     
+    [Unit]
+    Description=Sample Systemd Unit for CS312
+    
+    [Service]
+    Type=simple
+    RemainAfterExit=yes
+    EnvironmentFile=/home/centos/.unit_parm
+    ExecStart=/bin/echo "Hello $ARG"
+    StandardOutput=syslog
+    StandardError=syslog
+
+8.
+    a)
+        
