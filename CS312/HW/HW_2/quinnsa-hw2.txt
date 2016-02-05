@@ -1,0 +1,130 @@
+CS312 Homework #2                                                   Sam Quinn
+January 29, 2016
+
+Instructions
+
+Please submit all answers as a single text ﬁle via T.E.A.C.H using the nam-
+ing format $onidusername-hw2.txt. This homework is due at 4pm on
+Friday, Feb 5th.
+
+Questions
+
+1. Explain the function of each of the following DNS records:
+    PTR   - Pointer to a canonical name.
+    MX    - Maps to a the message transfer agents for the given domain. 
+    TXT   - Human readable txt about the given domain.
+    CNAME - Alias of one domain name to another.
+    SOA   - Authoritative information about the DNS zone.
+    AAAA  - The 128 bit IPv6 address.
+
+[source] Wikipedia.org
+
+2. Describe the diﬀerence between an authoritative DNS server and a recursive DNS server.
+
+    An authoritative DNS server will return an absolute path to the requested domain. Authroative servers are the offical repersetations of a zone. A recursive DNS server will either return a cached value of where it thinks that the Authoratative server resides or will point the request to a DNS server that would know better. 
+
+3. MX records can be used on CNAME records
+
+    (a) True - They can but is prohibited by RFC 2181
+
+4. Which DNS record is typically used to assist in classless PTR delega-
+tion?
+    
+    CNAMES can be exploited to provide reverse mappings for a subnet. 
+
+5. Describe why conﬁguring remote logging is important.
+    
+    It is a good idea to setup remote logging so if in the case of a security breach there is no way for a hacker to delete their trace. It also seperates the single point of failure so if the server hard drive are unreadable you could still view the logs.
+
+6. Name the two logging applications that are running on CentOS 7.
+    
+    rsyslog
+    journalctl
+
+7. What signal does logrotate typically send to applications to release
+ﬁle handles?
+    
+    -HUP
+
+8. Provide the journalctl command which will list all of the logs for
+the kernel.
+    
+    journalctl -f _TRANSPORT=kernel
+
+[source] archlinux.org
+
+9. Provide a single crontab entry that would do all of the following:
+    • Run every Tuesday and Thursday
+    • Starting at 1am, every third hour it runs once every 10 minutes.
+For example, it should run at 1:10, 1:20, etc and then at 4:10,
+4:20, etc.
+
+    */10 1/3 * * 2,4 /path/to/script
+
+10. Which directory allows for arbitrary crontab formatted ﬁles used by
+crond?
+
+    (a) /etc/cron.d
+
+11. Software RAID6 can be used for /boot with any version of grub.
+
+    (a) True
+
+12. Which ﬁle provides the current status of the software RAID devices?
+
+    (b) /proc/mdstat
+
+13. Correctly order the commands that should be used to create an LVM
+volume and then mount that volume.
+
+    1. pvcreate /dev/sda1 /dev/sdb1
+    2. vgcreate data /dev/sda1 /dev/sdb1
+    3. lvcreate -n misc -L 100G data
+    4. mkfs.ext4 /dev/data/misc
+    5. mount /dev/data/misc /mnt
+
+14. Which RAID level provides a mirrored set of striped drives?
+
+    (c) RAID6
+
+15. Correctly order the network boot install steps:
+
+    1. System start up, BIOS check
+    2. Grabs the initial boot image
+    3. Gets an IP address and information on where the TFTP server is
+    4. PXELINUX downloads Linux kernel/initrd image and sends any
+       kernel arguments
+    5. Boot from network device
+
+16. Provide the list of Anaconda boot options that would do the following:
+
+    (a) Set the IP statically to 192.168.5.100
+            network --bootproto=static --ip=192.168.5.100
+    (b) Assuming the subnet is a /24 and the gateway is 192.168.5.1,
+        set the correct gateway and netmask.
+            network --netmask=255.255.255.0 --gateway=192.168.5.1
+    (c) Set the DNS nameserver to 192.168.5.130 and 192.168.5.131
+            network --nameserver=192.168.5.130 --nameserver=192.168.5.131
+    (d) Enable the VNC GUI installer with the password set to cs312
+            vnc --localhost --port=5900 --password=cs312w16
+    (e) Use the Kickstart ﬁle from an NFS ﬁle share on
+        192.168.5.2:/kickstart/ks.cfg
+            linux ks=192.168.5.2:/kickstart/ks.cfg
+
+17. Which directory does systemd look for custom systemd unit ﬁles?
+
+    (a) /etc/systemd/system/
+
+18. The following command is the proper way to restart the httpd service
+using systemd: systemctl httpd restart
+
+    (b) False
+
+19. Which systemd service type should be used for a command that is just
+run and then exits?
+
+    (d) oneshot
+
+20. What are systemd Targets roughly equal to in the SystemV world?
+
+    (b) Run levels
