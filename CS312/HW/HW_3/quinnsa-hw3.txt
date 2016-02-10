@@ -1,0 +1,128 @@
+CS312 Homework #3                                                   Sam Quinn
+
+February 5, 2016
+
+Questions
+
+1. Give the command(s) to manually bring up the IP address 10.1.1.100,
+netmask of 255.255.254.0, and a default gateway to 10.1.1.1 on
+an interface named em0.
+
+    ip link set em0 down
+    ip addr add 10.1.1.100/24 dev em0
+    ip route add default via 10.1.1.1
+    ip link set em0 up
+
+2. Give the command(s) to manually turn off multicast on an interface
+named eth0.
+    
+    ip maddr del dev eth0
+
+3. Give the command(s) to show all Unix domain sockets.
+
+    ss -a
+
+4. What ﬁle (including the full path) would you need to create if you
+wanted to conﬁgure network settings for an interface named enP1p1s0f3?
+
+    /etc/sysconfig/network-scripts/ifcfg-enP1p1s0f3
+
+5. The predictable naming scheme for ethernet interfaces usually starts
+using the preﬁx eth and then falls back to using em.
+True
+
+    False
+
+6. Provide the command(s) that will notify NetworkManager of a con-
+ﬁguration change.
+
+    nmcli connection reload
+
+7. Which version of NFS is considered stateful?
+
+    (d) 4
+
+8. Provide the conﬁguration for /etc/exports that would provide the
+following:
+• Export /data/www
+• Allow read-write access to hosts foo.example.org, bar.example.org
+and any subdomain under baz.example.org
+• Disable root squashing for bar.example.org
+• Allow read-only access to any other host
+
+    /data/www   foo.example.orf(rw) bar.example.org(rw, no_root_squash) *.baz.example.org(rw) *(ro)
+
+9. Which ﬁle on a Linux system would you modify to enable LDAP sup-
+port for name-service information such as users and groups?
+
+    /etc/passwd
+
+10. What is the name of the LDAP server daemon service for OpenLDAP?
+
+    (d) openldap-server
+
+11. Name the e-mail system components and their primary functions.
+
+    MUA - Allows users to read and compose email.
+    MSA - Accepts outgoing mail from a MUA and submits it to the transport system. 
+    MTA - Routes messages among machines. 
+    LDA - Places the messages in local store.
+    AA  - Connect the user agent to the message store
+
+12. Given the following e-mail header:
+Received: from whitealder.osuosl.org (smtp1.osuosl.org. [140.211.166.138])
+by mx.google.com with ESMTP id rl9si26152457pab.109.2016.02.01.12.16.38
+for <ramereth@gapps.osuosl.org>;
+Mon, 01 Feb 2016 12:16:39 -0800 (PST)
+
+(a) Which server recieved the email?
+
+    mx.google.com
+
+(b) What is the queue ID for the e-mail?
+    
+    rl9si26152457pab.109.2016.02.01.12.16.38
+
+(c) Which server sent the email?
+
+    whitealder.osuosl.org
+
+13. Most Linux kernel modules allow parameters to be updated without
+unloading the module
+
+    (b) False
+
+14. Name the virtual ﬁle system that exports information about various
+kernel subsystems, hardware devices, and device drivers.
+
+    sysfs
+
+15. Which virtual ﬁle system allows you to modify runtime kernel tunable
+parameters?
+
+    sysctl
+
+16. Explain what Control Groups are and why they are important in mod-
+ern Linux system administration
+
+    Control groups allow administrators to proritize, allocate, and monitor system resources. Control groups also allow for group hierarchies.
+
+17. In which systemd cgroup slice would containers typically reside?
+
+    (b) machine.slice
+
+18. Name four cgroup resource controllers
+
+    cpu
+    memory
+    blkio
+    cpuset
+
+19. Which Linux performance tool provides information about processes,
+memory, paging and other various metrics in real-time?
+
+    vmstat
+
+20. Which Linux I/O scheduler would be ideal for database servers?
+
+    deadline
