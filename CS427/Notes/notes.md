@@ -211,3 +211,81 @@ MAC constructions:
 CBC-MAC:
     is secure on msgs of a single lenght.
     If you ask for MACs with a certain lenght you could forge message.
+
+**Hash functions**
+H:{0,1}^\* --> {0,1}^n
+
+idea: "If H(x) = H(x') then x=x'" is the definiton of a 1 to 1 function.
+
+H:{0,1}^\* --> {0,1}^n
+   |             |\_\_ finite # of outputs    {injectly is impossible}
+infinite inputs
+
+Def: x,x' are a collision if x!=x', H(x)=H(x')
+Crypto: It's ok if collisions exist in principle as long as they are hard to find. 
+
+Flavors of security
+    * Collision resistance: Given H, find any collision x!=x', H(x)=H(x')
+    * Target-Collision resistance:
+        Given H(x) for unknon x, find x' (possibly equal to x) S.T. H(x')=H(x)
+    * Second preimage resistance
+        Given x, find x'!=x S.T. H(x')=H(x)
+
+Cost of finding collisions:
+    Q: How long does it take to break collison-resistance?
+    A: If H:{0,1}^\* --> {0,1}^n then need to evaluate H on ~ 2^(n/2) values te get good probability of collision (birthady bound)
+
+    Q: Break second-preimage?
+    A:
+
+Merkl-Damgard, Length Extension:
+    Application of hash funcitos
+    - MAC is a MAC scheme for {0,1}^n
+    - Define new MAC scheme for {0,1}^\*
+        MAC^\*(k, m (exists) {0,1}^\*) = MAC(k, H(m))
+
+Claim: if underlying MAC is secure, and H is collision-resistant, then MAC^\* is secure.
+
+Idea: Adv (attacknig MAC^\*) sees 
+        t1 = MAC^\*(k, m1) = MAC(k, H(m1))
+        tq = MAC^\*(k, mq) = MAC(k, H(mq))
+    supose Adv produces forgery: (m^\*, t^\*)
+        t^\* = MAC^\*(k, m^\*) / MAC(k, H(m^\*))
+            where m^\* (not in) { m1 .., mq}
+
+        case 1: H(m^\*) = H(mi) for some mi 
+            => adv found collision in H
+        case 2: H(m^\*) (not in) { H(m1), ..., H(mq)}
+            => Adv knows MAC(k, H(m^\*))
+               after seeing MAC(k, X)
+               for many X != H(m^\*)
+
+        *Forgery of underlying MAC*
+
+Common Pitfall:
+    Construct MAC(k, m) = H(k||m)
+     %(Socure if H=SHA-3, insecure if H=MD5, SHA-1)%
+
+Merkle-Damgard Consturction:
+    * Design a "Compression function" h: {0,1}^(n+t) -> {0,1}^n (not "compression" like ZIP, gZIP, etc)
+    * Extend h to a full-fledge Hash function: 
+        H(x): 
+                x1      x2      x3      x4      x5      Each block is t bits
+            x   |       |                           len(x)
+                v       v   ...                      |
+    y0 = 0^n -> H ----> H                         -> H -->  H(x)
+
+Security: If h is collison-resistant, then H is too. 
+    Idea: If H(x) = H(x') then within these 2 computaitons, a colision under h is guaranteed to exist. 
+
+Ex: Suppose MAC(k, m) = H(k||m), where H is Merkle-Damgard.
+    n = 16 bytes
+    t = 2  bytes
+    k = e93a3527 (4 bytes)    (key)
+    m = 7d6 (12 bits)
+
+    H(k||m):    len(k||m) = 88bits = "58" in hex
+        e93a | 3527 | 7d6(0)| --> H(k, m)
+
+    Q: how is H(k||m) related to H(k||m||00058)?
+    A: 
