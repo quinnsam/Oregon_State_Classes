@@ -288,4 +288,70 @@ Ex: Suppose MAC(k, m) = H(k||m), where H is Merkle-Damgard.
         e93a | 3527 | 7d6(0)| --> H(k, m)
 
     Q: how is H(k||m) related to H(k||m||00058)?
-    A: 
+
+**NumberTheory & RSA:**
+    Notation:
+        Z(int)_n = {0,..., n-1}     "integers mod n"
+
+        x % n               = remainder when dividing x by n
+        x | n               = x divides n, n is a multiple of x
+        x =(congurent)_n y  = x & y are congrunt mod n n|(x-y)
+
+Pari/GP:    (installed on ENGR servers)
+   "Division" mod n:
+        Bezout theorem: let d = gcd(x,y)
+            you can write d = ax+by where a &  are integers
+
+        Pari: bezout()
+
+        Suposse gcd(x,n) = 1
+        then 1 = ax + bn for integers a,b
+               |
+               v
+    1 (congurent)_n ax + 0
+    So x has a multiplicative inverse mod n which is "a" (can write a =_n x ^(-1)
+
+Def:
+    Z_n^\* = { x in Z_n | gcd(x,n) = 1 }
+    Then every element in Z_n^\* has amultiplicative inverse mod n; actually Z_n^\* = {x in Z_n | x has mult inverse}
+    so mltiplication & division make sense in Z_n^\*
+
+
+Euler Totient function:
+    phi(n) = |Z_n^\*| = # of x in Z_n relitivly prime to n
+
+    Ex: phi(11) = 10                                   Z_11 = {1, ..., 10}
+        phi(p)  = p-1  if p prime => Z_p^\* = {1,...,p-1}
+        
+        phi(15) = ?
+        Z_15 =  0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+                  1 2   4 5   7 8   10 11    13 14  //Threw away multiples of 3
+                  1 2   4     7 8      11    13 14  //Threw away multiples of 5
+        if p,q primes (p != q) then 
+            phi(pq) = -- (# multiples of p)
+                      -- (# multiples of q)
+                      + 1 (because 0 is double counted)
+                    = pq - q - p + 1
+                phi(pq) = (p-1)(q-1)
+
+LaGrange Theorem:
+    For all x in Z_n^\*, x ^(p(n)) =_n 1
+
+
+RSA: 
+    p !=    q,      primes
+    N =     p*q     "RSA modulus"
+    e,d wher e e*d =_phi(n) 1       ( ed,d multiplicitave inversese mod phi(N))
+
+    (N,e) is public key
+    (N,d) is private key
+
+    RSA Function: M in Z_n ---> m^e in Z_n
+    RSA Inverse:  C in Z_n ---> c^d in Z_n
+
+    Proof:  ed =_phi(N) 1 => ed = k*phi(N) + 1 for some int k
+
+        (m^e)^d = m^(ed) = m^(k*phi(N)+1) = (m^phi(N))^k * m
+        =_N 1^k * m = m
+
+
