@@ -1,0 +1,77 @@
+CS312 Project #2
+Feburary 12, 2016
+
+Instructions
+Please submit all answers as a single text file (except for files specified) via
+T.E.A.C.H using the naming format $onidusername-project2.txt.
+This project is due at 4pm Wednesday, February 24nd.
+
+Questions
+1. Name and describe the four components of Ansible.
+2. Name the Ansible fact variable which provides the operating system
+family.
+3. Show an Ansible inventory file that would do the following:
+• Two groups named oregon and washington
+• The oregon group contains hosts www1, www2 . . . through www100
+• The washington group contains hosts db1, db5 and www
+• Set the variable db host=db.example.org for the oregon
+group
+• Create a group called pnw which contains the oregon and washington
+groups
+4. Provide an Ansible host pattern that includes all hosts from groups
+foo and bar but only if they are also in the production group.
+1
+
+5. Describe the difference between Ansible Roles and Playbooks.
+6. Handlers in Ansible can only be triggered once
+(a) True
+(b) False
+7. Construct an Ansible playbook that does the following. Include the
+YAML file and the output from running it with ansible-playbook
+-v.
+• Create two loop back devices using dd and losetup that are
+each 200M
+• Create a volume group named ansible vg using the loop back
+devices
+• Create a logical volume named data from the volume group described above with the size of 50M
+• Create a logical volume named www from the volume group described above filling the remaining space
+• Delete a logical volume named backup from the volume group
+described above
+8. Provide an Ansible template that will output an HTML file with the
+following information included which is sourced from Ansible Facts:
+• Hostname
+• Lists all IP addresses
+• Linux distribution name and release version
+• The amount of free memory
+• The total size of /dev/vda1
+9. Construct an Ansible playbook that does the following. Include the
+YAML file and the output from running it with ansible-playbook
+-v.
+• Installs epel-release, httpd, git, python-pip and
+python-virtualenv
+2
+
+• Enables and starts the httpd service
+• Create a system user named cs312
+• Using git, clone the CS312 class site repository
+https://github.com/osuosl/cs312.git into
+/var/www/cs312
+• Executes the script scripts/build.sh inside of the repository
+10. Create a new role which does the following. Include all the files (include
+directories) in a single zip or tarball file including the output of running
+ansible-playbook -v.
+• Convert the single playbook in #9 into roles splitting out each
+task as its own role using the recommended best practice
+• Using the template in #8, set the destination to
+/var/www/html/index.html
+• Create a symlink from /var/www/cs312/build/html to
+/var/www/html/cs312
+• Set the default playbook (site.yml) to use all of the roles and
+run ansible-playbook -v with the playbook.
+• Go to the IP address for your VM in your web browser and ensure that the url http://<your ip>/index.html shows the
+content of your template, and the CS312 website is accessible at
+http://<your ip>/cs312
+
+3
+
+
