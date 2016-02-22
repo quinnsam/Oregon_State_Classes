@@ -354,4 +354,27 @@ RSA:
         (m^e)^d = m^(ed) = m^(k*phi(N)+1) = (m^phi(N))^k * m
         =_N 1^k * m = m
 
+Chinese Remainder theorem:
+    Let p,q be relatively prime (gcd(p,q) = 1), then
+    for all u, v, there is a soultion for x in 
+
+                system of eq's
+        x =_p u         ex: x =_5 2
+        x =_q v             x =_7 3
+
+    Also, solution is unique mod pq
+
+Alternatively:
+    x in Z_pq  -crt-> (x % p, x % q) in Z_p x Z_q
+    this function is a bijection! (1-to-1 correspondence)
+
+Ex: p=3, q=5
+
+Mathematically: Z_pq and Z_p x Z_q are isomorphic 2 sets of "names" for same objects. (encodings)
+
+Application to RSA:
+    RSA inverse c |--> c^d mod N=p*q
+
+        Z_pq world          Z_p x Z_q world
+          c -> d               (c % p, c % q) -> d 
 
