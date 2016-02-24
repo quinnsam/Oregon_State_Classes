@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<body>
+<!-- {{ ansible_managed }} -->
+<h1>Hostname:</h1> {{ ansible_hostname }}
+<h1>IPs:</h1> {{ ansible_eth0.ipv4.address }}
+<h1>Distribution:</h1> {{ ansible_distribution }}
+<h1>Free Mem:</h1> {{ ansible_memfree_mb }}
+<h1>Size of /dev/sda1:</h1> {{ ansible_devices.vda.partitions.vda1.size }}
+</body>
+</html>

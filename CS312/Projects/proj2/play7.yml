@@ -1,0 +1,22 @@
+---
+- hosts: cs312
+  tasks:
+  - name: Create loopback1
+    command: /bin/dd if=/dev/zero of=/tmp/loopback1 bs=40M count=5
+  - name: Creating loopback2
+    command: /bin/dd if=/dev/zero of=/tmp/loopback2 bs=40M count=5
+  - name: Looping loop0
+    command: /sbin/losetup /dev/loop0 /tmp/loopback1 
+  - name: Looping loop1
+    command: /sbin/losetup /dev/loop1 /tmp/loopback2
+  - name: Creating pyhsical devices
+    command: /sbin/pvcreate /dev/loop0 /dev/loop1
+  - name: Creating volume group
+    command: /sbin/vgcreate "ansible_vg" /dev/loop0 /dev/loop1
+  - name: Creating Logical volume data with 50M
+    command: /sbin/lvcreate -L 50 -n "data" "ansible_vg" 
+  - name: Creating Logical volume www with %100
+    command: /sbin/lvcreate -l 100%FREE -n "www" "ansible_vg" 
+  - name: Delete logical volume backup
+    command: /sbin/lvremove -f ansible_vg/backup
+

@@ -43,7 +43,7 @@ Questions
     • Create a logical volume named www from the volume group described above filling the remaining space
     • Delete a logical volume named backup from the volume group described above
 
-   $ cat ./playbook.yml]
+    **See play7.yml and play7.out**
 
 8. Provide an Ansible template that will output an HTML file with the following information included which is sourced from Ansible Facts:
     • Hostname
@@ -51,12 +51,18 @@ Questions
     • Linux distribution name and release version
     • The amount of free memory
     • The total size of /dev/vda1
+    
+    **See template.html**
+
 9. Construct an Ansible playbook that does the following. Include the YAML file and the output from running it with ansible-playbook
     • Installs epel-release, httpd, git, python-pip and python-virtualenv
     • Enables and starts the httpd service
     • Create a system user named cs312
     • Using git, clone the CS312 class site repository https://github.com/osuosl/cs312.git into /var/www/cs312
     • Executes the script scripts/build.sh inside of the repository
+    
+    **See play9.yml and play9.out**
+
 10. Create a new role which does the following. Include all the files (include directories) in a single zip or tarball file including the output of running
 ansible-playbook -v.
 • Convert the single playbook in #9 into roles splitting out each task as its own role using the recommended best practice
@@ -65,3 +71,6 @@ ansible-playbook -v.
 • Set the default playbook (site.yml) to use all of the roles and run ansible-playbook -v with the playbook.
 • Go to the IP address for your VM in your web browser and ensure that the url http://<your ip>/index.html shows the
 content of your template, and the CS312 website is accessible at http://<your ip>/cs312
+    
+    **See cs312.tar.bz2 and play10.out**
+

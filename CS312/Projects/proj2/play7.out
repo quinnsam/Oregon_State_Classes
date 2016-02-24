@@ -1,0 +1,42 @@
+% ansible-playbook -v -i hosts -s ./play3.yml                        :(
+/nfs/stak/students/q/quinnsa/ansible/venv/lib/python2.7/site-packages/Crypto/Util/number.py:57: PowmInsecureWarning: Not using mpz_powm_sec.  You should rebuild using libgmp >= 5 to avoid timing attack vulnerability.
+  _warn("Not using mpz_powm_sec.  You should rebuild using libgmp >= 5 to avoid timing attack vulnerability.", PowmInsecureWarning)
+  No config file found; using defaults
+
+  PLAY ***************************************************************************
+
+  TASK [setup] *******************************************************************
+  ok: [cs312]
+
+  TASK [Create loopback1] ********************************************************
+  changed: [cs312] => {"changed": true, "cmd": ["/bin/dd", "if=/dev/zero", "of=/tmp/loopback1", "bs=40M", "count=5"], "delta": "0:00:00.338187", "end": "2016-02-22 04:04:37.743319", "rc": 0, "start": "2016-02-22 04:04:37.405132", "stderr": "5+0 records in\n5+0 records out\n209715200 bytes (210 MB) copied, 0.295302 s, 710 MB/s", "stdout": "", "stdout_lines": [], "warnings": []}
+
+  TASK [Creating loopback2] ******************************************************
+  changed: [cs312] => {"changed": true, "cmd": ["/bin/dd", "if=/dev/zero", "of=/tmp/loopback2", "bs=40M", "count=5"], "delta": "0:00:00.699345", "end": "2016-02-22 04:04:38.673932", "rc": 0, "start": "2016-02-22 04:04:37.974587", "stderr": "5+0 records in\n5+0 records out\n209715200 bytes (210 MB) copied, 0.692181 s, 303 MB/s", "stdout": "", "stdout_lines": [], "warnings": []}
+
+  TASK [Looping loop0] ***********************************************************
+  changed: [cs312] => {"changed": true, "cmd": ["/sbin/losetup", "/dev/loop0", "/tmp/loopback1"], "delta": "0:00:00.011138", "end": "2016-02-22 04:04:42.471010", "rc": 0, "start": "2016-02-22 04:04:42.459872", "stderr": "", "stdout": "", "stdout_lines": [], "warnings": []}
+
+  TASK [Looping loop1] ***********************************************************
+  changed: [cs312] => {"changed": true, "cmd": ["/sbin/losetup", "/dev/loop1", "/tmp/loopback2"], "delta": "0:00:00.003036", "end": "2016-02-22 04:04:42.721522", "rc": 0, "start": "2016-02-22 04:04:42.718486", "stderr": "", "stdout": "", "stdout_lines": [], "warnings": []}
+
+  TASK [Creating pyhsical devices] ***********************************************
+  changed: [cs312] => {"changed": true, "cmd": ["/sbin/pvcreate", "/dev/loop0", "/dev/loop1"], "delta": "0:00:00.164986", "end": "2016-02-22 04:04:43.133616", "rc": 0, "start": "2016-02-22 04:04:42.968630", "stderr": "", "stdout": "  Physical volume \"/dev/loop0\" successfully created\n  Physical volume \"/dev/loop1\" successfully created", "stdout_lines": ["  Physical volume \"/dev/loop0\" successfully created", "  Physical volume \"/dev/loop1\" successfully created"],
+  "warnings": []}
+
+  TASK [Creating volume group] ***************************************************
+  changed: [cs312] => {"changed": true, "cmd": ["/sbin/vgcreate", "ansible_vg", "/dev/loop0", "/dev/loop1"], "delta": "0:00:00.033753", "end": "2016-02-22 04:04:43.412001", "rc": 0, "start": "2016-02-22 04:04:43.378248", "stderr": "", "stdout": "  Volume group \"ansible_vg\" successfully created", "stdout_lines": ["  Volume group \"ansible_vg\" successfully created"], "warnings": []}
+
+  TASK [Creating Logical volume data with 50M] ***********************************
+  changed: [cs312] => {"changed": true, "cmd": ["/sbin/lvcreate", "-L", "50", "-n", "data", "ansible_vg"], "delta": "0:00:00.215707", "end": "2016-02-22 04:04:43.864002", "rc": 0, "start": "2016-02-22 04:04:43.648295", "stderr": "", "stdout": "  Rounding up size to full physical extent 52.00 MiB\n  Logical volume \"data\" created.", "stdout_lines": ["  Rounding up size to full physical extent 52.00 MiB", "  Logical volume \"data\" created."], "warnings": []}
+
+  TASK [Creating Logical volume www with %100] ***********************************
+  changed: [cs312] => {"changed": true, "cmd": ["/sbin/lvcreate", "-l", "100%FREE", "-n", "www", "ansible_vg"], "delta": "0:00:00.041207", "end": "2016-02-22 04:04:44.149431", "rc": 0, "start": "2016-02-22 04:04:44.108224", "stderr": "", "stdout": "  Logical volume \"www\" created.", "stdout_lines": ["  Logical volume \"www\" created."], "warnings": []}
+
+  TASK [Delete logical volume backup] ********************************************
+  fatal: [cs312]: FAILED! => {"changed": true, "cmd": ["/sbin/lvremove", "-f", "ansible_vg/backup"], "delta": "0:00:00.014685", "end": "2016-02-22 04:04:44.406868", "failed": true, "rc": 5, "start": "2016-02-22 04:04:44.392183", "stderr": "  Failed to find logical volume \"ansible_vg/backup\"", "stdout": "", "stdout_lines": [], "warnings": []}
+
+  PLAY RECAP *********************************************************************
+  cs312                      : ok=9    changed=8    unreachable=0    failed=1
+
+
