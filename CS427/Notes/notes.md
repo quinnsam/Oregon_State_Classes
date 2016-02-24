@@ -378,3 +378,72 @@ Application to RSA:
         Z_pq world          Z_p x Z_q world
           c -> d               (c % p, c % q) -> d 
 
+RSA vs. Factoring:
+    The following problems are equivalent:
+        1. Given N = pq, compute p, q
+        2. Given N=pq, compute phi(N) = (p-1)(q-1)
+        3. Given N=pq, e, compute d where ed =_phi(N) 1
+        4. Given N=pq, compuet any x !=_N +- 1 where x^2 =_N 1
+
+    "equivalent" = Means either all have poly-time algos, or none of them do.
+
+How to show equivalence: ("reduction")
+    * if a poly-time algo exists for #1, I could use it as a subroutine to solve #2 in poly-time
+    * #2 => #3, #3 => #4, #4 => #1
+
+    Note: #1 => #2, #2 => #3 are trivial. 
+
+(#4 => #1)
+    Def: x is a square root of unity mod N if x^2 =_N 1
+        if x =_N +- 1 then x is a trivial sqrt unity, otherwise nontrivial sqrt unity
+
+    ex: N = 15
+        Z^*_15     = { 1 2 4 7 8 11 13 14 }
+        x^2 mod 15 = ( 1 4 1 4 4 1 4 1 }
+
+    Claim: If N=pq (RSA modulus) then there are 4 sqrts of unity mod N
+    
+    Proof: 
+                       x^2 =_p 1 <=> x =_p +- 1
+        x^2 =_N 1 <=>  && 
+                       x^2 =_q 1 <=> x =_q +- 1
+
+        x =_p  1    x =_p 1     x =_p -1    x =_p -1
+        x =_q  1    x =_q -1    x =_q 1     x =_q -1
+
+        There are 4 values of x
+
+    Claim: if you can find nontrivial squrt unity x mod N=pq then gcd(x+-1,N) are the factors of N
+
+    Ex: N=15, x=4 (non trivial sqrt of unity)
+            gcd(4+1, 15) = 5
+            gcd(4-1, 15) = 3
+
+Proof: 
+    x^2 =_N 1  <=> x^2 -1 is a multiple of N
+               <=> N divides (x^2 -1) = (x -1) (x+1)
+    x !=_N +-1 <=> x +- 1 is not multiple of N
+               <=> N doesn't divide x+1 or x-1
+
+    So (x-1)(x+1) has foctors of p and q both, bet p and q not both factors of either term 
+        -> p|x-1 but q !| x-1
+        -> gcd(x-1, pq) = p
+
+(#3 => #4) if you can find d given N=pq, e. Then you can find nontrivial sqrt untity
+    idea: Given (N,e)
+          Compute d =_phi(N) e^(-1)     (by assumtion)
+
+          write ed-1 = Z^s * r where r is even ("ed-1" is the number of 0's on the right)
+
+          Choose w <- Z_N
+          compute -1, w^r, w^2r, w^4r, w^8r, ..., w^(2^(s)r) all (mod N)
+
+    Claim: Eventually this sequence reaches "1"
+           W^(2^(s)r) = w^(ed-1) = (w^(ed)(w^(-1)) = w(w^(-1)) = 1
+
+    Therefore: Item before first "1" in sequence is a sqrt of unity
+
+
+
+
+
