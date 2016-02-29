@@ -1,0 +1,111 @@
+CS312 Homework #4
+
+February 22, 2016
+
+Questions
+
+1. Ansible primarily uses a push driven model, however it can also support
+a pull driven model.
+
+    (a) True
+
+2. Nagios plugins keep track of core monitoring logic including service
+states.
+
+    (a) True
+
+3. NRPE checks are initiated by Nagios
+
+    (b) False
+
+4. Horizontal scaling means adding more resources to a node
+
+    (b) False
+
+5. Vertical scaling is easier and more simple than horizontal scaling.
+
+    (a) True
+
+6. Hosts in Nagios must have at least once service deﬁned
+
+    (a) True
+
+7. Which Nagios conﬁguration component deﬁnes what hosts and services
+to monitor?
+
+    (c) Objection deﬁnition ﬁles
+
+8. Which consensus algorithm does CoreOS use for etcd?
+
+    (b) Raft
+
+9. Which conﬁguration management system is the oldest platform that is
+still in use today?
+
+    (d) CFEngine
+
+10. Describe two resources you might want to monitor on a server. Elaborate on how you might decide on acceptable thresholds for each resource.
+    
+    * Disk usage - Monitoring disk usage with a percentage as a threshold. I would set a 90% threshold so I would have time to fix the problem before it gets out of hand.
+    * SSH        - Monitoring the amount of ssh connections could be useful to understand how your system is being accessed. I would set up a threshold based on the number of normal connections I am used to seeing, if it goes over then I would like to investigate. 
+
+11. Name two primary differences between active checks vs. Passive checks
+for monitoring.
+
+    Active checks   - Checks are initiated from a regular schedule.
+    Passive checks  - Passive checks start from an external event or a state. 
+
+12. Describe what the following command does in detail:
+
+/usr/lib64/nagios/plugins/check_nrpe -H foo.example.org \
+-c check_cpu
+
+    The command above would initiate a check_cpu check on the host foo.example.org. Based on the CPU load at the host it would return the live user, system, iowait, and idle CPU %. 
+
+13. Which contact configuration directive in Nagios conﬁgures whether or
+not a contact will receive notiﬁcations about service problems and recoveries?
+
+    The contacts or contact group is defined in the object definition. Each of the contacts or contact group will be notified if any of the checks are triggered unless the "time periods" are set to not notify.
+
+14. What are speciﬁcity and sensitivity? Give a 1–2 sentence description
+of each.
+
+    Specificity - In layman's terms specificity is the proportion of the non-correctly identified measurements. This can be though of the amount of cars that actually get broken into when the car alarm is going off.
+
+    Sensitivity - Sensitivity is the measurement of how often the test returns a wrong value. This can be thought of as the amount of cars that have alarms go off but nothing is happening to them.
+
+15. Give an example of a highly sensitive test that has low specificity.
+
+    Fire sprinklers in the ceiling. The have high sensitivity meaning that they don't go off very often, but low specificity since the fire alarm can go off without initiating the sprinklers. 
+
+16. What is time-series data? Give an explanation of why it is important.
+
+    Time-series data is data that is collected over a period of time. This is important because you can make correlations to past metrics and make predictions of what might happen.
+    
+
+17. Explain the CoreOS update process. What is it modeled after? Do you
+think this is a good or bad update model? Explain.
+    
+    CoreOS uses a push type update model, similarly to how Google Chrome was created. I think this is a great model since it will force people who usually neglect updates to update their system to the most secure state. All of the updates are handled by CoreOS and will be installed automatically, if anything fails they will rollback for you.
+    
+
+18. Name three scenarios that virtual IP’s are good for increasing redundancy.
+
+    1) Server goes down then you can point the Virtual IP to another server in realtime.
+    2) The one virtual IP can point to more than one server to help with load balancing or backups.
+    3) The IP is not tied to any hardware specifically. 
+
+
+19. Name three ways that horizontal scaling can add complexity. Brieﬂy
+explain why the complexity is necessary to scale horizontally.
+
+    1) Load balancing - Because there are more machines working they need to be able to play well together and balance the load evenly.
+    2) Cost - The cost to run more machines could be a undesired.
+    3) More machines more problems - With each machine added there is more maintenance and up keep needed. 
+
+20. Suppose you have a system running with a single load balancer, three
+web nodes, and two database nodes. What is the single point of failure?
+How could you get rid of this single point of failure? After ﬁxing it,
+what other points of failure might be singular?
+
+    The single point of failure is the load balancer itself. You could have one of the three web nodes, or on of the two database nodes double as a load balancer. This way if the main load balancer goes down the system could designate another node as the main load balancer and keep everything working as expected. 
