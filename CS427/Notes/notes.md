@@ -444,6 +444,39 @@ Proof:
     Therefore: Item before first "1" in sequence is a sqrt of unity
 
 
+Malleability of RSA:
+    RSA = m |-> m^e mod N
+
+    Q: Given c = m^e (RSA "encryption" of unknown m), can you find RSA enc of "related" msg?
+    A: c^2 = (m^e)^2 = (m^2)^e = RSA enc of m^2
+       c^x = is RSA enc of m^x
+       c*x^e = (m^e)(x^e) = (mx)^e
+        (ok since e is public)
+
+Claim: Suppose algo A inverns RSA (given m^e, N, e, returns m) but only for 1% of m in Z_n 
+       => Then there is a way to invert RSA on ALL inputs. 
+
+       Superinverse(c, N, e):
+        //want to find m:m^e=c
+        Repeat:
+            x <-- Z_N
+            c' = c * x^e    // c' is RSA enc of m*x = m'
+            ~m <- A(c', N, e)
+            if ~m^e = c'        // A was sucessful
+                return ~m*x^(-1)
+
+        each time through the loop m*x has 1% chance of being a good input for A.
 
 
+Claim: If given m^e, N, e you can determine whether m < N/2, then you can ivert RSA
+        Ex: suppose I have c=m^e for unknown m
+            1) run algo on c, find that m is in 1st half.
+
+            Z_N     0 1 2 . . . N-1/2 | {N+1/2 . . . N-1} // {} = not there
+
+            2) run algo on c * 2^e, find that 2m is in 2nd half of Z_N
+
+            m: Z_N     {0 1 2 . . . N-1/2} | N+1/2 . . . N-1 // {} = not there
+
+            2m: Z_N     {0 1 2 . . . N-1/2} | {N+1/2 .} . . N-1 // {} = not there
 
