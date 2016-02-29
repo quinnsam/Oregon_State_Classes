@@ -1,0 +1,213 @@
+
+? 100!
+%1 = 93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000
+? 200!
+%2 = 788657867364790503552363213932185062295135977687173263294742533244359449963403342920304284011984623904177212138919638830257642790242637105061926624952829931113462857270763317237396988943922445621451664240254033291864131227428294853277524242407573903240321257405579568660226031904170324062351700858796178922222789623703897374720000000000000000000000000000000000000000000000000
+? ?
+Help topics: for a list of relevant subtopics, type ?n for n in
+  0: user-defined functions (aliases, installed and user functions)
+  1: Standard monadic or dyadic OPERATORS
+  2: CONVERSIONS and similar elementary functions
+  3: TRANSCENDENTAL functions
+  4: NUMBER THEORETICAL functions
+  5: Functions related to ELLIPTIC CURVES
+  6: Functions related to general NUMBER FIELDS
+  7: POLYNOMIALS and power series
+  8: Vectors, matrices, LINEAR ALGEBRA and sets
+  9: SUMS, products, integrals and similar functions
+ 10: GRAPHIC functions
+ 11: PROGRAMMING under GP
+ 12: The PARI community
+
+Also:
+  ? functionname (short on-line help)
+  ?\             (keyboard shortcuts)
+  ?.             (member functions)
+Extended help (if available):
+  ??             (opens the full user's manual in a dvi previewer)
+  ??  tutorial / refcard / libpari (tutorial/reference card/libpari manual)
+  ??  keyword    (long help text about "keyword" from the user's manual)
+  ??? keyword    (a propos: list of related functions).
+? ?4
+
+addprimes     bestappr      bezout        bezoutres     bigomega
+binomial      chinese       content       contfrac      contfracpnqn
+core          coredisc      dirdiv        direuler      dirmul
+divisors      eulerphi      factor        factorback    factorcantor
+factorff      factorial     factorint     factormod     ffgen
+ffinit        fflog         fforder       ffprimroot    fibonacci
+gcd           hilbert       isfundamental ispower       isprime
+ispseudoprime issquare      issquarefree  kronecker     lcm
+moebius       nextprime     numbpart      numdiv        omega
+partitions    polrootsff    precprime     prime         primepi
+primes        qfbclassno    qfbcompraw    qfbhclassno   qfbnucomp
+qfbnupow      qfbpowraw     qfbprimeform  qfbred        qfbsolve
+quadclassunit quaddisc      quadgen       quadhilbert   quadpoly
+quadray       quadregulator quadunit      removeprimes  sigma
+sqrtint       stirling      sumdedekind   zncoppersmith znlog
+znorder       znprimroot    znstar        
+
+? n = random(1000000)
+%3 = 159429
+? x = random(n)
+%4 = 110262
+? Mod(x,n)
+%5 = Mod(110262, 159429)
+? x^2
+%6 = 12157708644
+? Mod(x,n)^2
+%7 = Mod(131391, 159429)
+? Mod(x,n) + 1
+%8 = Mod(110263, 159429)
+? Mod(x,n) + 3
+%9 = Mod(110265, 159429)
+? Mod(1,n)-2
+%10 = Mod(159428, 159429)
+? 
+? 
+? x = random(1000000:
+  ***   syntax error, unexpected $end, expecting variable name: 
+  ***   x=random(1000000:
+  ***                   ^-
+? x = random(1000000)
+%11 = 320482
+? y = random(1000000)
+%12 = 905007
+? gcd(x,y)
+%13 = 1
+? bezout(x,y)
+%14 = [-5933, 2101, 1]
+? ?bezout
+bezout(x,y): returns [u,v,d] such that d=gcd(x,y) and u*x+v*y=d.
+
+? (-5933)*x + 2101*y
+%15 = 1
+? 
+? 
+? 
+? 
+? 
+? n = random(10000000)
+%16 = 5420235
+? x = random(n)
+%17 = 5397850
+? gcd(x,n)
+%18 = 5
+? x = random(n)
+%19 = 2191525
+? x = random(n)
+%20 = 2386336
+? gcd(x,n)
+%21 = 1
+? bezout(x, n)
+%22 = [-335369, 147651, 1]
+? y = -335369
+%23 = -335369
+? x*y % n
+%24 = 1
+? Mod(x,n) * Mod(y,n)
+%25 = Mod(1, 5420235)
+? Mod(y,n)
+%26 = Mod(5084866, 5420235)
+? 1/Mod(x,n)
+%27 = Mod(5084866, 5420235)
+? lift( 1 / Mod(x,n) )
+%28 = 5084866
+? lift( 1 / Mod(x,n) ) == y
+%29 = 0
+? lift( 1 / Mod(x,n) ) == lift( Mod(y,n) )
+%30 = 1
+? 
+? 
+? 
+? 
+? \\ what if gcd(x,n) != 1 ??
+? x = random(n)
+%31 = 5396017
+? x = random(n) ; gcd(x,n)
+%32 = 1
+? x = random(n) ; gcd(x,n)
+%33 = 1
+? x = random(n) ; gcd(x,n)
+%34 = 5
+? x
+%35 = 2924660
+? 1 / Mod(x,n)
+  ***   at top-level: 1/Mod(x,n)
+  ***                  ^---------
+  *** _/_: impossible inverse modulo: Mod(5, 5420235).
+  ***   Break loop: type 'break' to go back to GP
+break> 
+
+? \\ x = 2924660 , gcd(x,n) = 5, so x not in Z*_n
+? n
+%36 = 5420235
+? 
+? 
+? 
+? 
+? eulerphi(15)
+%37 = 8
+? 
+? 
+? 
+? p = nextprime( random(100000))
+%38 = 42863
+? q = nextprime( random(100000))
+%39 = 82529
+? N = p*q
+%40 = 3537440527
+? phi = (p-1)*(q-1)       \\ phi(N)
+%41 = 3537315136
+? x = random(N)
+%42 = 987852940
+? x^phi % N
+  ***   at top-level: x^phi%N
+  ***                  ^------
+  *** _^_: overflow in lg().
+  ***   Break loop: type 'break' to go back to GP
+break> 
+
+? Mod(x,N)^phi
+%43 = Mod(1, 3537440527)
+? Mod( random(N) ,N)^phi
+%44 = Mod(1, 3537440527)
+? Mod( random(N) ,N)^phi
+%45 = Mod(1, 3537440527)
+? Mod( random(N) ,N)^phi
+%46 = Mod(1, 3537440527)
+? Mod( random(N) ,N)^phi
+%47 = Mod(1, 3537440527)
+? 
+? 
+? 
+? 
+? p = random(2^100);
+? p = nextprime(random(2^100));
+? q = nextprime(random(2^100));
+? p
+%51 = 1147182980464974206750357179079
+? q
+%52 = 66916408576402570201816171091
+? N = p*q
+%53 = 76765365032689462160174259553799199913517924608367589805189
+? phi = (p-1)*(q-1)
+%54 = 76765365032689462160174259552585100524476547831415416455020
+? e = nextprime(random(phi))
+%55 = 8707857813433679672208687107088620388398274189342615221387
+? d = lift( 1 / Mod(e,phi) )
+%56 = 62658830097866318300159357251031762862865501387152616171863
+? e*d % phi
+%57 = 1
+? m = 31415926535897932384626433832795
+%58 = 31415926535897932384626433832795
+? c = lift( Mod(m,N)^e )
+%59 = 50750485171603128886282715343499375812232836457842569970369
+? lift( Mod(c,N)^d )
+%60 = 31415926535897932384626433832795
+? %60 == m
+%61 = 1
+? Mod(c,N)^d 
+%62 = Mod(31415926535897932384626433832795, 76765365032689462160174259553799199913517924608367589805189)
+? 
+
