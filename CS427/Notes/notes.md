@@ -588,9 +588,80 @@ Security of PKE (CPA):
     * As before, deterministic ENC can't be CPA secure
 
 ElGamal Encryption:
-    DH - Protocol:
+    keygen:
+        a <- Z_n 
+        pk = A = g^a
+        sk = a
+
+    DH - Protocol (tweeked for Elgamal):
             Alice                           Bob
         a <- Z_p-1     (A = g^a) ->      
                        <- (B = g^b)       b<-Z_p-1
-          K = B^a                         K = A^b
-          (g^b)^a    <~~~~(Same)~~~~>     (g^a)^b  
+          K = B^a         (C = M*K)       K = A^b
+          (g^b)^a                         (g^a)^b  
+
+
+Claim: ElGamal is CPA-Secure when group <g> DDH assumption holds in group <g>
+    
+I will show: CPA$ secure when Adv just sees 1 ciphertext. 
+            Chal(m):
+                (pk,sk) <- keygen 
+                ret (pk, ENC(pk,m))
+
+
+            Chal(m):
+                (pk,sk) <- keygen 
+                c <- E (completly random)
+                ret (pk, c)
+                
+Claim: ANY public-key enc. scheme that is secure (cpa) for 1 ctxt is also secure against many ctxts
+
+Simpler: 1 ctxt secure => 2 ctxt security
+    want to show:
+        2chal(ml1, ml2, mr1, mr2):
+            (pk,sk) <- keygen
+            c1 <- ENC(pk,ml1)
+            c2 <- ENC(pk,ml2)
+            ret(pk,c1,c2)
+    
+    ~equivilent with~        
+    
+        2chal(ml1, ml2, mr1, mr2):
+            (pk,sk) <- keygen
+            c1 <- ENC(pk,mr1)
+            c2 <- ENC(pk,mr2)
+            ret(pk,c1,c2)
+
+Can use the fact that this is secure with one ctxt
+
+
+Commitment:
+    A: "I know all the scores for tommorrows BBall games"
+    B: "Cool"
+
+    Whate are we tying to protect bob from?
+        Alice shouldn't change her mind (binding)
+    What are we trying to protect Bob from?
+        Bob seenig the predictions before Alice says ok (Hiding)
+
+Commitment scheme / protocol:
+    Interactive protocaol: Alice has input X in {0,1}
+        2 Phases
+            * Commitment phase: (put value in safe)
+            * Opening phase: (open the safe)
+
+    Security properties:
+        HIDING:                                             BINDING:
+        Bob Can't distiguish                                After commit phase ends,
+        commit phase x=0 from                               Exists at most 1 value x^*
+        x=1 (even if Bob cheats)                            that Bob will accept in opening phase
+        
+                                                            x^* must exist / be fixed mathematically , but should be
+                                                            for Bob to compute
+
+Some bad ideas:
+    A: (x in {0,1})
+       k <- {0,1}
+       c = k (xor) x 
+                            --->
+                                        B:
