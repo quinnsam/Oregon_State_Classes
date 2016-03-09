@@ -1,0 +1,51 @@
+CS312 Homework #5                       Sam Quinn
+March 2, 2016
+Due Wednesday, Mar 9th.
+
+Questions
+1. Load balancers are designed to help with vertical scaling.
+    (b) False
+2. Layer 7 load balancers allow you to use both connection tracking and inspection of packets including modification of packets.
+    (a) True
+3. Linux containers do not require hypervisors
+    (a) True
+4. The RUN command can be used more than once in a Dockerfile.
+    (a) True
+5. The PID Namespace allows users to see processes from other containers
+    (b) False
+6. Paravirtualization uses CPU supported virtualization.
+    (a) True
+7. Which software load balancer primarily acts as an HTTP accelerator
+and a static cache server?
+    (d) Varnish
+8. Which of the following is not true about Linux Containers?
+    (a) Operating system level virtualization
+    (b) Provides little overhead
+    (d) Allows limits to resources with cgroups
+9. Which service describes a virtual computing platform?
+    (a) IaaS
+10. Describe the potential problems of using Round Robin DNS.
+    One problem that is present with a Round Robin DNS, is that it does not have automatic fail over. Also depending on the implementation round robin DNS could be somewhat random or not. 
+11. Which scheduling algorithm is generally preferred if the web application uses sessions?
+    If the sessions are long the "Least Connection" algorithm is perferred. 
+12. Which HAProxy configuration section allows you to define a complete proxy?
+    The "listen" configuration defines a complete proxy with its frontend and backend parts combined in one section.
+13. Name the two components of the Linux Kernel that are required to make Linux containers function.
+    1) CGroups             - Process resource limiting, accounting, and prioritization.
+    2) Namespace Isolation - Sepperation proccess resorces.
+14. Define what a hypervisor is.
+    Creates virtual hardware for virtual machines on the same host. In other words a hypervisor is a virtul machine manager.
+15. Provide an example of a Type 2 hypervisor.
+    A type 2 Hypervisor will pass certain commands dirctly to the reall host CPU, memory, disk, network and other resources. 
+16. Explain the relationship between KVM and QEMU in detail.
+    KVM is used for the virtulization of the Linux kernel that needs too work closly with the virtual I/O devices that are created by QEMU. Both of these systems need one another to work properly. 
+17. Explain the relationship with Libvirt and KVM in detail.
+    Libvirt is the application protocol interface that KVM will use to manage varios virtualizatoion platforms. 
+18. What are the primary differences between Ganeti and Openstack?
+    Ganeti doesn't have the cloud like fetures present in the Openstack platform. While Openstack can be very complicated Ganeti is fairly easy to customize.
+19. Define in detail what a cloud or machine image is.
+    It is essentially an entire filesystem that has a functioning OS installed on it. 
+20. Name three useful features that distributed systems tend to support.
+    1) Redundancy           - If a server goes down the work can be transfered to the other nodes.
+    2) Fault-tolerance      - Nodes can determine faults and destribute load elsewere
+    3) Horizontal Scalable  - Allow for easily adding systems to the cluster without much effort. 
