@@ -1,0 +1,14 @@
+Users
+sudo
+permisions in octal
+booting
+DNS records MX...
+syslog
+cron !not writing
+LVM
+Raid
+Netboot
+Systemd
+Network commands and interfaces
+NFS !not writing exprots
+cgroups
