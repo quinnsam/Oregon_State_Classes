@@ -12,3 +12,12 @@ Systemd
 Network commands and interfaces
 NFS !not writing exprots
 cgroups
+
+*New Topics*
+
+sensitivity vs specificty
+Scalling horiz vs verti
+scheduling algorithms
+Hyperisor kvm qemu libvirt
+Selinux 
+Iptables
