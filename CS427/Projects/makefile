@@ -20,5 +20,8 @@ pdf: ps
 	rm ${TARGET}.log
 	rm ${TARGET}.out
 	rm ${TARGET}.ps
+	rm ${TARGET}.toc
+	rm ${TARGET}.blg
+	rm ${TARGET}.bbl
 
 	

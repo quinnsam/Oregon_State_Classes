@@ -21,7 +21,7 @@
 \usepackage{amsfonts}
 \usepackage{amsmath}
 
-% Code snippents color
+% Code snippets color
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -63,7 +63,7 @@
 \center % Center everything on the page
 
 %----------------------------------------------------------------------------------------
-%TITLE SECTI   ON
+%TITLE SECTION
 %----------------------------------------------------------------------------------------
 
 %\includegraphics[scale=.5]{image.eps}
@@ -74,7 +74,7 @@
 %HEADING SECTIONS
 %----------------------------------------------------------------------------------------
 
-\textsc{\LARGE SOCat Cryptography Analisis}\\[0.5cm] % Name of your university/college
+\textsc{\LARGE Socat Cryptography Analysis}\\[0.5cm] % Name of your university/college
 \textsc{\Large CS427 Project}\\[0.5cm] % Major heading such as course name
 \textsc{\large Winter 2016}\\[0.5cm] % Minor heading such as course title
 
@@ -88,7 +88,7 @@
 \begin{flushleft} \large
 \emph{Student:}\\
         \textbf{Sam \textsc{Quinn}} \\ % Your name
-        {\small Quinnsa@Oregonstat.edu}
+        {\small Quinnsa@Oregonstate.edu}
         \end{flushleft}
         \end{minipage}
         ~
@@ -96,7 +96,7 @@
         \begin{flushright} \large
         \emph{Professor:} \\
             \textbf{Michael \textsc{Rosulek}} \\ % Supervisor's Name
-            {\small rosulekm@eecs.oregonstate.edu}
+            {\small Rosulekm@eecs.Oregonstate.edu}
             \end{flushright}
             \end{minipage}\\[3cm]
 
@@ -131,7 +131,7 @@
 \\
 
 \section{Problem Defined}
-\indent Socat secures network transmission with the extremely popular OpenSSL. OpenSSL is in fact still considered very secure, Socats problems were products of their own misuse of the secure libraries within OpenSSL. Socat has implemented a hybrid encryption scheme to securely transfer data among peers. The symmetric keys are obtained using Diffie Hellman key agreement.
+\indent Socat secures network transmission with the extremely popular OpenSSL. OpenSSL is in fact still considered very secure, Socats problems were products of their own misuse of the secure libraries within OpenSSL. Socat has implemented a hybrid encryption scheme to securely transfer data among peers. The symmetric keys are obtained using Diffie Hellman key agreement (DHKA).
 \\
 \indent Diffie Hellman protocol needs to publicly share two variables $g$ and $p$ to function correctly. The variable $p$ is public and is very large since the $p$ value will be used as the modulus for the combined shared key after the two parties raise the $g$ to their private keys. When generating $p$ and $g$ you want to choose “good numbers”. For example $p$ that is greater than $2048bits$ in length and that satisfy $p = 2t+1$ where $t$ is also prime are know to be harder to break.  When choosing $p$ values the most important thing is that both $p$ and $g$ \textbf{MUST} be prime, which is where Socat went wrong. Socat for a full year had a $p$ value that was not prime.
 \\
@@ -172,20 +172,20 @@ This gives some credit back to Zhigang Wang for responsibly telling the Socat's 
 \\
 \indent Lets first look at what the $p$ has to do with everything. Size does matter with the public prime numbers, small primes make it easier for an adversaries to attack the key agreement. The first $p$ was $512 bits$ which is not considered secure anymore, mainly because there are machines out there that could attack this given their computational power. If Zhigang Wang wanted to hack Socat it probably would have been easier not submitting the patch for the larger prime $p$. Lets say that this number was submitted for the purpose of creating a backdoor.
 \\
-\indent You might wonder why having a non-prime $p$ could do to hinder the security of the Diffie Hellman key agreement, $p$ is public, everyone already knows it. The adversary is trying to solve the problem given $g^a$ and $g^b$ what is the value of $g^ab$ is. This equation is also known as the Diffie Hellman Problem or more generic discrete logarithm problem. It is true that $p$ is public, but still calculating discrete logs takes a lot of time and computational power.  One math trick that can speed
+\indent You might wonder why having a non-prime $p$ could do to hinder the security of the Diffie Hellman key agreement, $p$ is public, everyone already knows it. The adversary is trying to solve the problem given $g^a$ and $g^b$ what is the value of $g^ab$ is. This equation is also known as the Diffie Hellman Problem or more generic discrete logarithm problem (DLP). It is true that $p$ is public, but still calculating discrete logs takes a lot of time and computational power.  One math trick that can speed
 up modulus calculations is the Chinese Remainder Theorem (CTR). The CTR states that given any mathematical computation within $\mathbb{Z}_{p}$ the same calculation can be calculated $mod p$'s factors. With our modern computers we are able to perform calculations much easier on the smaller $mod$ factors of $p$.
 \\
 \indent The Chinese remainder theorem is a very powerful function in cryptanalysis. When number can be broken into smaller prime factored parts the number is considered smooth. The discrete logarithm problem can be solved in the smaller groups and then use the CTR to obtain the discrete log of $g^{ab}$. The current best algorithm that will solve the discrete logarithm problem is Number Field Sieve which holds the current record for a “random” modulo $p$ that is 530 bits long. So does a non-prime number help in bruteforcing the DLP? It turns out not really.
-\subsection{Backdoor Possibilitties}
-\noindent How an adversary could attack the DHKA would be with Pohlig hellman attack.\\
-\indent To fully execute a Pohlig-Hellman attack we need to find $\Phi(p)$ also known as the Euler totient of the Modulus. Even if we separate the discrete logarithm problem into smaller subsets using the CTR, the size of the factors will still affect the difficulty of the DLP of the multiplicative group $\mathbb{Z}_{p}$. So far given the insecure prime $p$ used in Socat the factors that have been found so far are $a =$ 271, $b =$ 13587, and 
+\subsection{Backdoor Possibilities}
+\noindent How an adversary could attack the DHKA would be with Pohlig Hellman attack.\\
+\indent To fully execute a Pohlig-Hellman attack we need to find $\Phi(p)$ also known as the Euler Totient of the modulus. Even if we separate the discrete logarithm problem into smaller subsets using the CTR, the size of the factors will still affect the difficulty of the DLP of the multiplicative group $\mathbb{Z}_{p}$. So far given the insecure prime $p$ used in Socat the factors that have been found so far are $a =$ 271, $b =$ 13587, and 
 \\$c =$
 388948843976343660073564545483323706469727242688027819734402088955429361655646564 \\
 7352454140331039340582059836626167317380213077123632531487837183036372378804582171198 \\
 546144167567931605824660910435516113447004 670533759317049846261619565037897529811714 \\
 1144096886684800236261920005248055422089305813639519 \\ 
-$c$ is a $1002 bit$ non-prime number that we are able to further factorize, but as for now the factors remain unknown. With trial division we are able to determine the the smallest factors are larger than $2^40$. Trial division is a test where it will systematically test whether $p$ is divisible by any smaller number, clearly very slow as it checks every number in a Sieve of Eratosthenes like manner. If we want to get anywhere near the factors of $c$ we will have to do something more efficient
-like the Lenstra Elliptic Curve factorization. Lenstra algroithim's computation performance is a based on the size of the largest factor not the entire number itself.  However since there are still no solutions the factors of $c$ might be a product of two large $500 bit$ primes, which would be still very difficult to solve and may never be found. With still no solutions of the factors of $c$ we are still not able to take the full advantage of the CTR in computing the DLP. 
+$c$ is a $1002 bit$ non-prime number that we are able to further factorize, but as for now the factors remain unknown. With trial division we are able to determine the smallest factors are larger than $2^40$. Trial division is a test where it will systematically test whether $p$ is divisible by any smaller number, clearly very slow as it checks every number in a Sieve of Eratosthenes like manner. If we want to get anywhere near the factors of $c$ we will have to do something more efficient
+like the Lenstra Elliptic Curve factorization. Lenstra algorithm's computation performance is a based on the size of the largest factor not the entire number itself.  However since there are still no solutions the factors of $c$ might be a product of two large $500 bit$ primes, which would be still very difficult to solve and may never be found. With still no solutions of the factors of $c$ we are still not able to take the full advantage of the CTR in computing the DLP. 
 \\
 The computations that would need to take place after the smaller factors of $c$ are found are with the Chinese remainder theorem. If the subsets were small enough we would be able to brute force $x_{1}$ and $x_{2}$ but if they are still too large we could use more efficient DLP algorithms. DLP can be solved more efficiently with either Pollar's Rho or index calculus in each of the smaller sub groups. For example:\\
 \indent $\Phi(p)=q_{1}*q_{2}$\\
@@ -209,7 +209,7 @@ Zhigang Wang was asked to comment on how the non-prime number that was submitted
     \item Use Pohlig-Hellman and CRT to reduce DLP to the factor sets of $\mathbb{Z}_{p}$
     \item Use Pollar's rho or index calculus to solve DLP in each factor set of $\mathbb{Z}_{p}$
     \item Sniff Socat encrypted network traffic to recover public DH parameters
-    \item Unencrypt data
+    \item Decrypt data
 \end{enumerate}
 \indent I also took note on the fact that you should always double check your security implementation, or even have another person look it over to find stupid errors like a prime not being prime. It is also an I opener to how long it might be before someone finds the mistake in your code, and that hole time you should assume that an adversary has known about it the whole time and consider all data that was used with that application compromised.  It was fun for me to look into
 this topic, I really liked how it was a mystery why the value was not prime and I came up with multiple conspiracy theories while writing this to why the non-prime value was added. It still does not seem like a mistake but at this point I might just have to leave it at that, a mistake.
