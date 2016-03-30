@@ -1,0 +1,544 @@
+Chapter 2: outline
+2.1 principles of network
+applications
+2.2 Web and HTTP
+2.3 FTP
+2.4 electronic mail
+
+2.6 P2P applications
+2.7 socket programming
+with UDP and TCP
+
+ SMTP, POP3, IMAP
+
+2.5 DNS
+
+Application Layer 2-1
+
+The Book
+
+Start Reading
+Chapter 2 Now
+
+Introduction 1-2
+
+Chapter 2: application layer
+our goals:
+ conceptual,
+implementation aspects
+of network application
+protocols
+ transport-layer
+service models
+ client-server
+paradigm
+ peer-to-peer
+paradigm
+
+
+
+learn about protocols by
+examining popular
+application-level
+protocols
+
+
+
+
+
+
+
+HTTP
+FTP
+SMTP / POP3 / IMAP
+DNS
+
+creating network
+applications
+ socket API
+
+Application Layer 2-3
+
+Some network apps
+
+
+
+
+
+
+
+
+
+e-mail
+web
+text messaging
+remote login
+P2P file sharing
+multi-user network games
+streaming stored video
+(YouTube, Hulu, Netflix)
+
+
+
+
+
+
+
+
+voice over IP (e.g., Skype)
+real-time video
+conferencing
+social networking
+search
+…
+…
+
+Application Layer 2-4
+
+Creating a network app
+write programs that:
+ run on (different) end systems
+ communicate over network
+ e.g., web server software
+communicates with browser
+software
+
+no need to write software for
+network-core devices
+ network-core devices do not
+run user applications
+ applications on end systems
+allows for rapid app
+development, propagation
+
+application
+transport
+network
+data link
+physical
+
+application
+transport
+network
+data link
+physical
+
+application
+transport
+network
+data link
+physical
+
+Application Layer 2-5
+
+Application architectures
+possible structure of applications:
+ client-server
+ peer-to-peer (P2P)
+
+Application Layer 2-6
+
+Client-server architecture
+server:
+
+
+
+
+always-on host
+permanent IP address
+data centers for scaling
+
+clients:
+
+
+client/server
+
+
+
+
+
+communicate with server
+may be intermittently
+connected
+may have dynamic IP
+addresses
+do not communicate directly
+with each other
+Application Layer 2-7
+
+P2P architecture
+
+
+
+
+
+
+no always-on server
+arbitrary end systems
+directly communicate
+peers request service from
+other peers, provide service
+in return to other peers
+ self scalability – new
+peers bring new service
+capacity, as well as new
+service demands
+peers are intermittently
+connected and change IP
+addresses
+ complex management
+
+peer-peer
+
+Application Layer 2-8
+
+Processes communicating
+process: program running
+within a host
+
+
+
+
+within same host, two
+processes communicate
+using inter-process
+communication (defined by
+OS)
+processes in different hosts
+communicate by exchanging
+messages
+
+clients, servers
+client process: process that
+
+initiates communication
+server process: process that
+waits to be contacted
+
+
+
+aside: applications with P2P
+architectures have client
+processes & server
+processes
+
+Application Layer 2-9
+
+Sockets
+
+
+
+process sends/receives messages to/from its socket
+socket analogous to door
+ sending process shoves message out door
+ sending process relies on transport infrastructure on
+other side of door to deliver message to socket at
+receiving process
+application
+
+process
+
+socket
+
+application
+
+process
+
+transport
+
+transport
+
+network
+
+network
+
+link
+physical
+
+Internet
+
+link
+
+controlled by
+app developer
+
+controlled
+by OS
+
+physical
+
+Application Layer 2-10
+
+Addressing processes
+
+
+
+
+
+to receive messages,
+process must have identifier
+host device has unique 32bit IP address
+Q: does IP address of host
+on which process runs
+suffice for identifying the
+process?
+ A: no, many processes
+can be running on same
+host
+
+
+
+
+
+identifier includes both IP
+address and port numbers
+associated with process on
+host.
+example port numbers:
+ HTTP server: 80
+ mail server: 25
+
+
+
+to send HTTP message to
+gaia.cs.umass.edu web
+server:
+ IP address: 128.119.245.12
+ port number: 80
+
+
+
+more shortly…
+
+Application Layer 2-11
+
+App-layer protocol defines
+
+
+
+
+
+
+
+
+types of messages
+exchanged,
+ e.g., request, response
+message syntax:
+ what fields in messages
+& how fields are
+delineated
+message semantics
+ meaning of information
+in fields
+rules for when and how
+processes send & respond
+to messages
+
+open protocols:
+ defined in RFCs
+ allows for interoperability
+ e.g., HTTP, SMTP
+proprietary protocols:
+ e.g., Skype
+
+Application Layer 2-12
+
+What transport service does an app need?
+data integrity
+ some apps (e.g., file transfer,
+web transactions) require
+100% reliable data transfer
+ other apps (e.g., audio) can
+tolerate some loss
+timing
+ some apps (e.g., Internet
+telephony, interactive
+games) require low delay
+to be “effective”
+
+throughput
+ some apps (e.g.,
+multimedia) require
+minimum amount of
+throughput to be
+“effective”
+ other apps (“elastic apps”)
+make use of whatever
+throughput they get
+
+security
+ encryption, data integrity,
+…
+Application Layer 2-13
+
+Transport service requirements: common apps
+application
+
+data loss
+
+throughput
+
+file transfer
+e-mail
+Web documents
+real-time audio/video
+
+no loss
+no loss
+no loss
+loss-tolerant
+
+stored audio/video
+interactive games
+text messaging
+
+loss-tolerant
+loss-tolerant
+no loss
+
+elastic
+no
+elastic
+no
+elastic
+no
+audio: 5kbps-1Mbps yes, 100’s msec
+video:10kbps-5Mbps
+same as above
+yes, few secs
+few kbps up
+yes, 100’s msec
+elastic
+yes and no
+
+time sensitive
+
+Application Layer 2-14
+
+Internet transport protocols services
+TCP service:
+
+UDP service:
+
+
+
+
+
+
+
+
+
+
+
+
+reliable transport between
+sending and receiving
+process
+flow control: sender won’t
+overwhelm receiver
+congestion control: throttle
+sender when network
+overloaded
+does not provide: timing,
+minimum throughput
+guarantee, security
+connection-oriented: setup
+required between client and
+server processes
+
+
+
+unreliable data transfer
+between sending and
+receiving process
+does not provide:
+reliability, flow control,
+congestion control,
+timing, throughput
+guarantee, security,
+orconnection setup,
+
+Q: why bother? Why is
+there a UDP? What
+applications want that?
+Application Layer 2-15
+
+Internet apps: application, transport protocols
+application
+e-mail
+remote terminal access
+Web
+file transfer
+streaming multimedia
+Internet telephony
+
+application
+layer protocol
+
+underlying
+transport protocol
+
+SMTP [RFC 2821]
+Telnet [RFC 854]
+HTTP [RFC 2616]
+FTP [RFC 959]
+HTTP (e.g., YouTube),
+RTP [RFC 1889]
+SIP, RTP, proprietary
+(e.g., Skype)
+
+TCP
+TCP
+TCP
+TCP
+TCP or UDP
+
+TCP or UDP
+
+Application Layer 2-16
+
+Securing TCP – be aware as your write apps!
+TCP & UDP
+ no encryption
+ cleartext passwds sent
+into socket traverse
+Internet in cleartext
+SSL
+ provides encrypted
+TCP connection
+ data integrity
+ end-point
+authentication
+
+SSL is at app layer
+ Apps use SSL libraries,
+which “talk” to TCP
+SSL socket API
+ cleartext passwds sent
+into socket traverse
+Internet encrypted
+ See Chapter 7
+
+Application Layer 2-17
+
+Chapter 2: outline
+2.1 principles of network
+applications
+ app architectures
+ app requirements
+
+2.6 P2P applications
+2.7 socket programming
+with UDP and TCP
+
+2.2 Web and HTTP
+2.3 FTP
+2.4 electronic mail
+ SMTP, POP3, IMAP
+
+2.5 DNS
+
+Application Layer 2-18
+
+

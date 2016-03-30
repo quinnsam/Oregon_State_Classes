@@ -1,0 +1,842 @@
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-1
+
+Principles of congestion control
+congestion:
+
+
+
+
+
+
+informally: “too many sources sending too much
+data too fast for network to handle”
+different from flow control (which is about
+applications and read buffers)
+manifestations:
+ lost packets (buffer overflow at routers)
+ long delays (queueing in router buffers)
+a top-10 problem!
+
+Transport Layer 3-2
+
+Causes/costs of congestion: scenario 1
+
+
+
+
+lout
+
+Host A
+
+unlimited shared
+output link buffers
+
+Host B
+
+R/2
+
+delay
+
+
+
+two senders, two
+receivers
+one router, infinite
+buffers
+output link capacity: R
+no retransmission
+
+throughput:
+
+lout
+
+
+
+original data: lin
+
+
+
+lin R/2
+maximum per-connection
+throughput: R/2
+
+
+
+lin R/2
+large delays as arrival rate, lin,
+approaches capacity
+Transport Layer 3-3
+
+Causes/costs of congestion: scenario 2
+
+
+
+one router, finite buffers
+sender retransmission of timed-out packet
+ application-layer input = application-layer output: lin =
+lout
+ transport-layer input includes retransmissions : l‘in lin
+lin : original data
+l'in: original data, plus
+
+lout
+
+retransmitted data
+Host A
+
+Host B
+
+finite shared output
+link buffers
+Transport Layer 3-4
+
+Causes/costs of congestion: scenario 2
+lout
+
+idealization: perfect
+knowledge
+ sender sends only when
+router buffers available
+
+R/2
+
+lin : original data
+l'in: original data, plus
+
+copy
+
+lin
+
+R/2
+
+lout
+
+retransmitted data
+A
+
+Host B
+
+free buffer space!
+
+finite shared output
+link buffers
+Transport Layer 3-5
+
+Causes/costs of congestion: scenario 2
+Idealization: known loss
+
+
+
+packets can be lost,
+dropped at router due
+to full buffers
+sender only resends if
+packet known to be lost
+lin : original data
+l'in: original data, plus
+
+copy
+
+lout
+
+retransmitted data
+A
+
+no buffer space!
+
+Host B
+Transport Layer 3-6
+
+Causes/costs of congestion: scenario 2
+
+
+
+packets can be lost,
+dropped at router due
+to full buffers
+sender only resends if
+packet known to be lost
+
+R/2
+when sending at R/2,
+some packets are
+retransmissions but
+asymptotic goodput
+is still R/2 (why?)
+
+lout
+
+Idealization: known loss
+
+lin : original data
+l'in: original data, plus
+
+lin
+
+R/2
+
+lout
+
+retransmitted data
+A
+
+free buffer space!
+
+Host B
+Transport Layer 3-7
+
+Causes/costs of congestion: scenario 2
+
+
+
+packets can be lost, dropped
+at router due to full buffers
+sender times out prematurely,
+sending two copies, both of
+which are delivered
+
+R/2
+
+lin
+l'in
+
+timeout
+copy
+
+A
+
+when sending at R/2,
+some packets are
+retransmissions
+including duplicated
+that are delivered!
+
+lout
+
+Realistic: duplicates
+
+lin
+
+R/2
+
+lout
+
+free buffer space!
+
+Host B
+Transport Layer 3-8
+
+Causes/costs of congestion: scenario 2
+
+
+
+packets can be lost, dropped
+at router due to full buffers
+sender times out prematurely,
+sending two copies, both of
+which are delivered
+
+R/2
+when sending at R/2,
+some packets are
+retransmissions
+including duplicated
+that are delivered!
+
+lout
+
+Realistic: duplicates
+
+lin
+
+R/2
+
+“costs” of congestion:
+
+
+
+more work (retrans) for given “goodput”
+unneeded retransmissions: link carries multiple copies of pkt
+ decreasing goodput
+
+Transport Layer 3-9
+
+Causes/costs of congestion: scenario 3
+
+
+
+
+
+four senders
+multihop paths
+timeout/retransmit
+Host A
+
+Q: what happens as lin and lin’
+
+increase ?
+A: as red lin’ increases, all arriving
+blue pkts at upper queue are
+dropped, blue throughput g 0
+
+lin : original data
+l'in: original data, plus
+
+lout
+
+Host B
+
+retransmitted data
+finite shared output
+link buffers
+
+Host D
+Host C
+
+Transport Layer 3-10
+
+Causes/costs of congestion: scenario 3
+
+lout
+
+C/2
+
+lin’
+
+C/2
+
+another “cost” of congestion:
+ when packet dropped, any “upstream transmission
+capacity used for that packet was wasted!
+
+Transport Layer 3-11
+
+Approaches towards congestion control
+two broad approaches towards congestion control:
+end-end congestion
+control:
+
+
+
+
+
+no explicit feedback
+from network
+congestion inferred
+from end-system
+observed loss, delay
+approach taken by
+TCP
+
+network-assisted
+congestion control:
+
+
+routers provide
+feedback to end systems
+ single bit indicating
+congestion (SNA,
+DECbit, TCP/IP ECN,
+ATM)
+ explicit rate for
+sender to send at
+Transport Layer 3-12
+
+Case study: ATM ABR congestion control
+ABR: available bit rate:
+
+
+
+
+
+“elastic service”
+if sender’s path
+“underloaded”:
+ sender should use
+available bandwidth
+if sender’s path
+congested:
+ sender throttled to
+minimum guaranteed
+rate
+
+RM (resource management)
+cells:
+
+
+
+
+
+sent by sender, interspersed
+with data cells
+bits in RM cell set by switches
+(“network-assisted”)
+ NI bit: no increase in rate
+(mild congestion)
+ CI bit: congestion
+indication
+RM cells returned to sender
+by receiver, with bits intact
+Transport Layer 3-13
+
+Case study: ATM ABR congestion control
+RM cell
+
+
+
+data cell
+
+two-byte ER (explicit rate) field in RM cell
+ congested switch may lower ER value in cell
+ senders’ send rate thus max supportable rate on path
+
+
+
+EFCI bit in data cells: set to 1 in congested switch
+ if data cell preceding RM cell has EFCI set, receiver sets
+CI bit in returned RM cell
+Transport Layer 3-14
+
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-15
+
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-16
+
+TCP congestion control: additive increase
+
+multiplicative decrease
+
+approach: sender increases transmission rate (window
+size), probing for usable bandwidth, until loss occurs
+ additive increase: increase cwnd by 1 MSS every
+RTT until loss detected
+ multiplicative decrease: cut cwnd in half after loss
+
+AIMD saw tooth
+behavior: probing
+for bandwidth
+
+cwnd: TCP sender
+congestion window size
+
+
+
+additively increase window size …
+…. until loss occurs (then cut window in half)
+
+time
+Transport Layer 3-17
+
+TCP Congestion Control: details
+sender sequence number space
+cwnd
+
+last byte
+ACKed
+
+
+
+sent, notyet ACKed
+(“in-flight”)
+
+last byte
+sent
+
+sender limits transmission:
+
+TCP sending rate:
+ roughly: send cwnd
+bytes, wait RTT for
+ACKS, then send
+more bytes
+rate
+
+~
+~
+
+cwnd
+RTT
+
+bytes/sec
+
+LastByteSent< cwnd
+LastByteAcked
+
+
+
+cwnd is dynamic, function
+of perceived network
+congestion
+Transport Layer 3-18
+
+TCP Slow Start
+when connection begins,
+increase rate
+exponentially until first
+loss event:
+
+Host B
+
+RTT
+
+
+
+Host A
+
+ initially cwnd = 1 MSS
+ double cwnd every RTT
+ done by incrementing
+cwnd for every ACK
+received
+
+
+summary: initial rate is
+slow but ramps up
+exponentially fast
+
+time
+
+Transport Layer 3-19
+
+TCP: detecting, reacting to loss
+
+
+
+
+
+
+loss indicated by timeout:
+
+Lots of ways to do this,
+some with odd names
+
+ cwnd set to 1 MSS;
+ window then grows exponentially (as in slow start)
+to threshold, then grows linearly
+loss indicated by 3 duplicate ACKs: TCP RENO
+ dup ACKs indicate network capable of delivering
+some segments
+ cwnd is cut in half window then grows linearly
+TCP Tahoe always sets cwnd to 1 (timeout or 3
+
+duplicate acks)
+
+Transport Layer 3-20
+
+TCP: switching from slow start to CA
+Q: when should the
+exponential
+increase switch to
+linear?
+A: when cwnd gets
+to 1/2 of its value
+before timeout.
+
+Implementation:
+
+
+
+variable ssthresh
+on loss event, ssthresh
+is set to 1/2 of what
+cwnd was just before
+loss event (12 -> 6)
+Transport Layer 3-21
+
+Summary: TCP Congestion Control
+duplicate ACK
+
+dupACKcount++
+L
+cwnd = 1 MSS
+ssthresh = 64 KB
+dupACKcount = 0
+
+slow
+start
+
+timeout
+ssthresh = cwnd/2
+cwnd = 1 MSS
+dupACKcount = 0
+retransmit missing segment
+
+dupACKcount == 3
+ssthresh= cwnd/2
+cwnd = ssthresh + 3
+retransmit missing segment
+
+New
+ACK!
+new ACK
+cwnd = cwnd+MSS
+dupACKcount = 0
+transmit new segment(s), as allowed
+cwnd > ssthresh
+L
+timeout
+ssthresh = cwnd/2
+cwnd = 1 MSS
+dupACKcount = 0
+retransmit missing segment
+
+timeout
+ssthresh = cwnd/2
+cwnd = 1
+dupACKcount = 0
+retransmit missing segment
+
+New
+ACK!
+
+new ACK
+cwnd = cwnd + MSS (MSS/cwnd)
+dupACKcount = 0
+transmit new segment(s), as allowed
+
+.
+
+congestion
+avoidance
+duplicate ACK
+dupACKcount++
+
+New
+ACK!
+New ACK
+cwnd = ssthresh
+dupACKcount = 0
+
+dupACKcount == 3
+ssthresh= cwnd/2
+cwnd = ssthresh + 3
+retransmit missing segment
+
+fast
+recovery
+duplicate ACK
+
+cwnd = cwnd + MSS
+transmit new segment(s), as allowed
+
+Transport Layer 3-22
+
+TCP throughput
+
+
+Can we calculate avg. TCP throughput as function of
+window size and RTT?
+ ignore slow start, assume always data to send
+
+
+
+W: window size (measured in bytes) where loss occurs
+ avg. window size (# in-flight bytes) is ¾ W
+ avg. thruput is 3/4W per RTT
+3 W
+avg TCP thruput =
+
+4 RTT
+
+bytes/sec
+
+W
+
+W/2
+
+Transport Layer 3-23
+
+TCP Futures: TCP over “long, fat pipes”
+
+
+
+
+example: 1500 byte segments, 100ms RTT, want
+10 Gbps throughput
+requires W = 83,333 in-flight segments
+throughput in terms of segment loss probability, L
+[Mathis 1997]:
+
+. MSS
+1.22
+TCP throughput =
+RTT L
+
+➜ to achieve 10 Gbps throughput, need a loss rate of L
+= 2·10-10 – a very small loss rate!
+
+
+new versions of TCP for high-speed
+Transport Layer 3-24
+
+TCP Fairness
+fairness goal: if K TCP sessions share same
+bottleneck link of bandwidth R, each should have
+average rate of R/K
+TCP connection 1
+
+TCP connection 2
+
+bottleneck
+router
+capacity R
+
+Transport Layer 3-25
+
+Why is TCP fair?
+two competing sessions:
+
+
+
+additive increase gives slope of 1, as throughput increases
+(creeps up slowly)
+multiplicative decrease decreases throughput proportionally
+R
+
+equal bandwidth share
+
+loss: decrease window by factor of 2
+congestion avoidance: additive increase
+loss: decrease window by factor of 2
+congestion avoidance: additive increase
+
+Connection 1 throughput
+
+R
+
+Transport Layer 3-26
+
+Fairness (more)
+Fairness and UDP
+ multimedia apps often
+do not use TCP
+
+
+
+Fairness, parallel TCP
+connections
+ application can open
+ do not want rate
+multiple parallel
+throttled by congestion
+connections between two
+control
+hosts
+instead use UDP:
+ web browsers do this
+ send audio/video at
+ e.g., link of rate R with 9
+constant rate, tolerate
+packet loss
+existing connections:
+ new app asks for 1 TCP, gets rate
+R/10
+ new app asks for 11 TCPs, gets R/2
+Transport Layer 3-27
+
+Chapter 3: summary
+
+
+
+
+principles behind
+transport layer services:
+ multiplexing,
+demultiplexing
+ reliable data transfer
+ flow control
+ congestion control
+Instantiation and
+implementation in the
+Internet via:
+
+next:
+ leaving the
+network “edge”
+(application,
+transport layers)
+ into the network
+“core”
+
+ UDP
+ TCP
+Transport Layer 3-28
+
+

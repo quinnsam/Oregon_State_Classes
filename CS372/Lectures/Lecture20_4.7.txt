@@ -1,0 +1,703 @@
+Chapter 4: outline
+4.1 introduction
+4.2 virtual circuit and
+datagram networks
+4.3 what’s inside a router
+4.4 IP: Internet Protocol
+
+
+
+
+
+datagram format
+IPv4 addressing
+ICMP
+IPv6
+
+4.5 routing algorithms
+ link state
+ distance vector
+ hierarchical routing
+
+4.6 routing in the Internet
+ RIP
+ OSPF
+ BGP
+
+4.7 broadcast and multicast
+routing
+
+Network Layer 4-1
+
+Terminology
+
+
+
+
+
+
+unicast: Direct, host-to-host communication. Can
+be across the entire internet.
+broadcast: Communication done from one host to
+all other hosts on the same subnet.
+multicast: Communication done from one or
+more hosts to a “subscribed” set of hosts across
+multiple subnets. Note that internet routers
+block multicast packets, so it’s LAN only.
+anycast: Communication done to the closest
+subnet that responds. Google uses this to cache
+search results physically closer to you. i.e., a
+subnet is advertised in multiple places!
+Network Layer 4-2
+
+Broadcast routing
+
+
+
+deliver packets from source to all other nodes
+source duplication is inefficient:
+duplicate
+
+duplicate
+creation/transmission
+
+R1
+
+R1
+duplicate
+
+R2
+
+R2
+
+R3
+
+R4
+
+source
+duplication
+
+
+
+R3
+
+R4
+
+in-network
+duplication
+
+source duplication: how does source determine all
+of the recipient addresses?
+Network Layer 4-3
+
+In-network duplication
+
+
+flooding: when node receives broadcast packet,
+sends copy to all neighbors
+ problems: cycles & broadcast storm
+
+
+
+controlled flooding: node only broadcasts packet if
+it hasn’t broadcast same packet before
+ node keeps track of packet ids already broadcasted
+ or reverse path forwarding (RPF): only forward packet
+if it arrived on shortest path between node and source
+
+
+
+spanning tree:
+ no redundant packets received by any node
+
+Network Layer 4-4
+
+Spanning tree
+
+
+
+first construct a spanning tree
+nodes then forward/make copies only along
+spanning tree
+A
+
+A
+B
+
+B
+
+c
+
+c
+D
+
+F
+
+D
+
+E
+
+F
+
+E
+
+G
+
+Broadcast initiated at A
+
+G
+
+Broadcast initiated at D
+
+Network Layer 4-5
+
+Spanning tree: creation
+
+
+
+center node
+each node sends unicast join message to center
+node
+ message forwarded until it arrives at a node already
+belonging to spanning tree
+A
+
+A
+3
+
+B
+
+B
+
+c
+
+c
+4
+
+E
+
+F
+1
+
+2
+
+D
+
+D
+F
+
+5
+
+E
+
+G
+
+(a) stepwise construction of
+spanning tree (center: E)
+
+G
+
+(b) constructed spanning
+tree
+Network Layer 4-6
+
+Multicast routing: problem statement
+goal: find a tree (or trees) connecting routers having
+local multicast group members
+legend
+
+
+
+
+tree: not all paths between routers used
+shared-tree: same tree used by all group members
+source-based: different tree from each sender to rcvrs
+
+group
+member
+not group
+member
+router
+with a
+group
+member
+router
+without
+group
+member
+
+shared tree
+
+source-based trees
+Network Layer 4-7
+
+Approaches for building mcast trees
+approaches:
+ source-based tree: one tree per source
+ shortest path trees
+ reverse path forwarding
+
+
+group-shared tree: group uses one tree
+ minimal spanning (Steiner)
+ center-based trees
+
+…we first look at basic approaches, then specific protocols
+adopting these approaches
+
+Network Layer 4-8
+
+Shortest path tree
+
+
+multicast forwarding tree: tree of shortest path
+routes from source to all receivers
+ Dijkstra’s algorithm
+LEGEND
+
+s: source
+R1
+1
+
+2
+
+R2
+3
+
+router with attached
+group member
+
+R4
+5
+
+4
+
+R3
+R6
+
+router with no attached
+group member
+
+R5
+
+6
+R7
+
+i
+
+link used for forwarding,
+i indicates order link
+added by algorithm
+
+Network Layer 4-9
+
+Reverse path forwarding
+rely on router’s knowledge of unicast shortest
+path from it to sender
+ each router has simple forwarding behavior:
+
+
+if (multicast datagram received on incoming link on
+shortest path back to center)
+then flood datagram onto all outgoing links
+else ignore datagram
+
+Network Layer 4-10
+
+Reverse path forwarding: example
+s: source
+
+LEGEND
+R1
+
+R4
+
+router with attached
+group member
+
+R2
+
+R5
+
+router with no attached
+group member
+datagram will be forwarded
+
+R3
+R6
+
+R7
+datagram will not be
+forwarded
+
+
+
+result is a source-specific reverse SPT
+ may be a bad choice with asymmetric links
+Network Layer 4-11
+
+Reverse path forwarding: pruning
+
+
+forwarding tree contains subtrees with no multicast group
+members
+ no need to forward datagrams down subtree
+ “prune” messages sent upstream by router with no
+downstream group members
+
+s: source
+LEGEND
+
+R1
+
+R4
+
+R2
+
+router with attached
+group member
+
+P
+R5
+
+R3
+
+P
+R6
+
+R7
+
+router with no attached
+group member
+P
+
+prune message
+links with multicast
+forwarding
+Network Layer 4-12
+
+Shared-tree: steiner tree
+
+
+
+
+
+
+steiner tree: minimum cost tree connecting all
+routers with attached group members
+problem is NP-complete
+excellent heuristics exists
+not used in practice:
+
+ computational complexity
+ information about entire network needed
+ monolithic: rerun whenever a router needs to
+join/leave
+
+Network Layer 4-13
+
+Center-based trees
+
+
+
+
+single delivery tree shared by all
+one router identified as “center” of tree
+to join:
+ edge router sends unicast join-msg addressed to center
+router
+ join-msg “processed” by intermediate routers and
+forwarded towards center
+ join-msg either hits existing tree branch for this center,
+or arrives at center
+ path taken by join-msg becomes new branch of tree for
+this router
+
+Network Layer 4-14
+
+Center-based trees: example
+suppose R6 chosen as center:
+LEGEND
+R1
+3
+R2
+
+router with attached
+group member
+
+R4
+
+router with no attached
+group member
+
+2
+R5
+
+R3
+
+1
+
+1
+
+path order in which join
+messages generated
+
+R6
+R7
+
+Network Layer 4-15
+
+Internet Multicasting Routing: DVMRP
+
+
+
+DVMRP: distance vector multicast routing
+protocol, RFC1075
+flood and prune: reverse path forwarding, sourcebased tree
+ RPF tree based on DVMRP’s own routing tables
+constructed by communicating DVMRP routers
+ no assumptions about underlying unicast
+ initial datagram to multicast group flooded
+everywhere via RPF
+ routers not wanting group: send upstream prune
+messages
+
+Network Layer 4-16
+
+DVMRP: continued…
+
+
+soft state: DVMRP router periodically (1 min.)
+“forgets” branches are pruned:
+
+ multicast data again flows down unpruned branch
+ downstream router: reprune or else continue to receive
+data
+
+
+routers can quickly regraft to tree
+ following IGMP join at leaf
+
+
+
+odds and ends
+ commonly implemented in commercial router
+
+Network Layer 4-17
+
+Tunneling
+Q: how to connect “islands” of multicast routers in a
+“sea” of unicast routers?
+
+physical topology
+
+
+
+
+
+logical topology
+
+multicast datagram encapsulated inside “normal” (nonmulticast-addressed) datagram
+normal IP datagram sent through “tunnel” via regular IP
+unicast to receiving multicast router (recall IPv6 inside IPv4
+tunneling)
+receiving multicast router un-encapsulates to get multicast
+Network Layer 4-18
+datagram
+
+PIM: Protocol Independent Multicast
+
+
+
+
+not dependent on any specific underlying unicast
+routing algorithm (works with all)
+
+two different multicast distribution scenarios :
+
+dense:
+
+
+
+
+group members densely
+packed, in “close”
+proximity.
+bandwidth more plentiful
+
+sparse:
+
+
+
+
+
+# networks with group
+members small wrt #
+interconnected networks
+group members “widely
+dispersed”
+bandwidth not plentiful
+Network Layer 4-19
+
+Consequences of sparse-dense dichotomy:
+dense
+
+sparse:
+
+
+
+
+
+
+
+
+group membership by
+routers assumed until
+routers explicitly prune
+data-driven construction on
+multicast tree (e.g., RPF)
+bandwidth and non-grouprouter processing is
+profligate
+
+
+
+
+
+no membership until routers
+explicitly join
+receiver-driven construction of
+multicast tree (e.g., centerbased)
+bandwidth and non-grouprouter processing is
+conservative
+
+Network Layer 4-20
+
+PIM- dense mode
+flood-and-prune RPF: similar to DVMRP but…
+underlying unicast protocol provides RPF info
+for incoming datagram
+ less complicated (less efficient) downstream
+flood than DVMRP reduces reliance on
+underlying routing algorithm
+ has protocol mechanism for router to detect it
+is a leaf-node router
+
+
+Network Layer 4-21
+
+PIM - sparse mode
+
+
+
+
+
+center-based approach
+router sends join msg to
+rendezvous point (RP)
+ intermediate routers
+update state and
+forward join
+after joining via RP, router
+can switch to sourcespecific tree
+ increased
+performance: less
+concentration, shorter
+paths
+
+R1
+
+R4
+
+join
+R2
+
+join
+
+R5
+R3
+
+join
+R6
+all data multicast
+from rendezvous
+point
+
+R7
+rendezvous
+point
+
+Network Layer 4-22
+
+PIM - sparse mode
+sender(s):
+
+
+
+
+
+
+unicast data to RP,
+which distributes
+down RP-rooted tree
+RP can extend
+multicast tree
+upstream to source
+RP can send stop
+message if no attached
+receivers
+
+R1
+
+R4
+
+join
+R2
+
+join
+
+R5
+R3
+
+join
+R6
+all data multicast
+from rendezvous
+point
+
+R7
+rendezvous
+point
+
+ “no one is listening!”
+Network Layer 4-23
+
+Chapter 4: done!
+4.1 introduction
+4.2 virtual circuit and
+datagram networks
+4.3 what’s inside a router
+4.4 IP: Internet Protocol
+ datagram format, IPv4
+addressing, ICMP, IPv6
+
+
+
+
+4.5 routing algorithms
+ link state, distance vector,
+hierarchical routing
+
+4.6 routing in the Internet
+ RIP, OSPF, BGP
+
+4.7 broadcast and multicast
+routing
+
+understand principles behind network layer services:
+ network layer service models, forwarding versus routing
+how a router works, routing (path selection), broadcast,
+multicast
+instantiation, implementation in the Internet
+Network Layer 4-24
+
+

@@ -1,0 +1,517 @@
+Chapter 2: outline
+2.1 principles of network
+applications
+ app architectures
+ app requirements
+
+2.6 P2P applications
+2.7 socket programming
+with UDP and TCP
+
+2.2 Web and HTTP
+2.3 FTP
+2.4 electronic mail
+ SMTP, POP3, IMAP
+
+2.5 DNS
+
+Application Layer 2-1
+
+DNS: domain name system
+people: many identifiers:
+ SSN, name, passport #
+Internet hosts, routers:
+ IP address (32 bit) used for addressing
+datagrams
+ “name”, e.g.,
+www.yahoo.com used by humans
+Q: how to map between IP
+address and name, and
+vice versa ?
+
+Domain Name System:
+
+
+
+
+distributed database
+implemented in hierarchy of
+many name servers
+application-layer protocol: hosts,
+name servers communicate to
+resolve names (address/name
+translation)
+ note: core Internet function,
+implemented as applicationlayer protocol
+ complexity at network’s
+“edge”
+Application Layer 2-2
+
+DNS: services, structure
+DNS services
+
+
+
+hostname to IP address
+translation
+host aliasing
+ canonical, alias names
+
+
+
+
+
+mail server aliasing
+load distribution
+ replicated Web
+servers: many IP
+addresses correspond
+to one name
+
+why not centralize DNS?
+
+
+
+
+
+single point of failure
+traffic volume
+distant centralized database
+maintenance
+
+A: doesn’t scale!
+
+Application Layer 2-3
+
+DNS: a distributed, hierarchical database
+Root DNS Servers
+
+…
+com DNS servers
+yahoo.com
+amazon.com
+DNS servers DNS servers
+
+…
+
+org DNS servers
+pbs.org
+DNS servers
+
+edu DNS servers
+poly.edu
+umass.edu
+DNS serversDNS servers
+
+client wants IP for www.amazon.com; 1st approx:
+
+
+
+
+client queries root server to find com DNS server
+client queries .com DNS server to get amazon.com DNS server
+client queries amazon.com DNS server to get IP address for
+www.amazon.com
+
+Application Layer 2-4
+
+DNS: root name servers
+
+
+
+contacted by local name server that can not resolve name
+root name server:
+ contacts authoritative name server if name mapping not known
+ gets mapping
+ returns mapping to local name server
+c. Cogent, Herndon, VA (5 other sites)
+d. U Maryland College Park, MD
+h. ARL Aberdeen, MD
+j. Verisign, Dulles VA (69 other sites )
+
+e. NASA Mt View, CA
+f. Internet Software C.
+Palo Alto, CA (and 48 other
+sites)
+a. Verisign, Los Angeles CA
+(5 other sites)
+b. USC-ISI Marina del Rey, CA
+l. ICANN Los Angeles, CA
+(41 other sites)
+g. US DoD Columbus,
+OH (5 other sites)
+
+k. RIPE London (17 other sites)
+i. Netnod, Stockholm (37 other sites)
+m. WIDE Tokyo
+(5 other sites)
+
+13 root name
+“servers”
+worldwide
+
+Application Layer 2-5
+
+TLD, authoritative servers
+top-level domain (TLD) servers:
+ responsible for com, org, net, edu, aero, jobs, museums,
+and all top-level country domains, e.g.: uk, fr, ca, jp
+ Network Solutions maintains servers for .com TLD
+ Educause for .edu TLD
+
+authoritative DNS servers:
+ organization’s own DNS server(s), providing authoritative
+hostname to IP mappings for organization’s named hosts
+ can be maintained by organization or service provider
+
+Application Layer 2-6
+
+Local DNS name server
+
+
+
+does not strictly belong to hierarchy
+each ISP (residential ISP, company, university) has
+one
+ also called “default name server”
+
+
+
+when host makes DNS query, query is sent to its
+local DNS server
+ has local cache of recent name-to-address translation
+pairs (but may be out of date!)
+ acts as proxy, forwards query into hierarchy
+
+Application Layer 2-7
+
+DNS name
+resolution example
+
+
+root DNS server
+
+2
+
+host at cis.poly.edu
+wants IP address for
+gaia.cs.umass.edu
+
+iterated query:
+
+
+
+
+contacted server
+replies with name of
+server to contact
+“I don’t know this
+name, but ask this
+server”
+
+3
+
+TLD DNS server
+4
+5
+
+local DNS server
+dns.poly.edu
+
+1
+
+8
+
+7
+
+6
+
+authoritative DNS server
+dns.cs.umass.edu
+
+requesting host
+cis.poly.edu
+gaia.cs.umass.edu
+Application Layer 2-8
+
+DNS name
+resolution example
+
+root DNS server
+
+recursive query:
+
+
+
+
+puts burden of name
+resolution on
+contacted name
+server
+heavy load at upper
+levels of hierarchy?
+
+3
+
+2
+
+7
+
+6
+TLD DNS
+server
+
+local DNS server
+dns.poly.edu
+
+1
+
+5
+
+4
+
+8
+authoritative DNS server
+dns.cs.umass.edu
+
+requesting host
+cis.poly.edu
+gaia.cs.umass.edu
+Application Layer 2-9
+
+Testing DNS ourselves
+
+
+At the command line, we want nslookup
+
+nslookup eecs.oregonstate.edu
+Server: ns5.oregonstate.edu
+Address: 128.193.15.13
+Name:
+eecs.oregonstate.edu
+Address: 128.193.40.35
+
+Application Layer 2-10
+
+Testing DNS ourselves
+
+
+At the command line, we want nslookup
+
+nslookup eecs.oregonstate.edu 8.8.8.8
+Server: google-public-dns-a.google.com
+Address: 8.8.8.8
+Non-authoritative answer:
+Name:
+eecs.oregonstate.edu
+Address: 128.193.40.35
+
+Application Layer 2-11
+
+DNS: caching, updating records
+
+
+once (any) name server learns mapping, it caches
+mapping
+ cache entries timeout (disappear) after some time (TTL)
+ TLD servers typically cached in local name servers
+• thus root name servers not often visited
+
+
+
+cached entries may be out-of-date (best effort
+name-to-address translation!)
+ if name host changes IP address, may not be known
+Internet-wide until all TTLs expire
+
+
+
+update/notify mechanisms proposed IETF standard
+ RFC 2136
+
+Application Layer 2-12
+
+DNS records
+DNS: distributed db storing resource records (RR)
+RR format: (name,
+
+type=A
+ name is hostname
+ value is IP address
+
+type=NS
+ name is domain (e.g.,
+foo.com)
+ value is hostname of
+authoritative name
+server for this domain
+
+value, type, ttl)
+
+type=CNAME
+ name is alias name for some
+“canonical” (the real) name
+ www.ibm.com is really
+servereast.backup2.ibm.com
+
+ value is canonical name
+
+type=MX
+ value is name of mailserver
+associated with name
+Application Layer 2-13
+
+DNS protocol, messages
+
+
+query and reply messages, both with same message
+format
+2 bytes
+2 bytes
+
+msg header
+
+
+
+
+identification: 16 bit # for
+query, reply to query uses
+same #
+flags:
+ query or reply
+ recursion desired
+ recursion available
+ reply is authoritative
+
+identification
+
+flags
+
+# questions
+
+# answer RRs
+
+# authority RRs
+
+# additional RRs
+
+questions (variable # of questions)
+answers (variable # of RRs)
+authority (variable # of RRs)
+additional info (variable # of RRs)
+Application Layer 2-14
+
+DNS protocol, messages
+2 bytes
+
+2 bytes
+
+identification
+
+flags
+
+# questions
+
+# answer RRs
+
+# authority RRs
+
+# additional RRs
+
+name, type fields
+for a query
+
+questions (variable # of questions)
+
+RRs in response
+to query
+
+answers (variable # of RRs)
+
+records for
+authoritative servers
+
+authority (variable # of RRs)
+
+additional “helpful”
+info that may be used
+
+additional info (variable # of RRs)
+Application Layer 2-15
+
+Inserting records into DNS
+
+
+
+
+example: new startup “Network Utopia”
+register name networkuptopia.com at DNS registrar
+(e.g., Network Solutions)
+ provide names, IP addresses of authoritative name server
+(primary and secondary)
+ registrar inserts two RRs into .com TLD server:
+
+(networkutopia.com, dns1.networkutopia.com, NS)
+(dns1.networkutopia.com, 212.212.212.1, A)
+
+
+
+create authoritative server type A record for
+www.networkuptopia.com; type MX record for
+networkutopia.com
+
+Application Layer 2-16
+
+Attacking DNS
+DDoS attacks
+ Bombard root servers
+with traffic
+ Not successful to date
+ Traffic Filtering
+ Local DNS servers
+cache IPs of TLD
+servers, allowing root
+server bypass
+
+
+Bombard TLD servers
+ Potentially more
+dangerous
+
+Redirect attacks
+ Man-in-middle
+ Intercept queries
+
+
+DNS poisoning
+ Send bogus replies to
+DNS server, which
+caches
+
+Exploit DNS for DDoS
+ Send queries with
+spoofed source
+address: target IP
+ Requires amplification
+Application Layer 2-17
+
+Chapter 2: outline
+2.1 principles of network
+applications
+ app architectures
+ app requirements
+
+2.6 P2P applications
+2.7 socket programming
+with UDP and TCP
+
+2.2 Web and HTTP
+2.3 FTP
+2.4 electronic mail
+ SMTP, POP3, IMAP
+
+2.5 DNS
+
+Application Layer 2-18
+
+

@@ -1,0 +1,834 @@
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer
+
+5-1
+
+Multiprotocol label switching (MPLS)
+
+
+initial goal: high-speed IP forwarding using fixed
+length label (instead of IP address)
+ fast lookup using fixed length identifier (rather than
+shortest prefix matching)
+ borrowing ideas from Virtual Circuit (VC) approach
+ but IP datagram still keeps IP address!
+PPP or Ethernet
+header
+
+MPLS header
+
+label
+20
+
+IP header
+
+remainder of link-layer frame
+
+Exp S TTL
+3
+
+1
+
+5
+Link Layer
+
+5-2
+
+MPLS capable routers
+
+
+
+a.k.a. label-switched router
+forward packets to outgoing interface based only on
+label value (don’t inspect IP address)
+ MPLS forwarding table distinct from IP forwarding tables
+
+
+
+flexibility: MPLS forwarding decisions can differ from
+those of IP
+ use destination and source addresses to route flows to
+same destination differently (traffic engineering)
+ re-route flows quickly if link fails: pre-computed backup
+paths (useful for VoIP)
+
+Link Layer
+
+5-3
+
+MPLS versus IP paths
+R6
+D
+R4
+
+R3
+
+R5
+A
+R2
+
+
+
+IP routing: path to destination determined
+by destination address alone
+
+IP router
+
+Link Layer
+
+5-4
+
+MPLS versus IP paths
+entry router (R4) can use different MPLS
+routes to A based, e.g., on source address
+
+R6
+D
+R4
+
+R3
+
+R5
+A
+R2
+
+
+
+
+
+IP routing: path to destination determined
+by destination address alone
+
+IP-only
+router
+
+MPLS routing: path to destination can be
+based on source and dest. address
+
+MPLS and
+IP router
+
+ fast reroute: precompute backup routes in
+case of link failure
+Link Layer
+
+5-5
+
+MPLS signaling
+
+
+modify OSPF, IS-IS link-state flooding protocols to
+carry info used by MPLS routing,
+ e.g., link bandwidth, amount of “reserved” link bandwidth
+
+
+
+entry MPLS router uses RSVP-TE signaling protocol to set
+up MPLS forwarding at downstream routers
+
+RSVP-TE
+
+R6
+
+D
+R4
+R5
+
+modified
+link state
+flooding
+
+A
+
+Link Layer
+
+5-6
+
+MPLS forwarding tables
+in
+label
+
+out
+label dest
+
+10
+12
+8
+
+out
+interface
+
+A
+D
+A
+
+0
+0
+1
+
+in
+label
+
+out
+label dest
+
+out
+interface
+
+10
+
+6
+
+A
+
+1
+
+12
+
+9
+
+D
+
+0
+
+R6
+0
+
+0
+
+D
+
+1
+
+1
+
+R3
+
+R4
+R5
+
+0
+
+0
+
+R2
+in
+label
+
+8
+
+out
+label dest
+
+6
+
+A
+
+out
+interface
+
+in
+label
+
+6
+
+outR1
+label dest
+
+-
+
+A
+
+A
+out
+interface
+
+0
+
+0
+Link Layer
+
+5-7
+
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer
+
+5-8
+
+Data center networks
+
+
+10’s to 100’s of thousands of hosts, often closely
+coupled, in close proximity:
+ e-business (e.g. Amazon)
+ content-servers (e.g., YouTube, Akamai, Apple, Microsoft)
+ search engines, data mining (e.g., Google)
+
+
+
+challenges:
+ multiple applications, each
+serving massive numbers of
+clients
+ managing/balancing load,
+avoiding processing,
+networking, data bottlenecks
+Inside a 40-ft Microsoft container,
+Chicago data center
+Link Layer
+
+5-9
+
+Data center networks
+load balancer: application-layer routing
+ receives external client requests
+ directs workload within data center
+ returns results to external client (hiding data
+center internals from client)
+
+Internet
+
+Border router
+
+Load
+balancer
+
+Access router
+
+Tier-1 switches
+
+B
+A
+
+Load
+balancer
+
+Tier-2 switches
+
+C
+
+TOR switches
+Server racks
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+Link Layer 5-10
+
+Data center networks
+
+
+rich interconnection among switches, racks:
+ increased throughput between racks (multiple routing
+paths possible)
+ increased reliability via redundancy
+Tier-1 switches
+
+Tier-2 switches
+
+TOR switches
+
+Server racks
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer 5-12
+
+Synthesis: a day in the life of a web request
+
+
+journey down protocol stack complete!
+ application, transport, network, link
+
+
+
+putting-it-all-together: synthesis!
+ goal: identify, review, understand protocols (at all
+layers) involved in seemingly simple scenario:
+requesting www page
+ scenario: student attaches laptop to campus network,
+requests/receives www.google.com
+
+Link Layer 5-13
+
+A day in the life: scenario
+DNS server
+
+browser
+
+Comcast network
+68.80.0.0/13
+
+school network
+68.80.2.0/24
+web page
+
+web server
+64.233.169.105
+
+Google’s network
+64.233.160.0/19
+
+Link Layer 5-14
+
+A day in the life… connecting to the Internet
+DHCP
+UDP
+IP
+Eth
+Phy
+
+DHCP
+DHCP
+DHCP
+DHCP
+
+
+
+connecting laptop needs to
+get its own IP address, addr
+of first-hop router, addr of
+DNS server: use DHCP
+
+DHCP
+
+
+DHCP
+DHCP
+DHCP
+DHCP
+
+DHCP
+UDP
+IP
+Eth
+Phy
+
+router
+(runs DHCP)
+
+
+
+
+
+DHCP request encapsulated
+in UDP, encapsulated in IP,
+encapsulated in 802.3
+Ethernet
+
+Ethernet frame broadcast
+(dest: FFFFFFFFFFFF) on LAN,
+received at router running
+DHCP server
+Ethernet demuxed to IP
+demuxed, UDP demuxed to
+DHCP
+Link Layer 5-15
+
+A day in the life… connecting to the Internet
+DHCP
+UDP
+IP
+Eth
+Phy
+
+DHCP
+
+DHCP
+DHCP
+DHCP
+
+
+
+
+DHCP
+DHCP
+DHCP
+DHCP
+DHCP
+
+DHCP
+UDP
+IP
+Eth
+Phy
+
+router
+(runs DHCP)
+
+
+
+DHCP server formulates
+DHCP ACK containing
+client’s IP address, IP
+address of first-hop router
+for client, name & IP
+address of DNS server
+encapsulation at DHCP
+server, frame forwarded
+(switch learning) through
+LAN, demultiplexing at
+client
+DHCP client receives
+DHCP ACK reply
+
+Client now has IP address, knows name & addr of DNS
+server, IP address of its first-hop router
+Link Layer 5-16
+
+A day in the life… ARP (before DNS, before HTTP)
+DNS
+DNS
+DNS
+ARP query
+
+
+
+DNS
+UDP
+IP
+ARP
+Eth
+Phy
+
+
+
+ARP
+ARP reply
+
+Eth
+Phy
+router
+(runs DHCP)
+
+
+
+
+
+before sending HTTP request, need
+IP address of www.google.com:
+DNS
+DNS query created, encapsulated in
+UDP, encapsulated in IP,
+encapsulated in Eth. To send frame
+to router, need MAC address of
+router interface: ARP
+
+ARP query broadcast, received by
+router, which replies with ARP
+reply giving MAC address of
+router interface
+client now knows MAC address
+of first hop router, so can now
+send frame containing DNS
+query
+Link Layer 5-17
+
+A day in the life… using DNS
+DNS
+DNS
+
+DNS
+DNS
+DNS
+DNS
+
+DNS
+UDP
+IP
+Eth
+Phy
+
+DNS
+DNS
+
+DNS
+UDP
+IP
+Eth
+Phy
+
+DNS server
+
+DNS
+
+Comcast network
+68.80.0.0/13
+
+router
+(runs DHCP)
+
+
+
+IP datagram containing DNS
+query forwarded via LAN
+switch from client to 1st hop
+router
+
+
+
+IP datagram forwarded from
+campus network into comcast
+network, routed (tables created
+by RIP, OSPF, IS-IS and/or BGP
+routing protocols) to DNS server
+
+
+
+demux’ed to DNS server
+DNS server replies to client
+with IP address of
+www.google.com
+Link Layer
+
+
+
+5-18
+
+A day in the life…TCP connection carrying HTTP
+HTTP
+
+HTTP
+TCP
+IP
+Eth
+Phy
+
+SYNACK
+SYN
+SYNACK
+SYN
+SYNACK
+SYN
+
+
+
+router
+(runs DHCP)
+SYNACK
+SYN
+SYNACK
+SYN
+SYNACK
+SYN
+
+TCP
+IP
+Eth
+Phy
+
+web server
+64.233.169.105
+
+
+
+
+
+
+
+to send HTTP request,
+client first opens TCP socket
+to web server
+TCP SYN segment (step 1 in 3way handshake) inter-domain
+routed to web server
+web server responds with TCP
+SYNACK (step 2 in 3-way
+handshake)
+TCP connection established!
+Link Layer 5-19
+
+A day in the life… HTTP request/reply
+HTTP
+HTTP
+
+HTTP
+TCP
+IP
+Eth
+Phy
+
+HTTP
+HTTP
+HTTP
+HTTP
+HTTP
+HTTP
+
+
+
+web page finally (!!!) displayed
+
+
+
+HTTP
+HTTP
+HTTP
+HTTP
+
+HTTP
+TCP
+IP
+Eth
+Phy
+
+web server
+64.233.169.105
+
+router
+(runs DHCP)
+
+
+
+
+
+
+
+HTTP request sent into TCP
+socket
+IP datagram containing HTTP
+request routed to
+www.google.com
+web server responds with
+HTTP reply (containing web
+page)
+IP datagram containing HTTP
+reply routed back to client
+Link Layer 5-20
+
+Chapter 5: Summary
+
+
+principles behind link layer services:
+ error detection, correction
+ sharing a broadcast channel: multiple access
+ link layer addressing
+
+
+
+instantiation and implementation of various link
+layer technologies
+ Ethernet
+ switched LANS, VLANs
+ virtualized networks as a link layer: MPLS
+
+
+
+synthesis: a day in the life of a web request
+
+Link Layer 5-21
+
+Chapter 5: let’s take a breath
+
+
+
+
+
+journey down protocol stack complete (except
+PHY)
+solid understanding of networking principles,
+practice
+….. could stop here …. but lots of interesting
+topics!
+
+
+
+
+
+wireless
+multimedia
+security
+network management
+
+Link Layer 5-22
+
+

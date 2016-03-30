@@ -1,0 +1,575 @@
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-1
+
+Multiplexing/demultiplexing
+multiplexing at sender:
+handle data from multiple
+sockets, add transport header
+(later used for demultiplexing)
+
+demultiplexing at receiver:
+use header info to deliver
+received segments to correct
+socket
+
+application
+application
+
+P1
+
+P2
+
+application
+
+P3
+
+transport
+
+P4
+
+transport
+
+network
+
+transport
+
+network
+
+link
+
+network
+
+physical
+
+link
+
+link
+physical
+
+socket
+process
+
+physical
+
+Transport Layer 3-2
+
+How demultiplexing works
+
+
+host receives IP datagrams
+ each datagram has source IP
+address, destination IP
+address
+ each datagram carries one
+transport-layer segment
+ each segment has source,
+destination port number
+
+
+
+host uses IP addresses &
+port numbers to direct
+segment to appropriate
+socket
+
+32 bits
+
+source port #
+
+dest port #
+
+other header fields
+
+application
+data
+(payload)
+
+TCP/UDP segment format
+
+Transport Layer 3-3
+
+Connectionless demultiplexing
+
+
+recall: created socket has
+host-local port #:
+
+
+
+DatagramSocket mySocket1
+= new DatagramSocket(12534);
+
+
+
+when host receives UDP
+segment:
+ checks destination port #
+in segment
+ directs UDP segment to
+socket with that port #
+
+recall: when creating
+datagram to send into
+UDP socket, must specify
+ destination IP address
+ destination port #
+
+IP datagrams with same
+dest. port #, but different
+source IP addresses
+and/or source port
+numbers will be directed
+to same socket at dest
+Transport Layer 3-4
+
+Connectionless demux: example
+DatagramSocket
+mySocket2 = new
+DatagramSocket
+(9157);
+
+DatagramSocket
+serverSocket = new
+DatagramSocket
+(6428);
+application
+
+application
+
+DatagramSocket
+mySocket1 = new
+DatagramSocket
+(5775);
+application
+
+P1
+
+P3
+
+P4
+transport
+
+transport
+
+transport
+
+network
+
+network
+
+link
+
+network
+
+link
+
+physical
+
+link
+physical
+
+physical
+source port: 6428
+dest port: 9157
+
+source port: 9157
+dest port: 6428
+
+source port: ?
+dest port: ?
+
+source port: ?
+dest port: ?
+
+Server can’t talk first!
+Transport Layer 3-5
+
+Connection-oriented demux
+
+
+TCP socket identified
+by 4-tuple:
+
+
+
+
+
+
+
+source IP address
+source port number
+dest IP address
+dest port number
+
+demux: receiver uses
+all four values to direct
+segment to appropriate
+socket
+
+
+
+server host may support
+many simultaneous TCP
+sockets:
+ each socket identified by
+its own 4-tuple
+
+
+
+web servers have
+different sockets for
+each connecting client
+ non-persistent HTTP will
+have different socket for
+each request
+
+Transport Layer 3-6
+
+Connection-oriented demux: example
+server: IP address B
+
+host: IP address A
+
+host: IP address C
+
+application
+
+application
+
+P4
+
+P5
+
+application
+
+P6
+
+P3
+
+P3
+
+P2
+transport
+
+transport
+
+transport
+
+network
+
+network
+
+link
+
+network
+
+link
+
+physical
+
+link
+physical
+
+physical
+
+(2)
+source: B:80
+dest: A:9157
+
+(1)
+
+source: A:9157
+dest: B:80
+
+three segments, all destined to B:80
+are demultiplexed to different sockets
+
+(2)
+source: C:5775
+dest: B:80
+source: C:9157
+dest: B:80
+
+(1)
+Transport Layer 3-7
+
+Connection-oriented demux: example
+threaded server
+
+server: IP address B
+
+host: IP address A
+
+host: IP address C
+
+application
+
+application
+
+application
+
+P4
+
+P3
+
+P3
+
+P2
+transport
+
+transport
+
+transport
+
+network
+
+network
+
+link
+
+network
+
+link
+
+physical
+
+link
+physical
+
+physical
+
+(2)
+source: B:80
+dest: A:9157
+
+(1)
+
+source: A:9157
+dest: B:80
+
+three segments, all destined to B:80
+are demultiplexed to different sockets
+
+(2)
+source: C:5775
+dest: B:80
+source: C:9157
+dest: B:80
+
+(1)
+Transport Layer 3-8
+
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-9
+
+UDP: User Datagram Protocol [RFC 768]
+
+
+
+
+
+
+“no frills,” “bare bones”
+Internet transport
+protocol
+“best effort” service, UDP
+segments may be:
+ lost
+ delivered out-of-order
+to app
+connectionless:
+ no handshaking
+between UDP sender,
+receiver
+ each UDP segment
+handled independently
+of others
+
+
+
+UDP use:
+ streaming multimedia
+apps (loss tolerant, rate
+sensitive)
+ DNS
+ SNMP
+
+
+
+reliable transfer over
+UDP:
+ add reliability at
+application layer
+ application-specific error
+recovery!
+
+Transport Layer 3-10
+
+UDP: segment header
+32 bits
+source port #
+
+dest port #
+
+length
+
+checksum
+
+application
+data
+(payload)
+
+length, in bytes of
+UDP segment,
+including header
+
+why is there a UDP?
+
+
+
+
+
+UDP segment format
+
+
+
+no connection
+establishment (which can
+add delay)
+simple: no connection
+state at sender, receiver
+small header size
+no congestion control:
+UDP can blast away as
+fast as desired
+Transport Layer 3-11
+
+UDP checksum
+Goal: detect “errors” (e.g., flipped bits) in transmitted
+segment
+
+sender:
+
+
+
+
+
+
+treat segment contents,
+including header fields,
+as sequence of 16-bit
+integers
+checksum: addition
+(one’s complement sum)
+of segment contents
+sender puts checksum
+value into UDP
+checksum field
+
+receiver:
+
+
+
+compute checksum of
+received segment
+check if computed
+checksum equals checksum
+field value:
+ NO - error detected
+ YES - no error detected.
+But maybe errors
+nonetheless? More later
+….
+Transport Layer 3-12
+
+Internet checksum: example
+example: add two 16-bit integers
+1 1 1 1 0 0 1 1 0 0 1 1 0 0 1 1 0
+1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1
+wraparound 1 1 0 1 1 1 0 1 1 1 0 1 1 1 0 1 1
+sum 1 1 0 1 1 1 0 1 1 1 0 1 1 1 1 0 0
+checksum 1 0 1 0 0 0 1 0 0 0 1 0 0 0 0 1 1
+
+Then, see if the sum added to the checksum is all 1’s
+
+Transport Layer 3-13
+
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-14
+
+

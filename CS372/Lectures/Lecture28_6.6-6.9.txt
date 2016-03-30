@@ -1,0 +1,661 @@
+Chapter 6 outline
+6.1 Introduction
+Wireless
+6.2 Wireless links,
+characteristics
+ CDMA
+
+6.3 IEEE 802.11 wireless
+LANs (“Wi-Fi”)
+6.4 Cellular Internet Access
+ architecture
+ standards (e.g., GSM)
+
+Mobility
+6.5 Principles: addressing and
+routing to mobile users
+6.6 Mobile IP
+6.7 Handling mobility in
+cellular networks
+6.8 Mobility and higher-layer
+protocols
+6.9 Summary
+Wireless, Mobile Networks
+
+6-1
+
+Mobile IP
+RFC 3344
+ has many features we’ve seen:
+
+
+ home agents, foreign agents, foreign-agent registration,
+care-of-addresses, encapsulation (packet-within-apacket)
+
+
+three mainparts:
+ agent discovery
+ registration with home agent
+ indirect routing of datagrams
+
+Wireless, Mobile Networks
+
+6-2
+
+Mobile IP agent discovery
+
+
+Agent discovery dictates how a mobile agent
+discovers information about the home or foreign
+agent it has just connected to
+
+Wireless, Mobile Networks
+
+6-3
+
+Mobile IP: agent discovery
+
+
+agent advertisement: foreign/home agents advertise
+service by broadcasting ICMP messages (typefield = 9)
+0
+type = 9
+
+24
+checksum
+=9
+
+code = 0
+=9
+
+H,F bits: home and/or
+foreign agent
+R bit: registration
+required
+
+16
+
+8
+
+standard
+ICMP fields
+
+router address
+
+type = 16
+
+length
+
+registration lifetime
+
+sequence #
+RBHFMGV
+bits
+
+reserved
+
+0 or more care-ofaddresses
+
+mobility agent
+advertisement
+extension
+
+Wireless, Mobile Networks
+
+6-4
+
+Mobile IP registration
+
+
+Agent discovery gets the mobile agent the
+information it needs; the next step is to phone
+home
+
+
+
+The registration process dictates how the mobile
+agent registers care of addresses (COAs) with it’s
+home agent.
+
+Wireless, Mobile Networks
+
+6-5
+
+Mobile IP: registration example
+home agent
+HA: 128.119.40.7
+
+visited network: 79.129.13/24
+foreign agent
+COA: 79.129.13.2
+
+ICMP agent adv.
+
+mobile agent
+MA: 128.119.40.186
+
+COA:
+79.129.13.2
+….
+
+registration req.
+COA: 79.129.13.2
+HA: 128.119.40.7
+MA: 128.119.40.186
+Lifetime: 9999
+identification: 714
+encapsulation format
+….
+
+registration reply
+HA: 128.119.40.7
+MA: 128.119.40.186
+Lifetime: 4999
+Identification: 714
+encapsulation format
+….
+
+registration req.
+COA: 79.129.13.2
+HA: 128.119.40.7
+MA: 128.119.40.186
+Lifetime: 9999
+identification:714
+….
+
+registration reply
+HA: 128.119.40.7
+MA: 128.119.40.186
+Lifetime: 4999
+Identification: 714
+….
+
+time
+Wireless, Mobile Networks
+
+6-6
+
+Mobile IP: indirect routing
+foreign-agent-to-mobile packet
+
+packet sent by home agent to foreign
+agent: a packet within a packet
+dest: 79.129.13.2
+
+dest: 128.119.40.186
+
+dest: 128.119.40.186
+
+Permanent address:
+128.119.40.186
+
+dest: 128.119.40.186
+
+Care-of address:
+79.129.13.2
+
+packet sent by
+correspondent
+Wireless, Mobile Networks
+
+6-7
+
+Components of cellular network architecture
+recall:
+
+correspondent
+wired public
+telephone
+network
+MSC
+
+MSC
+MSC
+
+MSC
+MSC
+
+different cellular networks,
+operated by different providers
+Wireless, Mobile Networks
+
+6-8
+
+Handling mobility in cellular networks
+
+
+home network: network of cellular provider you
+subscribe to (e.g., Sprint PCS, Verizon)
+ home location register (HLR): database in home network
+containing permanent cell phone #, profile information
+(services, preferences, billing), information about
+current location (could be in another network)
+
+
+
+visited network: network in which mobile currently
+resides
+ visitor location register (VLR): database with entry for
+each user currently in network
+ could be home network
+Wireless, Mobile Networks
+
+6-9
+
+GSM: indirect routing to mobile
+home
+network
+
+HLR
+
+2
+home MSC consults HLR,
+gets roaming number of
+mobile in visited network
+
+correspondent
+
+home
+Mobile
+Switching
+Center
+
+1
+
+3
+VLR
+
+Mobile
+Switching
+Center
+
+4
+
+Public
+switched
+telephone
+network
+
+call routed
+to home network
+
+home MSC sets up 2nd leg of call
+to MSC in visited network
+
+mobile
+user
+visited
+network
+
+MSC in visited network completes
+call through base station to mobile
+Wireless, Mobile Networks 6-10
+
+GSM: handoff with common MSC
+
+
+VLR Mobile
+
+
+
+Switching
+Center
+old
+routing
+old BSS
+
+handoff goal: route call via
+new base station (without
+interruption)
+reasons for handoff:
+ stronger signal to/from new BSS
+(continuing connectivity, less
+battery drain)
+ load balance: free up channel in
+current BSS
+ GSM doesnt mandate why to
+perform handoff (policy), only
+how (mechanism)
+
+new
+routing
+new BSS
+
+
+
+handoff initiated by old BSS
+Wireless, Mobile Networks 6-11
+
+GSM: handoff with common MSC
+
+VLR Mobile
+Switching
+Center 2
+
+4
+
+1
+8
+old BSS
+
+5
+
+7
+3
+6
+
+new BSS
+
+1. old BSS informs MSC of impending
+handoff, provides list of 1+ new BSSs
+2. MSC sets up path (allocates resources)
+to new BSS
+3. new BSS allocates radio channel for
+use by mobile
+4. new BSS signals MSC and old BSS:
+ready for handoff
+5. old BSS tells mobile: perform handoff to
+new BSS
+6. mobile and new BSS communicate to
+activate new channel
+7. mobile signals via new BSS to MSC:
+handoff complete. MSC reroutes call
+8 MSC-old-BSS resources released
+Wireless, Mobile Networks 6-12
+
+GSM: handoff between MSCs
+
+home network
+correspondent
+
+Home
+MSC
+anchor MSC
+
+
+PSTN
+
+MSC
+
+MSC
+
+MSC
+
+
+
+anchor MSC: first MSC
+visited during call
+ call remains routed
+through anchor MSC
+new MSCs add on to end of
+MSC chain as mobile moves
+to new MSC
+optional path minimization
+step to shorten multi-MSC
+chain
+
+(a) before handoff
+Wireless, Mobile Networks 6-13
+
+GSM: handoff between MSCs
+
+home network
+correspondent
+
+Home
+MSC
+anchor MSC
+
+
+PSTN
+
+MSC
+
+MSC
+
+MSC
+
+
+
+anchor MSC: first MSC
+visited during call
+ call remains routed
+through anchor MSC
+new MSCs add on to end of
+MSC chain as mobile moves
+to new MSC
+optional path minimization
+step to shorten multi-MSC
+chain
+
+(b) after handoff
+Wireless, Mobile Networks 6-14
+
+Mobility: GSM versus Mobile IP
+GSM element
+
+Comment on GSM element
+
+Mobile IP element
+
+Home system
+
+Network to which mobile user’s permanent
+phone number belongs
+
+Home
+network
+
+Gateway Mobile
+Switching Center, or
+“home MSC”. Home
+Location Register
+(HLR)
+
+Home MSC: point of contact to obtain routable
+address of mobile user. HLR: database in
+home system containing permanent phone
+number, profile information, current location of
+mobile user, subscription information
+
+Home agent
+
+Visited System
+
+Network other than home system where
+mobile user is currently residing
+
+Visited
+network
+
+Visited Mobile
+services Switching
+Center.
+Visitor Location
+Record (VLR)
+
+Visited MSC: responsible for setting up calls
+to/from mobile nodes in cells associated with
+MSC. VLR: temporary database entry in
+visited system, containing subscription
+information for each visiting mobile user
+
+Foreign agent
+
+Mobile Station
+Roaming Number
+(MSRN), or “roaming
+number”
+
+Routable address for telephone call segment
+between home MSC and visited MSC, visible
+to neither the mobile nor the correspondent.
+
+Care-ofaddress
+
+Wireless, Mobile Networks 6-15
+
+Chapter 6 outline
+6.1 Introduction
+Wireless
+6.2 Wireless links,
+characteristics
+ CDMA
+
+6.3 IEEE 802.11 wireless
+LANs (“Wi-Fi”)
+6.4 Cellular Internet Access
+ architecture
+ standards (e.g., GSM)
+
+Mobility
+6.5 Principles: addressing and
+routing to mobile users
+6.6 Mobile IP
+6.7 Handling mobility in
+cellular networks
+6.8 Mobility and higher-layer
+protocols
+6.9 Summary
+
+Wireless, Mobile Networks 6-16
+
+Wireless, mobility: impact on higher layer protocols
+
+
+logically, impact should be minimal …
+ best effort service model remains unchanged
+ TCP and UDP can (and do) run over wireless, mobile
+
+
+
+… but performance-wise:
+ packet loss/delay due to bit-errors (discarded packets,
+delays for link-layer retransmissions), and handoff
+ TCP interprets loss as congestion, will decrease congestion
+window unnecessarily
+ delay impairments for real-time traffic
+ limited bandwidth of wireless links
+Wireless, Mobile Networks 6-17
+
+Wireless, mobility: impact on higher layer protocols
+
+
+Three broad classes of approaches to solve this
+unnecessary drop in transfer rate:
+ Local recovery
+ TCP sender awareness of wireless links
+ Split-connection approaches
+
+Wireless, Mobile Networks 6-18
+
+Wireless, mobility: Local recovery
+
+
+Attempts to solve the local bit errors that occur
+before “alerting” TCP to their presence by sending or
+dropping mangled packets
+ 802.11ARQ : Automatic Repeat reQuest
+• Allows the link-layer nodes to request retransmissions similar to
+TCP
+• Uses a sliding window of packets under consideration – places
+limits on number of packets being communicated at once
+
+
+
+Hardware has to be specifically built for this
+
+Wireless, Mobile Networks 6-19
+
+Wireless, mobility: TCP sender awareness
+Hosts are explicitly aware of wireless links, and are
+tolerant of the different types of losses
+ Distinguishes between congestion losses, and
+corruption/loss events
+
+
+Wireless, Mobile Networks 6-20
+
+Wireless, mobility: Split-connection approaches
+Splits up a TCP connection into two segments: the
+wired component, and the wireless component
+ The original sender and destination are unaware of
+the packet manipulation going on
+ The segment over the wireless link can be either a
+TCP connection or a specially-crafted error recovery
+protocol on top of UDP
+
+
+ Q: What does error recovery on top of UDP look like?
+
+Wireless, Mobile Networks 6-21
+
+Congratulations!
+You made it!
+ Next lecture: Final Review
+ Consider taking:
+
+
+
+
+
+
+
+CS312: Linux System Administration
+CS344 (probably already taken this…)
+CS476 Advanced Computer Networking
+CS478 Network Security
+
+Wireless, Mobile Networks 6-22
+
+Chapter 6 summary
+Wireless
+
+
+wireless links:
+
+Mobility
+
+
+ capacity, distance
+ channel impairments
+ CDMA
+
+
+
+
+
+
+Low bandwidth
+implications
+
+case studies
+ mobile IP
+ mobility in GSM
+
+cellular access
+ architecture
+ standards (e.g., GSM, 3G,
+4G LTE)
+
+
+
+ home, visited networks
+ direct, indirect routing
+ care-of-addresses
+
+IEEE 802.11 (“Wi-Fi”)
+ CSMA/CA reflects wireless
+channel characteristics
+
+principles: addressing,
+routing to mobile users
+
+
+
+impact on higher-layer
+protocols
+
+Wireless, Mobile Networks 6-23
+
+

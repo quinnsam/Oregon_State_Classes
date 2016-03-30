@@ -1,0 +1,909 @@
+Chapter 4: outline
+4.1 introduction
+4.2 virtual circuit and
+datagram networks
+4.3 what’s inside a router
+4.4 IP: Internet Protocol
+
+
+
+
+
+datagram format
+IPv4 addressing
+ICMP
+IPv6
+
+4.5 routing algorithms
+ link state
+ distance vector
+ hierarchical routing
+
+4.6 routing in the Internet
+ RIP
+ OSPF
+ BGP
+
+4.7 broadcast and multicast
+routing
+
+Network Layer 4-1
+
+Intra-AS Routing
+
+
+
+also known as interior gateway protocols (IGP)
+most common intra-AS routing protocols:
+ RIP: Routing Information Protocol
+ OSPF: Open Shortest Path First
+ IGRP: Interior Gateway Routing Protocol
+(Cisco proprietary)
+
+Network Layer 4-2
+
+RIP ( Routing Information Protocol)
+
+
+
+included in BSD-UNIX distribution in 1982
+distance vector algorithm
+ distance metric: # hops (max = 15 hops), each link has cost 1
+ DVs exchanged with neighbors every 30 sec in response message (aka
+advertisement)
+ each advertisement: list of up to 25 destination subnets (in IP addressing
+sense)
+
+u
+
+v
+
+A
+
+z
+
+C
+
+B
+
+w
+
+x
+
+D
+y
+
+from router A to destination subnets:
+subnet hops
+u
+1
+v
+2
+w
+2
+x
+3
+y
+3
+z
+2
+Network Layer 4-3
+
+RIP: example
+z
+w
+A
+
+x
+
+y
+B
+
+D
+C
+
+routing table in router D
+
+destination subnet
+
+next router
+
+# hops to dest
+
+w
+y
+z
+x
+
+A
+B
+B
+--
+
+2
+2
+7
+1
+
+….
+
+….
+
+....
+Network Layer 4-4
+
+RIP: example
+dest
+w
+x
+z
+….
+
+w
+A
+
+next
+C
+…
+
+A-to-D advertisement
+hops
+1
+1
+4
+...
+
+x
+
+z
+y
+
+B
+
+D
+C
+
+routing table in router D
+
+destination subnet
+
+next router
+
+# hops to dest
+
+w
+y
+z
+x
+
+A
+B
+A
+B
+--
+
+2
+2
+5
+7
+1
+
+….
+
+….
+
+....
+Network Layer 4-5
+
+RIP: link failure, recovery
+if no advertisement heard after 180 sec -->
+neighbor/link declared dead
+ routes via neighbor invalidated
+ new advertisements sent to neighbors
+ neighbors in turn send out new advertisements (if tables
+changed)
+ link failure info quickly (?) propagates to entire net
+ poison reverse used to prevent ping-pong loops (infinite
+distance = 16 hops)
+
+Network Layer 4-6
+
+RIP table processing
+
+
+
+RIP routing tables managed by application-level
+process called route-d (daemon)
+advertisements sent in UDP packets, periodically
+repeated
+routed
+
+routed
+
+transport
+(UDP)
+network
+(IP)
+link
+physical
+
+transprt
+(UDP)
+forwarding
+table
+
+forwarding
+table
+
+network
+(IP)
+link
+
+physical
+Network Layer 4-7
+
+OSPF (Open Shortest Path First)
+
+
+
+“open”: publicly available
+uses link state algorithm
+ LS packet dissemination
+ topology map at each node
+ route computation using Dijkstra’s algorithm
+
+
+
+OSPF advertisement carries one entry per neighbor,
+but advertisements flooded to entire AS
+ carried in OSPF messages directly over IP (rather than
+TCP or UDP
+
+
+
+IS-IS routing protocol: nearly identical to OSPF
+
+Network Layer 4-8
+
+OSPF “advanced” features (not in RIP)
+
+
+
+
+
+
+
+
+security: all OSPF messages authenticated (to prevent
+malicious intrusion)
+multiple same-cost paths allowed (only one path in
+RIP)
+for each link, multiple cost metrics for different TOS
+(e.g., satellite link cost set “low” for best effort ToS;
+high for real time ToS)
+integrated uni- and multicast support:
+ Multicast OSPF (MOSPF) uses same topology data
+base as OSPF
+hierarchical OSPF in large domains.
+Network Layer 4-9
+
+Hierarchical OSPF
+boundary router
+
+backbone router
+
+backbone
+area
+border
+routers
+
+area 3
+
+internal
+routers
+
+area 1
+area 2
+
+Network Layer 4-10
+
+Hierarchical OSPF
+
+
+
+
+
+
+two-level hierarchy: local area, backbone.
+ link-state advertisements only in area
+ each node has detailed area topology; only know
+direction (shortest path) to nets in other areas.
+area border routers: “summarize” distances to nets in
+own area, advertise to other Area Border routers.
+backbone routers: run OSPF routing limited to
+backbone.
+boundary routers: connect to other AS’s.
+
+Network Layer 4-11
+
+Internet inter-AS routing: BGP
+
+
+BGP (Border Gateway Protocol): the de facto
+inter-domain routing protocol
+ “glue that holds the Internet together”
+
+
+
+BGP provides each AS a means to:
+ eBGP: obtain subnet reachability information from
+
+neighboring ASs.
+ iBGP: propagate reachability information to all ASinternal routers.
+ determine “good” routes to other networks based on
+reachability information and policy.
+
+
+
+allows subnet to advertise its existence to rest of
+Internet: “I am here”
+Network Layer 4-12
+
+BGP basics
+
+
+BGP session: two BGP routers (“peers”) exchange BGP
+messages:
+ advertising paths to different destination network prefixes (“path vector”
+protocol)
+ exchanged over semi-permanent TCP connections
+
+
+
+when AS3 advertises a prefix to AS1:
+ AS3 promises it will forward datagrams towards that prefix
+ AS3 can aggregate prefixes in its advertisement
+3c
+3b
+
+other
+networks
+
+3a
+
+BGP
+message
+
+AS3
+
+2c
+
+1c
+1a
+AS1
+
+1d
+
+2a
+1b
+
+2b
+
+other
+networks
+
+AS2
+Network Layer 4-13
+
+BGP basics: distributing path information
+
+
+using eBGP session between 3a and 1c, AS3 sends prefix
+reachability info to AS1.
+ 1c can then use iBGP do distribute new prefix info to all routers
+in AS1
+ 1b can then re-advertise new reachability info to AS2 over 1b-to2a eBGP session
+
+
+
+when router learns of new prefix, it creates entry for
+prefix in its forwarding table.
+
+eBGP session
+
+3b
+other
+networks
+
+3a
+AS3
+
+iBGP session
+
+2c
+
+1c
+1a
+AS1
+
+1d
+
+2a
+1b
+
+2b
+
+other
+networks
+
+AS2
+Network Layer 4-14
+
+Path attributes and BGP routes
+
+
+advertised prefix includes BGP attributes
+ prefix + attributes = “route”
+
+
+
+two important attributes:
+ AS-PATH: contains ASs through which prefix
+advertisement has passed: e.g., AS 67, AS 17
+ NEXT-HOP: indicates specific internal-AS router to nexthop AS. (may be multiple links from current AS to nexthop-AS)
+
+
+
+gateway router receiving route advertisement uses
+import policy to accept/decline
+ e.g., never route through AS x
+ policy-based routing
+Network Layer 4-15
+
+BGP route selection
+
+
+router may learn about more than 1 route to
+destination AS, selects route based on:
+1.
+2.
+3.
+4.
+
+local preference value attribute: policy decision
+shortest AS-PATH
+closest NEXT-HOP router: hot potato routing
+additional criteria
+
+Network Layer 4-16
+
+BGP messages
+
+
+
+BGP messages exchanged between peers over TCP
+connection
+BGP messages:
+ OPEN: opens TCP connection to peer and authenticates
+sender
+ UPDATE: advertises new path (or withdraws old)
+ KEEPALIVE: keeps connection alive in absence of
+UPDATES; also ACKs OPEN request
+ NOTIFICATION: reports errors in previous msg; also
+used to close connection
+
+Network Layer 4-17
+
+Putting it Altogether:
+How Does an Entry Get Into a
+Router’s Forwarding Table? (pp396)
+
+
+
+
+
+
+Answer is complicated!
+Ties together hierarchical routing (Section 4.5.3)
+with BGP (4.6.3) and OSPF (4.6.2).
+Provides nice overview of BGP!
+
+How does entry get in forwarding table?
+routing algorithms
+
+entry
+
+Assume prefix is
+in another AS.
+
+local forwarding table
+prefix
+output port
+138.16.64/22
+124.12/16
+212/8
+…………..
+
+Dest IP
+
+3
+2
+4
+…
+
+1
+3 2
+
+How does entry get in forwarding table?
+High-level overview
+1.
+Router becomes aware of prefix
+2.
+Router determines output port/interface for prefix
+3.
+Router enters prefix-port/interface in forwarding
+table
+
+Router 1c becomes aware of prefix
+3c
+3b
+other
+networks
+
+
+
+
+
+3a
+
+BGP
+message
+
+AS3
+
+2c
+
+1c
+
+1a
+AS1
+
+1d
+
+2a
+1b
+
+2b
+
+other
+networks
+
+AS2
+
+BGP message contains “routes”
+“route” is a prefix and attributes: AS-PATH, NEXT-HOP
+Example: route:
+ Prefix:138.16.64/22 ; AS-PATH: AS3 AS131 ;
+NEXT-HOP: 201.44.13.125
+
+Router may receive multiple routes
+3c
+3b
+other
+networks
+
+
+
+
+
+3a
+
+BGP
+message
+
+AS3
+
+2c
+
+1c
+
+1a
+AS1
+
+1d
+
+2a
+1b
+
+2b
+
+other
+networks
+
+AS2
+
+Router may receive multiple routes for same prefix
+Has to select one route
+
+Select best BGP route to prefix
+
+
+
+
+Router selects route based on shortest AS-PATH
+Example:
+
+
+
+
+
+select
+
+AS2 AS17 to 138.16.64/22
+AS3 AS131 AS201 to 138.16.64/22
+
+What if there is a tie? We’ll come back to that!
+
+Find best intra-route to BGP route
+
+
+Use selected route’s NEXT-HOP attribute:
+ Route’s NEXT-HOP attribute is the IP address of the
+router interface that begins the AS PATH.
+
+
+
+Example:
+
+
+
+
+AS-PATH: AS2 AS17 ; NEXT-HOP: 111.99.86.55
+
+Router uses OSPF to find shortest path from 1c to
+111.99.86.55
+3c
+3b
+
+other
+networks
+
+3a
+
+AS3
+
+111.99.86.55
+
+1c
+1a
+AS1
+
+1d
+
+2c
+
+2a
+1b
+
+2b
+AS2
+
+other
+networks
+
+Router identifies port for route
+
+
+
+Identifies port along the OSPF shortest path
+Adds prefix-port entry to its forwarding table:
+ (138.16.64/22 , port 4)
+
+router
+port
+
+3c
+3b
+other
+networks
+
+3a
+
+AS3
+
+2c
+
+1
+1c 4
+2 3
+
+1a
+AS1
+
+1d
+
+2a
+1b
+
+2b
+AS2
+
+other
+networks
+
+Hot Potato Routing
+
+
+
+Suppose there two or more best inter-routes.
+Then choose route with closest NEXT-HOP
+ Use OSPF to determine which gateway is closest
+ Q: From 1c, chose AS3 AS131 or AS2 AS17?
+ A: route AS3 AS131 since it is closer (only one hop away)
+
+3c
+3b
+other
+networks
+
+3a
+AS3
+
+2c
+
+1c
+1a
+AS1
+
+1d
+
+2a
+1b
+
+2b
+AS2
+
+other
+networks
+
+How does entry get in forwarding table?
+Summary
+1.
+Router becomes aware of prefix
+
+2.
+
+Determine router output port for prefix
+
+
+
+
+3.
+
+via BGP route advertisements from other routers
+Use BGP route selection to find best inter-AS route
+Use OSPF to find best intra-AS route leading to that
+best inter-AS route
+Router identifies router/interface port for that best
+route
+
+Enter prefix & port/interface entry in forwarding
+table
+
+BGP routing policy ex. 1
+legend:
+B
+W
+
+X
+
+A
+C
+Y
+
+
+
+
+
+provider
+network
+
+customer
+Network
+(paying
+money)
+
+A,B,C are provider networks
+X,W,Y are customer (of provider networks)
+X is dual-homed: attached to two networks
+ X does not want to route from B via X to C
+ … so X will not advertise to B a route to C!
+
+Network Layer 4-28
+
+BGP routing policy ex. 2
+legend:
+B
+W
+
+X
+
+A
+C
+Y
+
+
+
+
+
+provider
+network
+
+customer
+Network
+(paying
+money)
+
+A advertises path AW to B
+B advertises path BAW to X
+Should B advertise path BAW to C?
+
+ No way! B gets no “revenue” for routing CBAW since neither W nor
+C are B’s customers
+ B wants to route only to/from its customers!
+ B wants to force C to route to w via A, not via itself
+
+Network Layer 4-29
+
+Why different Intra-, Inter-AS routing ?
+policy:
+
+
+
+inter-AS: admin wants control over how its traffic
+routed, who routes through its net.
+intra-AS: single administrative point, so no policy
+decisions need to be debated by different companies.
+
+scale:
+hierarchical routing saves table size, reduced update
+traffic
+performance:
+ intra-AS: can focus on performance
+ inter-AS: policy may dominate over performance
+
+
+Network Layer 4-30
+
+Chapter 4: outline
+4.1 introduction
+4.2 virtual circuit and
+datagram networks
+4.3 what’s inside a router
+4.4 IP: Internet Protocol
+
+
+
+
+
+datagram format
+IPv4 addressing
+ICMP
+IPv6
+
+4.5 routing algorithms
+ link state
+ distance vector
+ hierarchical routing
+
+4.6 routing in the Internet
+ RIP
+ OSPF
+ BGP
+
+4.7 broadcast and multicast
+routing
+
+Network Layer 4-31
+
+

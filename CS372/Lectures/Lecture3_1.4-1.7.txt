@@ -1,0 +1,920 @@
+Chapter 1: roadmap
+1.1 what is the Internet?
+1.2 network edge
+ end systems, access networks, links
+1.3 network core
+ packet switching, circuit switching, network structure
+1.4 delay, loss, throughput in networks
+1.5 protocol layers, service models
+1.6 networks under attack: security
+1.7 history
+
+Introduction 1-1
+
+How do loss and delay occur?
+packets queue in router buffers
+
+
+
+packet arrival rate to link (temporarily) exceeds output link
+capacity
+packets queue, wait for turn
+packet being transmitted (delay)
+
+A
+B
+packets queueing (delay)
+free (available) buffers: arriving packets
+dropped (loss) if no free buffers
+Introduction 1-2
+
+Four sources of packet delay
+transmission
+
+A
+
+propagation
+
+B
+nodal
+processing
+
+queueing
+
+dnodal = dproc + dqueue + dtrans + dprop
+
+dproc: nodal processing
+ check bit errors
+ determine output link
+ typically < msec
+
+dqueue: queueing delay
+
+ time waiting at output link
+for transmission
+ depends on congestion
+level of router
+Introduction 1-3
+
+Four sources of packet delay
+transmission
+
+A
+
+propagation
+
+B
+nodal
+processing
+
+queueing
+
+dnodal = dproc + dqueue + dtrans + dprop
+dtrans: transmission delay:
+
+ L: packet length (bits)
+ R: link bandwidth (bps)
+ dtrans = L/R
+dtrans and dprop
+very different
+
+dprop: propagation delay:
+
+ d: length of physical link
+ s: propagation speed in medium
+(~2x108 m/sec)
+ dprop = d/s
+
+* Check out the Java applet for an interactive animation on trans vs. prop delay
+
+Introduction 1-4
+
+Caravan analogy
+100 km
+ten-car
+caravan
+
+
+
+
+
+
+toll
+booth
+
+cars “propagate” at
+100 km/hr
+toll booth takes 12 sec to
+service car (bit transmission
+time)
+car~bit; caravan ~ packet
+Q: How long until caravan is
+lined up before 2nd toll
+booth?
+
+100 km
+toll
+booth
+
+ time to “push” entire
+caravan through toll
+booth onto highway =
+12*10 = 120 sec
+ time for last car to
+propagate from 1st to
+2nd toll both:
+100km/(100km/hr)= 1
+hr
+ A: 62 minutes
+Introduction 1-5
+
+Caravan analogy (more)
+100 km
+ten-car
+caravan
+
+
+
+
+toll
+booth
+
+100 km
+toll
+booth
+
+suppose cars now “propagate” at 1000 km/hr
+and suppose toll booth now takes one min to service a car
+Q: Will cars arrive to 2nd booth before all cars serviced at first
+booth?
+
+ A: Yes! after 7 min, 1st car arrives at second booth; three
+cars still at 1st booth.
+
+Introduction 1-6
+
+
+
+
+
+R: link bandwidth (bps)
+L: packet length (bits)
+a: average packet arrival
+rate
+
+average queueing
+delay
+
+Queueing delay (revisited)
+
+traffic intensity
+= La/R
+
+
+
+
+
+La/R ~ 0: avg. queueing delay small
+La/R -> 1: avg. queueing delay large
+La/R > 1: more “work” arriving
+than can be serviced, average delay infinite!
+
+* Check out the Java applet for an interactive animation on queuing and loss
+
+La/R ~ 0
+
+La/R -> 1
+Introduction 1-7
+
+“Real” Internet delays and routes
+what do “real” Internet delay & loss look like?
+ traceroute program: provides delay
+measurement from source to router along endend Internet path towards destination. For all i:
+
+
+ sends three packets that will reach router i on path
+towards destination
+ router i will return packets to sender
+ sender times interval between transmission and reply.
+
+3 probes
+
+3 probes
+
+3 probes
+
+Introduction 1-8
+
+“Real” Internet delays, routes
+traceroute: gaia.cs.umass.edu to www.eurecom.fr
+3 delay measurements from
+gaia.cs.umass.edu to cs-gw.cs.umass.edu
+1 cs-gw (128.119.240.254) 1 ms 1 ms 2 ms
+2 border1-rt-fa5-1-0.gw.umass.edu (128.119.3.145) 1 ms 1 ms 2 ms
+3 cht-vbns.gw.umass.edu (128.119.3.130) 6 ms 5 ms 5 ms
+4 jn1-at1-0-0-19.wor.vbns.net (204.147.132.129) 16 ms 11 ms 13 ms
+5 jn1-so7-0-0-0.wae.vbns.net (204.147.136.136) 21 ms 18 ms 18 ms
+6 abilene-vbns.abilene.ucaid.edu (198.32.11.9) 22 ms 18 ms 22 ms
+7 nycm-wash.abilene.ucaid.edu (198.32.8.46) 22 ms 22 ms 22 ms trans-oceanic
+8 62.40.103.253 (62.40.103.253) 104 ms 109 ms 106 ms
+link
+9 de2-1.de1.de.geant.net (62.40.96.129) 109 ms 102 ms 104 ms
+10 de.fr1.fr.geant.net (62.40.96.50) 113 ms 121 ms 114 ms
+11 renater-gw.fr1.fr.geant.net (62.40.103.54) 112 ms 114 ms 112 ms
+12 nio-n2.cssi.renater.fr (193.51.206.13) 111 ms 114 ms 116 ms
+13 nice.cssi.renater.fr (195.220.98.102) 123 ms 125 ms 124 ms
+14 r3t2-nice.cssi.renater.fr (195.220.98.110) 126 ms 126 ms 124 ms
+15 eurecom-valbonne.r3t2.ft.net (193.48.50.54) 135 ms 128 ms 133 ms
+16 194.214.211.25 (194.214.211.25) 126 ms 128 ms 126 ms
+17 * * *
+* means no response (probe lost, router not replying)
+18 * * *
+19 fantasia.eurecom.fr (193.55.113.142) 132 ms 128 ms 136 ms
+* Do some traceroutes from exotic countries at www.traceroute.org
+
+Introduction 1-9
+
+Packet loss
+queue (aka buffer) preceding link in buffer has finite
+capacity
+ packet arriving to full queue dropped (aka lost)
+ lost packet may be retransmitted by previous node,
+by source end system, or not at all
+
+
+buffer
+(waiting area)
+
+A
+
+packet being transmitted
+
+B
+packet arriving to
+full buffer is lost
+* Check out the Java applet for an interactive animation on queuing and loss
+
+Introduction 1-10
+
+Throughput
+
+
+throughput: rate (bits/time unit) at which bits
+transferred between sender/receiver
+ instantaneous: rate at given point in time
+ average: rate over longer period of time
+
+server,
+withbits
+server
+sends
+file of into
+F bitspipe
+(fluid)
+to send to client
+
+linkpipe
+capacity
+that can carry
+Rs bits/sec
+fluid at rate
+Rs bits/sec)
+
+linkpipe
+capacity
+that can carry
+Rc bits/sec
+fluid at rate
+Rc bits/sec)
+Introduction 1-11
+
+Throughput (more)
+
+
+Rs < Rc What is average end-end throughput?
+Rs bits/sec
+
+
+
+Rc bits/sec
+
+Rs > Rc What is average end-end throughput?
+Rs bits/sec
+
+Rc bits/sec
+
+bottleneck link
+link on end-end path that constrains end-end throughput
+Introduction 1-12
+
+Throughput: Internet scenario
+per-connection endend throughput:
+min(Rc,Rs,R/10)
+ in practice: Rc or Rs
+is often bottleneck
+
+
+Rs
+Rs
+
+Rs
+
+R
+Rc
+
+Rc
+Rc
+
+10 connections (fairly) share
+backbone bottleneck link R bits/sec
+Introduction 1-13
+
+Chapter 1: roadmap
+1.1 what is the Internet?
+1.2 network edge
+ end systems, access networks, links
+1.3 network core
+ packet switching, circuit switching, network structure
+1.4 delay, loss, throughput in networks
+1.5 protocol layers, service models
+1.6 networks under attack: security
+1.7 history
+
+Introduction 1-14
+
+Protocol “layers”
+Networks are complex,
+with many “pieces”:
+ hosts
+ routers
+ links of various
+media
+ applications
+ protocols
+ hardware,
+software
+
+Question:
+is there any hope of
+organizing structure of
+network?
+…. or at least our
+discussion of networks?
+
+Introduction 1-15
+
+Organization of air travel
+ticket (purchase)
+
+ticket (complain)
+
+baggage (check)
+
+baggage (claim)
+
+gates (load)
+
+gates (unload)
+
+runway takeoff
+
+runway landing
+
+airplane routing
+
+airplane routing
+airplane routing
+
+
+
+a series of steps
+Introduction 1-16
+
+Layering of airline functionality
+ticket (purchase)
+
+ticket (complain)
+
+ticket
+
+baggage (check)
+
+baggage (claim
+
+baggage
+
+gates (load)
+
+gates (unload)
+
+gate
+
+runway (takeoff)
+
+runway (land)
+
+takeoff/landing
+
+airplane routing
+
+airplane routing
+
+airplane routing
+departure
+airport
+
+airplane routing
+
+airplane routing
+
+intermediate air-traffic
+control centers
+
+arrival
+airport
+
+layers: each layer implements a service
+ via its own internal-layer actions
+ relying on services provided by layer below
+Introduction 1-17
+
+Why layering?
+dealing with complex systems:
+
+
+explicit structure allows identification,
+relationship of complex system’s pieces
+ layered reference model for discussion
+
+
+
+modularization eases maintenance, updating of
+system
+ change of implementation of layer’s service transparent
+to rest of system
+ e.g., change in gate procedure doesn’t affect rest of
+system
+
+Introduction 1-18
+
+Internet protocol stack
+
+
+application: supporting network
+applications
+ FTP, SMTP, HTTP
+
+
+
+transport: process-process data
+transfer
+ TCP, UDP
+
+
+
+network: routing of datagrams
+from source to destination
+ IP, routing protocols
+
+
+
+link: data transfer between
+neighboring network devices
+
+application
+
+transport
+network
+
+link
+physical
+
+ Ethernet, 802.111 (WiFi), PPP
+
+
+
+physical: bits “on the wire”
+
+Introduction 1-19
+
+ISO/OSI reference model
+presentation: allow applications
+to interpret meaning of data,
+e.g., encryption, compression,
+machine-specific conventions
+ session: synchronization,
+checkpointing, recovery of data
+exchange
+ Internet stack “missing” these
+layers!
+
+
+ these services, if needed, must be
+implemented in application
+ needed?
+
+application
+
+presentation
+session
+transport
+network
+link
+
+physical
+
+Introduction 1-20
+
+Encapsulation
+
+source
+message
+segment
+
+M
+
+Ht
+
+M
+
+datagram Hn Ht
+
+M
+
+frame
+
+M
+
+Hl Hn Ht
+
+application
+transport
+network
+link
+physical
+
+link
+physical
+switch
+
+M
+Ht
+
+M
+
+Hn Ht
+
+M
+
+Hl Hn Ht
+
+M
+
+destination
+
+Hn Ht
+
+M
+
+application
+transport
+network
+link
+physical
+
+Hl Hn Ht
+
+M
+
+network
+link
+physical
+
+Hn Ht
+
+M
+
+router
+
+Introduction 1-21
+
+Chapter 1: roadmap
+1.1 what is the Internet?
+1.2 network edge
+ end systems, access networks, links
+1.3 network core
+ packet switching, circuit switching, network structure
+
+1.4 delay, loss, throughput in networks
+1.5 protocol layers, service models
+1.6 networks under attack: security
+1.7 history
+
+Introduction 1-22
+
+Network security
+
+
+field of network security:
+ how bad guys can attack computer networks
+ how we can defend networks against attacks
+ how to design architectures that are immune to
+attacks
+
+
+
+Internet not originally designed with (much)
+security in mind
+
+ original vision: “a group of mutually trusting users
+attached to a transparent network” 
+ Internet protocol designers playing “catch-up”
+ security considerations in all layers!
+
+Introduction 1-23
+
+Bad guys: put malware into hosts via Internet
+
+
+malware can get in host from:
+
+
+virus: self-replicating infection by receiving/executing
+object (e.g., e-mail attachment)
+
+
+
+worm: self-replicating infection by passively receiving
+object that gets itself executed
+
+
+
+spyware malware can record keystrokes, web
+sites visited, upload info to collection site
+
+
+
+infected host can be enrolled in botnet, used for
+spam. DDoS attacks
+
+Introduction 1-24
+
+Bad guys: attack server, network infrastructure
+Denial of Service (DoS): attackers make resources
+(server, bandwidth) unavailable to legitimate traffic
+by overwhelming resource with bogus traffic
+1. select target
+2. break into hosts around
+the network (see botnet)
+
+3. send packets to target from
+compromised hosts
+target
+
+Introduction 1-25
+
+Bad guys can sniff packets
+packet “sniffing”:
+ broadcast media (shared ethernet, wireless)
+ promiscuous network interface reads/records all packets
+(e.g., including passwords!) passing by
+C
+
+A
+
+src:B dest:A
+
+
+
+payload
+
+B
+
+wireshark software used for end-of-chapter labs is a
+(free) packet-sniffer
+Introduction 1-26
+
+Bad guys can use fake addresses
+IP spoofing: send packet with false source address
+C
+
+A
+src:B dest:A
+
+payload
+
+B
+
+… lots more on security (throughout, Chapter 8)
+Introduction 1-27
+
+Chapter 1: roadmap
+1.1 what is the Internet?
+1.2 network edge
+ end systems, access networks, links
+1.3 network core
+ packet switching, circuit switching, network structure
+1.4 delay, loss, throughput in networks
+1.5 protocol layers, service models
+1.6 networks under attack: security
+1.7 history
+
+Introduction 1-28
+
+Internet history
+1961-1972: Early packet-switching principles
+
+
+
+
+
+
+
+
+1961: Kleinrock queueing theory shows
+effectiveness of packetswitching
+1964: Baran - packetswitching in military nets
+1967: ARPAnet
+conceived by Advanced
+Research Projects
+Agency
+1969: first ARPAnet
+node operational
+
+
+
+1972:
+ ARPAnet public demo
+ NCP (Network Control
+Protocol) first host-host
+protocol
+ first e-mail program
+ ARPAnet has 15 nodes
+
+Introduction 1-29
+
+Internet history
+1972-1980: Internetworking, new and proprietary nets
+
+
+
+
+
+
+
+
+
+1970: ALOHAnet satellite
+network in Hawaii
+1974: Cerf and Kahn architecture for interconnecting
+networks
+1976: Ethernet at Xerox PARC
+late70’s: proprietary
+architectures: DECnet, SNA,
+XNA
+late 70’s: switching fixed length
+packets (ATM precursor)
+1979: ARPAnet has 200 nodes
+
+Cerf and Kahn’s
+internetworking principles:
+ minimalism, autonomy - no
+internal changes required to
+interconnect networks
+ best effort service model
+ stateless routers
+ decentralized control
+
+define today’s Internet
+architecture
+
+Introduction 1-30
+
+Internet history
+1980-1990: new protocols, a proliferation of networks
+
+
+
+
+
+
+
+1983: deployment of
+TCP/IP
+1982: smtp e-mail
+protocol defined
+1983: DNS defined for
+name-to-IP-address
+translation
+1985: ftp protocol defined
+1988: TCP congestion
+control
+
+
+
+
+
+new national networks:
+Csnet, BITnet, NSFnet,
+Minitel
+100,000 hosts connected
+to confederation of
+networks
+
+Introduction 1-31
+
+Internet history
+1990, 2000’s: commercialization, the Web, new apps
+ early
+
+1990’s: ARPAnet
+decommissioned
+ 1991: NSF lifts restrictions on
+commercial use of NSFnet
+(decommissioned, 1995)
+ early 1990s: Web
+ hypertext [Bush 1945,
+Nelson 1960’s]
+ HTML, HTTP: Berners-Lee
+ 1994: Mosaic, later Netscape
+ late 1990’s:
+commercialization of the Web
+
+late 1990’s – 2000’s:
+ more killer apps: instant
+messaging, P2P file sharing
+ network security to
+forefront
+ est. 50 million host, 100
+million+ users
+ backbone links running at
+Gbps
+
+Introduction 1-32
+
+Internet history
+2005-present
+
+
+~750 million hosts
+
+
+
+
+
+
+Smartphones and tablets
+
+Aggressive deployment of broadband access
+Increasing ubiquity of high-speed wireless access
+Emergence of online social networks:
+ Facebook: soon one billion users
+
+
+
+
+
+Service providers (Google, Microsoft) create their own
+networks
+ Bypass Internet, providing “instantaneous” access to
+search, emai, etc.
+E-commerce, universities, enterprises running their
+services in “cloud” (eg, Amazon EC2)
+Introduction 1-33
+
+Introduction: summary
+covered a ton of material!
+
+
+
+
+
+
+
+
+
+Internet overview
+what’s a protocol?
+network edge, core, access
+network
+ packet-switching versus
+circuit-switching
+ Internet structure
+performance: loss, delay,
+throughput
+layering, service models
+security
+history
+
+you now have:
+
+
+
+context, overview, “feel”
+of networking
+more depth, detail to
+follow!
+
+Introduction 1-34
+
+

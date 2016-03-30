@@ -1,0 +1,919 @@
+Chapter 2: outline
+2.1 principles of network
+applications
+ app architectures
+ app requirements
+
+2.6 P2P applications
+2.7 socket programming
+with UDP and TCP
+
+2.2 Web and HTTP
+2.3 FTP
+2.4 electronic mail
+ SMTP, POP3, IMAP
+
+2.5 DNS
+
+Application Layer 2-1
+
+Web and HTTP
+First, a review…
+
+
+
+
+
+
+web page consists of objects
+object can be HTML file, JPEG image, Java applet,
+audio file,…
+web page consists of base HTML-file which
+includes several referenced objects
+each object is addressable by a URL, e.g.,
+www.someschool.edu/someDept/pic.gif
+host name
+
+path name
+
+Application Layer 2-2
+
+HTTP overview
+HTTP: hypertext
+transfer protocol
+
+
+
+Web’s application layer
+protocol
+client/server model
+ client: browser that
+requests, receives,
+(using HTTP protocol)
+and “displays” Web
+objects
+ server: Web server
+sends (using HTTP
+protocol) objects in
+response to requests
+
+PC running
+Firefox browser
+
+server
+running
+Apache Web
+server
+iphone running
+Safari browser
+
+Application Layer 2-3
+
+HTTP overview (continued)
+uses TCP:
+
+
+
+
+
+
+
+client initiates TCP
+connection (creates
+socket) to server, port 80
+server accepts TCP
+connection from client
+HTTP messages
+(application-layer protocol
+messages) exchanged
+between browser (HTTP
+client) and Web server
+(HTTP server)
+TCP connection closed
+
+HTTP is “stateless”
+
+
+server maintains no
+information about
+past client requests
+
+aside
+protocols that maintain
+“state” are complex!
+
+
+
+past history (state) must be
+maintained
+if server/client crashes, their
+views of “state” may be
+inconsistent, must be
+reconciled
+Application Layer 2-4
+
+HTTP connections
+non-persistent HTTP
+ at most one object
+sent over TCP
+connection
+ connection then
+closed
+ downloading multiple
+objects required
+multiple connections
+
+persistent HTTP
+ multiple objects can
+be sent over single
+TCP connection
+between client, server
+
+Application Layer 2-5
+
+Non-persistent HTTP
+suppose user enters URL:
+www.someSchool.edu/someDepartment/home.index
+
+1a. HTTP client initiates TCP
+connection to HTTP server
+(process) at
+www.someSchool.edu on port
+80
+2. HTTP client sends HTTP request
+message (containing URL) into
+TCP connection socket.
+Message indicates that client
+wants object
+someDepartment/home.index
+
+(contains text,
+references to 10
+jpeg images)
+
+1b. HTTP server at host
+www.someSchool.edu waiting
+for TCP connection at port 80.
+“accepts” connection, notifying
+client
+3. HTTP server receives request
+message, forms response
+message containing requested
+object, and sends message into
+its socket
+
+time
+Application Layer 2-6
+
+Non-persistent HTTP (cont.)
+5. HTTP client receives response
+
+4. HTTP server closes TCP
+connection.
+
+message containing html file,
+displays html. Parsing html file,
+finds 10 referenced jpeg objects
+
+time
+
+6. Steps 1-5 repeated for each of
+10 jpeg objects
+
+Application Layer 2-7
+
+Non-persistent HTTP: response time
+RTT (round trip time): time for
+a small packet to travel from
+client to server and back
+HTTP response time:
+ one RTT to initiate TCP
+connection
+ one RTT for HTTP request
+and first few bytes of HTTP
+response to return
+ file transmission time
+
+
+Total non-persistent HTTP
+response time PER OBJECT:
+ 2RTT+ file transmission
+time
+
+initiate TCP
+connection
+RTT
+request
+file
+time to
+transmit
+file
+
+RTT
+file
+received
+time
+
+time
+
+Application Layer 2-8
+
+Persistent HTTP
+non-persistent HTTP issues:
+
+
+
+
+
+requires 2 RTTs per object
+OS overhead for each TCP
+connection
+browsers often open
+parallel TCP connections
+to fetch referenced objects
+
+persistent HTTP:
+
+
+
+
+
+
+
+
+server leaves connection
+open after sending
+response
+subsequent HTTP
+messages between same
+client/server sent over
+open connection
+client sends requests as
+soon as it encounters a
+referenced object
+as little as one RTT +
+total transmission time for
+all the referenced objects
+Application Layer 2-9
+
+HTTP request message
+
+
+
+two types of HTTP messages: request, response
+HTTP request message:
+ ASCII (human-readable format)
+
+request line
+(GET, POST,
+HEAD commands)
+
+header
+lines
+carriage return,
+line feed at start
+of line indicates
+end of header lines
+
+carriage return character
+line-feed character
+
+GET /index.html HTTP/1.1\r\n
+Host: www-net.cs.umass.edu\r\n
+User-Agent: Firefox/3.6.10\r\n
+Accept: text/html,application/xhtml+xml\r\n
+Accept-Language: en-us,en;q=0.5\r\n
+Accept-Encoding: gzip,deflate\r\n
+Accept-Charset: ISO-8859-1,utf-8;q=0.7\r\n
+Keep-Alive: 115\r\n
+Connection: keep-alive\r\n
+\r\n
+
+Application Layer 2-10
+
+HTTP request message: general format
+method
+
+sp
+
+URL
+
+header field name
+
+sp
+value
+
+version
+cr
+
+cr
+
+value
+
+cr
+
+request
+line
+header
+lines
+
+~
+~
+header field name
+
+lf
+
+lf
+
+~
+~
+
+~
+~
+
+cr
+
+lf
+
+lf
+entity body
+
+~
+~
+
+body
+
+Application Layer 2-11
+
+Uploading form input
+POST method:
+
+
+
+web page often includes
+form input
+input is uploaded to
+server in entity body
+
+URL method:
+
+
+
+uses GET method
+input is uploaded in URL
+field of request line:
+www.somesite.com/animalsearch?monkeys&banana
+
+Application Layer 2-12
+
+Method types
+HTTP/1.0:
+
+
+
+
+
+GET
+POST
+HEAD
+ asks server to leave
+requested object out
+of response
+
+HTTP/1.1:
+
+
+
+
+
+
+GET, POST, HEAD
+PUT
+ uploads file in entity
+body to path specified
+in URL field
+DELETE
+ deletes file specified in
+the URL field
+
+Application Layer 2-13
+
+HTTP response message
+status line
+(protocol
+status code
+status phrase)
+
+header
+lines
+
+data, e.g.,
+requested
+HTML file
+
+HTTP/1.1 200 OK\r\n
+Date: Sun, 26 Sep 2010 20:09:20 GMT\r\n
+Server: Apache/2.0.52 (CentOS)\r\n
+Last-Modified: Tue, 30 Oct 2007 17:00:02
+GMT\r\n
+ETag: "17dc6-a5c-bf716880"\r\n
+Accept-Ranges: bytes\r\n
+Content-Length: 2652\r\n
+Keep-Alive: timeout=10, max=100\r\n
+Connection: Keep-Alive\r\n
+Content-Type: text/html; charset=ISO-88591\r\n
+\r\n
+data data data data data ...
+
+Application Layer 2-14
+
+HTTP response status codes
+status code appears in 1st line in server-toclient response message.
+ some sample codes:
+
+
+200 OK
+ request succeeded, requested object later in this msg
+
+301 Moved Permanently
+ requested object moved, new location specified later in this msg
+(Location:)
+
+400 Bad Request
+ request msg not understood by server
+
+404 Not Found
+ requested document not found on this server
+
+505 HTTP Version Not Supported
+Application Layer 2-15
+
+Trying out HTTP (client side) for yourself
+1. Telnet to your favorite Web server:
+telnet eecs.oregonstate.edu 80 Opens TCP connection to port 80
+(default HTTP server port) at eecs.o...edu.
+Anything typed in sent
+to port 80 at eecs.o...edu.
+
+2. type in a GET HTTP request:
+GET / HTTP/1.1
+Host: eecs.oregonstate.edu
+
+By typing this in (hit carriage
+return twice), you send
+this minimal (but complete)
+GET request to HTTP server
+
+3. look at response message sent by HTTP server!
+(or use Wireshark to look at captured HTTP request/response)
+Application Layer 2-16
+
+User-server state: cookies
+many Web sites use cookies
+four components:
+1) cookie header line of
+HTTP response
+message
+2) cookie header line in
+next HTTP request
+message
+3) cookie file kept on
+user’s host, managed
+by user’s browser
+4) back-end database at
+Web site
+
+example:
+ Susan always access Internet
+from PC
+ visits specific e-commerce
+site for first time
+ when initial HTTP requests
+arrives at site, site creates:
+ unique ID
+ entry in backend
+database for ID
+
+Application Layer 2-17
+
+Cookies: keeping “state” (cont.)
+client
+ebay 8734
+
+server
+usual http request msg
+
+cookie file
+
+usual http response
+ebay 8734
+amazon 1678
+
+set-cookie: 1678
+usual http request msg
+
+cookie: 1678
+usual http response msg
+
+Amazon server
+creates ID
+1678 for user create backend
+entry database
+cookiespecific
+action
+
+one week later:
+ebay 8734
+amazon 1678
+
+access
+
+access
+usual http request msg
+
+cookie: 1678
+usual http response msg
+
+cookiespecific
+action
+Application Layer 2-18
+
+Cookies (continued)
+what cookies can be used
+for:
+
+
+
+
+
+authorization
+shopping carts
+recommendations
+user session state (Web
+e-mail)
+
+aside
+
+cookies and privacy:
+ cookies permit sites to
+learn a lot about you
+ you may supply name and
+e-mail to sites
+
+how to keep “state”:
+
+
+
+
+protocol endpoints: maintain state at
+sender/receiver over multiple
+transactions
+cookies: http messages carry state
+Application Layer 2-19
+
+Web caches (proxy server)
+goal: satisfy client request without involving origin server
+
+
+
+user sets browser: Web
+accesses via cache
+browser sends all HTTP
+requests to cache
+ object in cache: cache
+returns object
+ else cache requests
+object from origin
+server, then returns
+object to client
+
+proxy
+server
+client
+
+client
+
+origin
+server
+
+origin
+server
+
+Application Layer 2-20
+
+More about Web caching
+
+
+cache acts as both
+client and server
+ server for original
+requesting client
+ client to origin server
+
+
+
+typically cache is
+installed by ISP
+(university, company,
+residential ISP)
+
+why Web caching?
+ reduce response time
+for client request
+ reduce traffic on an
+institution’s access link
+ Internet dense with
+caches: enables “poor”
+content providers to
+effectively deliver
+content (so too does
+P2P file sharing)
+Application Layer 2-21
+
+Caching example:
+assumptions:
+
+
+
+
+
+
+avg object size: 100K bits
+avg request rate from all browsers to
+origin servers:15/sec
+thus, avg data rate to all browsers:
+1.50 Mbps
+RTT from institutional router to any
+origin server: 2 sec
+access link rate: 1.54 Mbps
+
+consequences:
+
+
+
+
+LAN utilization: 0.15% problem!
+access link utilization = 97%
+total delay = Internet delay + access
+delay + LAN delay
+= 2 sec + minutes + usecs
+
+origin
+servers
+public
+Internet
+
+1.54 Mbps
+access link
+institutional
+network
+
+1 Gbps LAN
+
+Application Layer 2-22
+
+Caching example: fatter access link
+assumptions:
+
+
+
+
+
+
+avg object size: 100K bits
+avg request rate from all browsers to
+origin servers:15/sec
+thus, avg data rate to all browsers:
+1.50 Mbps
+RTT from institutional router to any
+origin server: 2 sec
+access link rate: 1.54 Mbps
+154 Mbps
+
+consequences:
+
+
+
+
+LAN utilization: 0.15%
+access link utilization = 97% 9.7%
+total delay = Internet delay + access
+delay + LAN delay
+= 2 sec + minutes + usecs
+
+origin
+servers
+public
+Internet
+
+1.54 Mbps
+154 Mbps
+access link
+institutional
+network
+
+1 Gbps LAN
+
+msecs
+
+Cost: increased access link speed (not cheap!)
+Application Layer 2-23
+
+Caching example: install local cache
+assumptions:
+
+
+
+
+
+
+avg object size: 100K bits
+avg request rate from all browsers to
+origin servers:15/sec
+thus, avg data rate to all browsers:
+1.50 Mbps
+RTT from institutional router to any
+origin server: 2 sec
+access link rate: 1.54 Mbps
+
+consequences:
+
+
+
+LAN utilization: 0.15%
+But what’s the delay?
+
+origin
+servers
+public
+Internet
+
+1.54 Mbps
+access link
+institutional
+network
+
+1 Gbps LAN
+
+local web
+cache
+
+Cost: web cache (cheap!)
+Application Layer 2-24
+
+Caching example: install local cache
+Calculating access link
+utilization, delay with cache:
+ suppose
+
+origin
+servers
+
+cache hit rate is 0.4
+
+ 40% requests satisfied at cache,
+60% requests satisfied at origin
+ access
+
+public
+Internet
+
+link utilization:
+
+ 60% of requests use access link
+
+
+data rate to browsers over access link
+= 0.6*1.50 Mbps = .9 Mbps
+ utilization = 0.9/1.54 = 58%
+
+1.54 Mbps
+access link
+institutional
+network
+
+1 Gbps LAN
+
+local web
+cache
+
+Application Layer 2-25
+
+Caching example: install local cache
+Calculating access link
+utilization, delay with cache:
+
+origin
+servers
+
+total delay = Internet delay +
+access delay + LAN delay
+
+
+
+
+public
+Internet
+
+Internet delay
+
+ = 0.6 * (delay from origin servers)
++ 0.4 * (delay when satisfied at cache)
+ = 0.6 (2s) + 0.4 (~msecs)
+ Access delay
+ At 58% utilization, msecs
+ LAN delay
+ usecs
+ Total = 1.2 + ~0 + ~0 = ~1.2 secs
+ less than with 154 Mbps link
+(and cheaper too!)
+
+1.54 Mbps
+access link
+institutional
+network
+
+1 Gbps LAN
+
+local web
+cache
+
+Application Layer 2-26
+
+Conditional GET (for caching)
+
+
+Goal: don’t send object if
+cache has up-to-date
+cached version
+ no object transmission
+delay
+ lower link utilization
+
+
+
+cache: specify date of
+cached copy in HTTP
+request
+If-modified-since:
+<date>
+
+
+
+server: response contains
+no object if cached copy
+is up-to-date:
+HTTP/1.0 304 Not
+Modified
+
+server
+
+client
+
+HTTP request msg
+If-modified-since: <date>
+
+HTTP response
+HTTP/1.0
+304 Not Modified
+
+object
+not
+modified
+before
+<date>
+
+HTTP request msg
+If-modified-since: <date>
+
+HTTP response
+HTTP/1.0 200 OK
+
+object
+modified
+after
+<date>
+
+<data>
+Application Layer 2-27
+
+Chapter 2: outline
+2.1 principles of network
+applications
+ app architectures
+ app requirements
+
+2.6 P2P applications
+2.7 socket programming
+with UDP and TCP
+
+2.2 Web and HTTP
+2.3 FTP
+2.4 electronic mail
+ SMTP, POP3, IMAP
+
+2.5 DNS
+
+Application Layer 2-28
+
+

@@ -1,0 +1,678 @@
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer
+
+5-1
+
+Multiple access links, protocols
+two types of “links”:
+ point-to-point
+ PPP for dial-up access
+ point-to-point link between Ethernet switch, host
+
+
+broadcast (shared wire or medium)
+ old-fashioned Ethernet
+ upstream HFC
+ 802.11 wireless LAN
+
+shared wire (e.g.,
+cabled Ethernet)
+
+shared RF
+(e.g., 802.11 WiFi)
+
+shared RF
+(satellite)
+
+humans at a
+cocktail party
+(shared air, acoustical)
+Link Layer
+
+5-2
+
+Multiple access protocols
+
+
+
+single shared broadcast channel
+two or more simultaneous transmissions by nodes:
+interference
+ collision if node receives two or more signals at the same
+time
+
+multiple access protocol
+
+
+
+distributed algorithm that determines how nodes share
+channel, i.e., determine when node can transmit
+communication about channel sharing must use channel itself!
+ no out-of-band channel for coordination
+
+Link Layer
+
+5-3
+
+An ideal multiple access protocol
+given: broadcast channel of rate R bps
+desiderata:
+1. when one node wants to transmit, it can send at rate R.
+2. when M nodes want to transmit, each can send at average
+rate R/M
+3. fully decentralized:
+• no special node to coordinate transmissions
+• no synchronization of clocks, slots
+4. simple
+
+Link Layer
+
+5-4
+
+MAC protocols: taxonomy
+three broad classes:
+ channel partitioning
+ divide channel into smaller “pieces” (time slots, frequency, code)
+ allocate piece to node for exclusive use
+
+
+random access
+ channel not divided, allow collisions
+ “recover” from collisions
+
+
+
+“taking turns”
+ nodes take turns, but nodes with more to send can take longer
+turns
+
+Link Layer
+
+5-5
+
+Channel partitioning MAC protocols: TDMA
+TDMA: time division multiple access
+
+
+
+
+
+
+access to channel in "rounds"
+each station gets fixed length slot (length = packet
+transmission time) in each round
+unused slots go idle
+example: 6-station LAN, 1,3,4 have packet, slots
+2,5,6 idle
+6-slot
+frame
+
+6-slot
+frame
+1
+
+3
+
+4
+
+1
+
+3
+
+4
+
+Link Layer
+
+5-6
+
+Channel partitioning MAC protocols: FDMA
+FDMA: frequency division multiple access
+
+
+
+
+
+channel spectrum divided into frequency bands
+each station assigned fixed frequency band
+unused transmission time in frequency bands go idle
+example: 6-station LAN, 1,3,4 have packets, frequency bands
+2,5,6 idle
+Requires frequency that can be divided
+
+FDM cable
+
+frequency bands
+
+
+
+Link Layer
+
+5-7
+
+Random access protocols
+
+
+when node has packet to send
+
+ transmit at full channel data rate R.
+ no a priori coordination among nodes
+
+
+
+
+two or more transmitting nodes ➜ “collision”,
+random access protocol specifies:
+ how to detect collisions
+ how to recover from collisions (e.g., via delayed
+retransmissions)
+
+
+
+examples of random access protocols:
+ slotted ALOHA
+ ALOHA
+ CSMA, CSMA/CD, CSMA/CA
+
+Link Layer
+
+5-8
+
+Slotted ALOHA
+assumptions:
+
+
+
+
+
+
+
+
+all frames same size
+time divided into equal size
+slots (time to transmit 1
+frame)
+nodes start to transmit
+only at slot beginning
+all nodes are synchronized
+to clock
+if 2 or more nodes transmit
+in slot, all nodes detect
+collision
+
+operation:
+
+
+when node obtains fresh
+frame, transmits in next slot
+ if no collision: node can send
+new frame in next slot
+ if collision: node retransmits
+frame in each subsequent
+slot with prob. p until
+success
+
+Link Layer
+
+5-9
+
+Slotted ALOHA
+node 1
+
+1
+
+1
+
+node 2
+
+2
+
+2
+
+node 3
+
+3
+
+C
+
+
+
+
+1
+
+1
+2
+3
+
+E
+
+C
+
+S
+
+Pros:
+
+
+C = Collision
+E = Empty
+S = Successful
+
+single active node can
+continuously transmit at
+full rate of channel
+highly decentralized
+simple
+
+E
+
+C
+
+3
+
+E
+
+S
+
+S
+
+Cons:
+
+
+
+
+
+
+collisions, wasting slots
+idle slots
+nodes may be able to
+detect collision in less
+than time to transmit
+packet
+clock synchronization
+Link Layer 5-10
+
+Slotted ALOHA: efficiency
+efficiency: long-run
+
+fraction of successful slots
+(many nodes, all with many
+frames to send)
+
+
+
+
+
+
+suppose: N nodes with
+many frames to send, each
+transmits in slot with
+probability p
+prob that given node has
+success in a slot = p(1p)N-1
+prob that any node has a
+success = Np(1-p)N-1
+
+
+
+
+
+max efficiency: find p* that
+maximizes
+Np(1-p)N-1
+for many nodes, take limit
+of Np*(1-p*)N-1 as N goes
+to infinity, gives:
+max efficiency = 1/e = .37
+
+at best: channel
+
+used for useful
+transmissions 37%
+of time!
+
+!
+
+Link Layer 5-11
+
+Pure (unslotted) ALOHA
+
+
+
+
+
+unslotted Aloha: simpler, no synchronization
+when frame first arrives
+ transmit immediately
+collision probability increases:
+ frame sent at t0 collides with other frames sent in [t01,t0+1]
+
+Link Layer 5-12
+
+Pure ALOHA efficiency
+P(success by given node) = P(node transmits) .
+P(no other node transmits in [t0-1,t0] .
+P(no other node transmits in [t0-1,t0]
+
+= p . (1-p)N-1 . (1-p)N-1
+= p . (1-p)2(N-1)
+… choosing optimum p and then letting n
+
+= 1/(2e) = .18
+
+even worse than slotted Aloha!
+
+Link Layer 5-13
+
+CSMA (carrier sense multiple access)
+CSMA: listen before transmit:
+if channel sensed idle: transmit entire frame
+ if channel sensed busy, defer transmission
+
+
+human analogy: don’t interrupt others!
+
+Link Layer 5-14
+
+CSMA collisions
+
+
+
+
+spatial layout of nodes
+
+collisions can still occur:
+propagation delay means
+two nodes may not hear
+each other’s
+transmission
+collision: entire packet
+transmission time
+wasted
+ distance & propagation
+delay play role in
+determining collision
+probability
+
+Link Layer 5-15
+
+CSMA/CD (collision detection)
+CSMA/CD: carrier sensing, deferral as in CSMA
+ collisions detected within short time
+ colliding transmissions aborted, reducing channel wastage
+
+
+collision detection:
+ easy in wired LANs: measure signal strengths, compare
+transmitted, received signals
+ difficult in wireless LANs: received signal strength
+overwhelmed by local transmission strength
+
+
+
+human analogy: the polite conversationalist
+
+Link Layer 5-16
+
+CSMA/CD (collision detection)
+spatial layout of nodes
+
+Link Layer 5-17
+
+Ethernet CSMA/CD algorithm
+1. NIC receives datagram
+from network layer,
+creates frame
+2. If NIC senses channel
+idle, starts frame
+transmission. If NIC
+senses channel busy,
+waits until channel idle,
+then transmits.
+3. If NIC transmits entire
+frame without detecting
+another transmission,
+NIC is done with frame !
+
+4. If NIC detects another
+transmission while
+transmitting, aborts and
+sends jam signal
+5. After aborting, NIC
+enters binary (exponential)
+backoff:
+ after mth collision, NIC
+chooses K at random
+from {0,1,2, …, 2m-1}.
+NIC waits K·512 bit
+times, returns to Step 2
+ longer backoff interval
+with more collisions
+Link Layer 5-18
+
+CSMA/CD efficiency
+
+
+
+Tprop = max prop delay between 2 nodes in LAN
+ttrans = time to transmit max-size frame
+
+efficiency 
+
+
+
+
+1
+1  5t prop /ttrans
+
+efficiency goes to 1
+ as tprop goes to 0
+ as ttrans goes to infinity
+better performance than ALOHA: and simple, cheap,
+decentralized!
+
+Link Layer 5-19
+
+“Taking turns” MAC protocols
+channel partitioning MAC protocols:
+ share channel efficiently and fairly at high load
+ inefficient at low load: delay in channel access, 1/N
+bandwidth allocated even if only 1 active node!
+
+random access MAC protocols
+ efficient at low load: single node can fully utilize
+channel
+ high load: collision overhead
+
+“taking turns” protocols
+look for best of both worlds, but often worse
+
+Link Layer 5-20
+
+“Taking turns” MAC protocols
+polling:
+
+
+
+
+
+master node “invites”
+slave nodes to transmit
+in turn
+typically used with
+“dumb” slave devices
+concerns:
+ polling overhead
+ latency
+ single point of
+failure (master)
+
+data
+poll
+
+master
+data
+
+slaves
+
+Link Layer 5-21
+
+“Taking turns” MAC protocols
+token passing:
+
+
+
+
+
+control token passed
+from one node to next
+sequentially.
+token message
+concerns:
+ token overhead
+ latency
+ single point of failure
+(token)
+
+T
+
+(nothing
+to send)
+T
+
+data
+Link Layer 5-22
+
+Cable access network
+Internet frames,TV channels, control transmitted
+downstream at different frequencies
+cable headend
+
+…
+
+CMTS
+
+cable modem
+termination system
+
+ISP
+
+
+
+
+…
+
+splitter
+
+cable
+modem
+
+upstream Internet frames, TV control, transmitted
+upstream at different frequencies in time slots
+
+multiple 40Mbps downstream (broadcast) channels
+ single CMTS transmits into channels
+multiple 30 Mbps upstream channels
+ multiple access: all users contend for certain upstream
+channel time slots (others assigned)
+
+Cable access network
+cable headend
+
+MAP frame for
+Interval [t1, t2]
+
+Downstream channel i
+
+CMTS
+
+Upstream channel j
+
+t1
+Minislots containing
+minislots request frames
+
+t2
+
+Residences with cable modems
+
+Assigned minislots containing cable modem
+upstream data frames
+
+DOCSIS: data over cable service interface spec
+
+
+
+FDM over upstream, downstream frequency channels
+TDM upstream: some slots assigned, some have contention
+ downstream MAP frame: assigns upstream slots
+ request for upstream slots (and data) transmitted
+random access (binary backoff) in selected slots
+Link Layer 5-24
+
+Summary of MAC protocols
+
+
+channel partitioning, by time, frequency or code
+ Time Division, Frequency Division
+
+
+
+
+
+random access (dynamic),
+ ALOHA, S-ALOHA, CSMA, CSMA/CD
+ carrier sensing: easy in some technologies (wire), hard
+in others (wireless)
+ CSMA/CD used in Ethernet
+ CSMA/CA used in 802.11
+taking turns
+ polling from central site, token passing
+ bluetooth, FDDI, token ring
+
+Link Layer 5-25
+
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer 5-26
+
+

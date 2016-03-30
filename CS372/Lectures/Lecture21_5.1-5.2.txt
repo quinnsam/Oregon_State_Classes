@@ -1,0 +1,603 @@
+The Book
+
+Start Reading
+Chapter 5 Now
+
+Introduction
+
+1-1
+
+Chapter 5: Link layer
+our goals:
+
+
+understand principles behind link layer
+services:
+
+
+
+
+
+
+
+error detection, correction
+sharing a broadcast channel: multiple access to it
+link layer addressing
+local area networks: Ethernet, VLANs
+
+instantiation, implementation of various link
+layer technologies
+
+Link Layer
+
+5-2
+
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer
+
+5-3
+
+Link layer: introduction
+terminology:
+
+
+
+
+
+hosts and routers: nodes
+communication channels that
+connect adjacent nodes along
+communication path: links
+ wired links
+ wireless links
+ LANs
+layer-2 packet: frame,
+encapsulates datagram
+
+global ISP
+
+data-link layer has responsibility of
+transferring datagram from one node
+to physically adjacent node over a link
+Link Layer
+
+5-4
+
+Link layer: context
+
+
+
+
+
+no more planning of routes
+at this layer!
+datagram transferred by
+different link protocols over
+different links:
+ e.g., Ethernet on first link,
+frame relay on
+intermediate links, 802.11
+on last link
+each link protocol provides
+different services
+ e.g., may or may not
+provide reliable data
+transfer over link
+
+transportation analogy:
+
+
+
+
+
+
+
+
+
+trip from Corvallis to Washington
+State Convention Center (WSCC):
+ car: Corvallis to Seattle Westin.
+ walk: Seattle Westin to
+monorail station.
+ train: monorail station to
+WSCC.
+
+tourist = datagram
+transport segment =
+communication link
+transportation mode = link
+layer protocol
+travel agent = routing
+algorithm (at different layer)
+Link Layer
+
+5-5
+
+Link layer services
+
+
+framing, link access:
+ encapsulate datagram into frame, adding header, trailer
+ channel access if shared medium
+ Media Access Control (MAC) addresses used in frame
+headers to identify source and destination
+• different from IP address!
+
+
+
+reliable delivery between adjacent nodes
+
+ we learned how to do this already (chapter 3)!
+ seldom used on low bit-error link (fiber, some twisted
+pair)
+ wireless links: high error rates
+• Q: why both link-level and end-end reliability?
+
+Link Layer
+
+5-6
+
+Link layer services (more)
+
+
+flow control:
+ pacing between adjacent sending and receiving nodes
+
+
+
+error detection:
+ errors caused by signal attenuation, noise.
+ receiver detects presence of errors:
+• signals sender for retransmission or drops frame
+
+
+
+error correction:
+ receiver identifies and corrects bit error(s) without resorting to
+retransmission
+
+
+
+half-duplex and full-duplex
+ with half duplex, nodes at both ends of link can transmit, but not
+at same time
+ with full duplex, both can transmit at the same time
+Link Layer
+
+5-7
+
+Where is the link layer implemented?
+
+
+
+
+
+
+in each and every host
+link layer implemented in
+“adaptor” (aka network
+interface card NIC) or on a
+chip
+ Ethernet card, 802.11
+card; Ethernet chipset
+ implements link, physical
+layer
+attaches into host’s system
+buses
+combination of hardware,
+software, firmware
+
+application
+transport
+network
+link
+
+cpu
+
+memory
+
+controller
+link
+physical
+
+host
+bus
+(e.g., PCI)
+
+physical
+transmission
+
+network adapter
+card
+
+Link Layer
+
+5-8
+
+Adaptors communicating
+datagram
+
+datagram
+controller
+
+controller
+
+receiving host
+
+sending host
+datagram
+
+frame
+
+
+sending side:
+ encapsulates datagram in
+frame
+ adds error checking bits,
+manages, reliable data
+transfer (rdt), flow
+control, etc.
+
+
+
+receiving side
+ looks for errors, rdt,
+flow control, etc
+ extracts datagram, passes
+to upper layer at
+receiving side
+Link Layer
+
+5-9
+
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer 5-10
+
+Error detection
+EDC = Error Detection and Correction bits (redundancy)
+D
+= Data protected by error checking, may include header fields
+• Error detection not 100% reliable!
+• protocol may miss some errors, but rarely
+• larger EDC field yields better detection and correction
+
+otherwise
+
+Link Layer 5-11
+
+Parity checking theory
+single bit parity:
+
+
+
+
+
+
+detects single bit
+errors.
+The parity bit is 1 if the
+number of 1s is odd.
+The parity bit is 0 if the
+number of 1s is even.
+
+DATA
+
+PARITY
+
+10101
+11110
+01110
+
+1
+0
+1
+
+two-dimensional bit parity:
+detect and correct single bit errors
+ requires grouping transmissions into blocks
+
+
+Change that 0 to a 1!
+
+Link Layer 5-12
+
+Internet checksum (review)
+goal: detect “errors” (e.g., flipped bits) in transmitted packet
+(note: used at transport layer only)
+
+sender:
+
+
+
+
+
+
+treat segment contents
+as sequence of 16-bit
+integers
+checksum: addition (1’s
+complement sum) of
+segment contents
+sender puts checksum
+value into UDP
+checksum field
+
+receiver:
+ compute checksum of
+received segment
+ check if computed
+checksum equals checksum
+field value:
+ NO - error detected
+ YES - no error detected.
+But maybe errors
+nonetheless?
+
+Link Layer 5-13
+
+Cyclic redundancy check
+
+
+
+
+
+
+more powerful error-detection coding
+view d data bits as a binary number D
+choose bit pattern (called a “generator”) of r+1 bits as
+binary number G
+sender: choose r CRC bits as a binary number R such that
+entire binary number DR exactly divisible (using XOR) by G
+receiver divides DR by G (using XOR): If non-zero
+remainder: error detected!
+ can detect all burst errors less than r+1 bits
+
+
+
+widely used in practice (Ethernet, 802.11 WiFi, ATM)
+D (d bits long)
+
+R (r bits long)
+
+G (r+1 bits long)
+
+Link Layer 5-14
+
+CRC example
+
+
+Sender wants to
+calculate DR
+
+Link Layer 5-15
+
+CRC example
+
+
+
+
+1) Bit shift left
+(i.e. multiply by 2)
+by size of G – 1
+101110
+turns into…
+
+Link Layer 5-16
+
+CRC example
+
+
+
+
+1) Bit shift left
+(i.e. multiply by 2)
+by size of G – 1
+101110
+turns into
+101110 000
+
+Link Layer 5-17
+
+CRC example
+
+
+
+2) Divide by G
+How many times does
+1001 go into 1011?
+
+Link Layer 5-18
+
+CRC example
+
+
+
+How many times does
+1001 go into 1011?
+Once!
+
+Link Layer 5-19
+
+CRC example
+
+
+Multiply 1 times 1001
+to get 1001
+
+Link Layer 5-20
+
+CRC example
+
+
+XOR 1011 and 1001
+to get 10
+ 1011
+1001
+0010
+
+Link Layer 5-21
+
+CRC example
+
+
+Carry down the 1
+
+Link Layer 5-22
+
+CRC example
+
+
+How many times does
+1001 go into 101?
+
+Link Layer 5-23
+
+CRC example
+
+
+
+How many times does
+1001 go into 101?
+Zero times!
+
+Link Layer 5-24
+
+CRC example
+
+
+Multiply 0 times 1001
+to get 000
+
+Link Layer 5-25
+
+CRC example
+
+
+XOR 101 and 000 to
+get 101
+ 101
+000
+101
+
+Link Layer 5-26
+
+CRC example
+
+
+Carry down the 0
+
+Link Layer 5-27
+
+CRC example
+
+
+Repeat……
+
+Link Layer 5-28
+
+CRC example
+
+
+
+
+3) Replace bit shifted
+part with remainder
+101110000
+011 +
+
+Link Layer 5-29
+
+CRC example
+
+
+
+
+
+
+3) Replace bit shifted
+part with remainder
+101110000
+011 +
+101110011
+Sender sends
+101110011
+
+Link Layer 5-30
+
+CRC example
+
+
+Receiver wants to error check
+ 1) Divide received frame by G (using XOR)
+ 2) If remainder is 0, no errors!
+If non-0, errors!
+
+Link Layer 5-31
+
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer 5-32
+
+
