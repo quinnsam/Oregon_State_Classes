@@ -82,3 +82,33 @@ Complexity
     3) Maximum length   - Lenght of the path to the goal
 
 
+################################################################################
+Tue 04/04
+################################################################################
+**Uniformed Search**
+
+Depth-first Search
+* Complete?     No - can go infininte depth
+* Optimal?      No - Can have shallower goals
+* Time complex  O(b^m)
+* space complex O(bm)
+
+Depth-simitde Search
+- Solves infinite path problem by using predetermined depth limit l
+- Nodes depth l are threated as if they have no successors
+
+* Complete?     No - Goal can be past limit
+* Optimal?      No - Can have shallower goals
+* Time complex  O(b^l)
+* space complex O(bl)
+
+Bidircetional search
+- Run on search forward and one backwards
+
+* Complete?     yes - provided branching factor is finite
+* Optimal?      yes - If the setp costs are identical in both directions
+* Time complex  O(b^(d/2))
+* space complex O(b^(d/2))
+
+
+

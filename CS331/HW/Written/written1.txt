@@ -1,0 +1,87 @@
+CS331 (Spring 2016): Introduction to Artificial Intelligence 
+Written Assignment #1 
+ 
+
+ 
+Date handed out: March 30, 2016 
+Date due: April 6, 2016 at the start of class 
+Total: 25 points 
+ 
+The written portion of this assignment is to be done individually.  Please hand in a 
+hardcopy.  Assignments done on a word processor are preferred but not mandatory.  For 
+hand written assignments, if we cannot read your writing, we cannot mark your 
+assignment. 
+ 
+1.  You will be answering parts (a)-(c) for an agent that controls the traffic lights at a 4-
+way intersection (where 2 roads cross, with traffic flowing in all directions). The lights 
+have green/yellow/red main lights plus a left-turn arrow and a pedestrian indicator. The 
+agent controls which lights go on and how long they stay on. Assume the intersection has 
+signals for pedestrians and in-pavement detectors right before the crosswalk for cars and 
+bikes. [11 pts]. 
+ 
+a) Develop a description of the task environment using the PEAS description i.e.: 
+  Performance 
+  Environment 
+  Actuators 
+  Sensors 
+
+ 
+b) Then describe the environment according to the following properties: 
+ 
+fully vs partially observable 
+  deterministic vs stochastic 
+  episodic vs sequential 
+  static vs dynamic 
+  discrete vs continuous 
+  single vs multi-agent 
+
+ 
+Note that in some cases, both answers might be correct.  Justify each answer to the task 
+environment properties with a one sentence explanation.   
+ 
+c) Suggest the most appropriate agent design by choosing the most appropriate of the 
+following agent types: 
+  simple reflex agent 
+  model-based reflex agent 
+  goal-based agents 
+  utility-based agent 
+Justify your answer with a one sentence explanation.   
+ 
+
+1/2 
+
+2.(Exercise 2.3a-d in the book) For each statement, say whether it is true or false. Provide 
+a one-sentence example, counterexample, or justification. 
+ 
+a) An agent that senses only partial information about the state cannot be perfectly 
+rational. [2 points] 
+ 
+b) There exist task environments in which no pure reflex agent can behave rationally.  [2 
+points] 
+ 
+c) There exists a task environment in which every agent is rational. [2 points] 
+ 
+d) The input to an agent program is the same as the input to the agent function. [2 points] 
+ 
+ 
+3. (Exercise 2.10a-c in the book) Consider a modified version of the vacuum 
+environment: 
+  Performance measure: one point awarded for each clean square at each time step 
+and one point penalized for each movement 
+  Environment: map is known a priori (squares A and B as in class and Figure 2.2), 
+dirt distribution and initial location are unknown. Clean squares stay clean.  
+  Actuators: Suck cleans dirt, Left moves left, Right moves right. 
+  Sensors: Location and dirt sensors. 
+
+ 
+a) Can a simple reflex agent be perfectly rational for this environment?  [2 points]  
+ 
+b) What about a reflex agent with state? Describe such an agent. [2 points] 
+ 
+c) How do your answers to a and b change if the agent’s percepts give it the clean/dirty 
+status of every square in the environment? [2 points] 
+ 
+
+2/2 
+
+
