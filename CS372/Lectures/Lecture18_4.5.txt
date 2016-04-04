@@ -1,0 +1,1171 @@
+Chapter 4: outline
+4.1 introduction
+4.2 virtual circuit and
+datagram networks
+4.3 what’s inside a router
+4.4 IP: Internet Protocol
+
+
+
+
+
+datagram format
+IPv4 addressing
+ICMP
+IPv6
+
+4.5 routing algorithms
+ link state
+ distance vector
+ hierarchical routing
+
+4.6 routing in the Internet
+ RIP
+ OSPF
+ BGP
+
+4.7 broadcast and multicast
+routing
+
+Network Layer 4-1
+
+A Link-State Routing Algorithm
+Dijkstra’s algorithm
+
+
+
+
+net topology, link costs
+known to all nodes
+ accomplished via “link state
+broadcast”
+ all nodes have same info
+
+
+
+computes least cost paths
+from one node (‘source”)
+to all other nodes
+
+
+
+ gives forwarding table for
+that node
+
+
+notation:
+ c(x,y): link cost from
+
+iterative: after k
+iterations, know least cost
+path to k dest.’s
+
+
+
+node x to y; = ∞ if not
+direct neighbors
+D(v): current value of
+cost of path from source
+to dest. v
+p(v): predecessor node
+along path from source to
+v
+N': set of nodes whose
+least cost path definitively
+known
+Network Layer 4-2
+
+Dijsktra’s Algorithm
+Initialization:
+1 N' = {u}
+2 for all nodes v
+3
+if v adjacent to u
+4
+then D(v) = c(u,v)
+5
+else D(v) = ∞
+Loop until all nodes in N'
+6 find w not in N' such that D(w) is a minimum
+7 add w to N'
+8 update D(v) for all v adjacent to w and not in N' :
+9 D(v) = min( D(v), D(w) + c(w,v) )
+
+Network Layer 4-3
+
+Dijkstra’s algorithm: example
+D(v), D(w), D(x), D(y), D(z),
+Step
+0
+1
+2
+3
+4
+5
+
+N'
+
+u
+uw
+uwx
+uwxv
+uwxvy
+uwxvyz
+
+p(v)
+
+7,u
+6,w
+6,w
+
+p(w)
+
+p(x)
+
+p(y)
+
+3,u
+
+∞
+∞
+5,u
+∞
+5,u 11,w
+11,w 14,x
+10,v 14,x
+12,y
+
+
+
+construct shortest path tree by
+tracing predecessor nodes
+ties can exist (can be broken
+arbitrarily)
+
+total known cost to v,
+previous node from v
+
+x
+
+notes:
+
+
+D(v), p(v) =
+
+p(z)
+
+5
+
+9
+7
+
+4
+
+8
+3
+
+u
+
+w
+
+y
+
+2
+
+z
+
+3
+4
+
+7
+
+v
+Network Layer 4-4
+
+Dijkstra’s algorithm: another example
+Step
+0
+1
+2
+3
+4
+5
+
+N'
+u
+ux
+uxy
+uxyv
+uxyvw
+uxyvwz
+
+D(v),p(v) D(w),p(w)
+2,u
+5,u
+2,u
+4,x
+2,u
+3,y
+3,y
+
+D(x),p(x)
+1,u
+
+D(y),p(y)
+∞
+2,x
+
+D(z),p(z)
+∞
+∞
+
+4,y
+4,y
+4,y
+
+5
+2
+
+u
+
+v
+2
+
+1
+
+x
+
+3
+
+w
+3
+
+1
+
+5
+
+z
+
+1
+
+y
+
+2
+Network Layer 4-5
+
+Dijkstra’s algorithm: example (2)
+resulting shortest-path tree from u:
+v
+
+w
+
+u
+
+z
+x
+
+y
+
+resulting forwarding table in u:
+destination
+
+link
+
+v
+x
+
+(u,v)
+(u,x)
+
+y
+
+(u,x)
+
+w
+
+(u,x)
+
+z
+
+(u,x)
+Network Layer 4-6
+
+Dijkstra’s algorithm, discussion
+algorithm complexity: n nodes
+
+
+
+
+each iteration: need to check all nodes, w, not in N
+n(n+1)/2 comparisons: O(n2)
+more efficient implementations possible: O(nlogn)
+
+oscillations possible:
+
+
+e.g., routes drive traffic along that route, leaving others empty:
+A
+
+1
+
+D
+1
+
+B
+
+0
+
+0
+0
+
+1+e
+
+C
+
+e
+
+initially
+
+D
+
+A
+
+0
+
+C
+
+0
+
+B
+
+1+e 1
+0
+
+1
+e
+
+2+e
+
+0
+
+given these costs,
+find new routing….
+resulting in new costs
+
+D
+
+A
+0
+
+1
+
+C
+
+2+e
+
+B
+
+0
+1+e
+
+2+e
+
+D
+
+A
+
+0
+
+B
+
+1+e 1
+0
+
+C
+
+0
+
+given these costs,
+given these costs,
+find new routing….
+find new routing….
+resulting in new costs resulting in new costs
+Network Layer 4-7
+
+Chapter 4: outline
+4.1 introduction
+4.2 virtual circuit and
+datagram networks
+4.3 what’s inside a router
+4.4 IP: Internet Protocol
+
+
+
+
+
+datagram format
+IPv4 addressing
+ICMP
+IPv6
+
+4.5 routing algorithms
+ link state
+ distance vector
+ hierarchical routing
+
+4.6 routing in the Internet
+ RIP
+ OSPF
+ BGP
+
+4.7 broadcast and multicast
+routing
+
+Network Layer 4-8
+
+Distance vector algorithm
+iterative, asynchronous:
+
+
+
+each local iteration
+caused by:
+local link cost change
+DV update message from
+neighbor
+
+distributed:
+
+
+each node notifies
+neighbors only when its
+DV changes
+ neighbors then notify their
+neighbors if necessary
+
+each node:
+wait for (change in local link
+cost or msg from neighbor)
+
+recompute estimates
+if DV to any dest has
+changed, notify neighbors
+
+Network Layer 4-9
+
+Distance vector algorithm
+Bellman-Ford equation (dynamic programming)
+let
+dx(y) := cost of least-cost path from x to y
+then
+
+dx(y) = min
+{c(x,v)
++
+d
+(y)
+}
+v
+v
+cost from neighbor v to destination y
+cost to neighbor v
+min taken over all neighbors v of x
+Network Layer 4-10
+
+Bellman-Ford example
+5
+2
+
+u
+
+v
+2
+
+1
+
+x
+
+3
+
+w
+3
+
+1
+
+clearly, dv(z) = 5, dx(z) = 3, dw(z) = 3
+5
+
+z
+
+1
+
+y
+
+2
+
+B-F equation says:
+du(z) = min { c(u,v) + dv(z),
+c(u,x) + dx(z),
+c(u,w) + dw(z) }
+= min {2 + 5,
+1 + 3,
+5 + 3} = 4
+
+node achieving minimum is next
+hop in shortest path, used in forwarding table
+Network Layer 4-11
+
+Distance vector algorithm
+
+
+Dx(y) = estimate of least cost from x to y
+
+ x maintains distance vector Dx = [Dx(y): y є N ]
+
+
+
+node x:
+ knows cost to each neighbor v: c(x,v)
+ maintains its neighbors’ distance vectors. For
+each neighbor v, x maintains
+Dv = [Dv(y): y є N ]
+
+Network Layer 4-12
+
+Distance vector algorithm
+key idea:
+
+
+
+from time-to-time, each node sends its own
+distance vector estimate to neighbors
+when x receives new DV estimate from neighbor,
+it updates its own DV using B-F equation:
+Dx(y) ← minv{c(x,v) + Dv(y)} for each node y ∊ N
+
+
+
+under minor, natural conditions, the estimate Dx(y)
+converge to the actual least cost dx(y)
+
+Network Layer 4-13
+
+Dx(y) = min{c(x,y) + Dy(y), c(x,z) + Dz(y)}
+= min{2+0 , 7+1} = 2
+
+x y z
+
+x 0 2 7
+y ∞∞ ∞
+z ∞∞ ∞
+
+x 0 2 3
+y 2 0 1
+z 7 1 0
+
+cost to
+
+from
+
+from
+
+node x
+cost to
+table x y z
+
+Dx(z) = min{c(x,y) +
+Dy(z), c(x,z) + Dz(z)}
+= min{2+1 , 7+0} = 3
+
+from
+
+node y cost to
+table x y z
+
+2
+
+x ∞ ∞ ∞
+y 2 0 1
+z ∞∞ ∞
+
+x
+
+y
+7
+
+1
+
+z
+
+from
+
+node z cost to
+table x y z
+x ∞∞ ∞
+y ∞∞ ∞
+z 7 1 0
+
+time
+Network Layer 4-14
+
+Dx(y) = min{c(x,y) + Dy(y), c(x,z) + Dz(y)}
+= min{2+0 , 7+1} = 2
+
+x y z
+
+x y z
+
+x 0 2 7
+y ∞∞ ∞
+z ∞∞ ∞
+
+x 0 2 3
+y 2 0 1
+z 7 1 0
+
+x 0 2 3
+y 2 0 1
+z 3 1 0
+
+cost to
+
+cost to
+
+from
+
+from
+
+from
+
+node x
+cost to
+table x y z
+
+x y z
+
+x y z
+
+x ∞ ∞ ∞
+y 2 0 1
+z ∞∞ ∞
+
+x 0 2 7
+y 2 0 1
+z 7 1 0
+
+x 0 2 3
+y 2 0 1
+z 3 1 0
+
+cost to
+
+cost to
+
+x 0 2 7
+y 2 0 1
+z 3 1 0
+
+2
+
+x
+
+y
+7
+
+1
+
+z
+
+cost to
+
+x y z
+from
+
+x ∞∞ ∞
+y ∞∞ ∞
+z 7 1 0
+
+from
+
+x y z
+
+from
+
+cost to
+
+from
+
+from
+
+from
+
+node y cost to
+table x y z
+
+node z cost to
+table x y z
+
+Dx(z) = min{c(x,y) +
+Dy(z), c(x,z) + Dz(z)}
+= min{2+1 , 7+0} = 3
+
+x 0 2 3
+y 2 0 1
+z 3 1 0
+time
+Network Layer 4-15
+
+Distance vector: link cost changes
+link cost changes:
+
+
+
+
+node detects local link cost change
+updates routing info, recalculates
+distance vector
+if DV changes, notify neighbors
+
+“good
+news
+travels
+fast”
+
+1
+
+x
+
+4
+
+y
+
+1
+
+z
+
+50
+
+t0 : y detects link-cost change, updates its DV, informs its
+neighbors.
+t1 : z receives update from y, updates its table, computes new
+least cost to x , sends its neighbors its DV.
+
+t2 : y receives z’s update, updates its distance table. y’s least costs
+do not change, so y does not send a message to z.
+
+Network Layer 4-16
+
+Distance vector: link cost changes
+link cost changes:
+
+
+
+
+node detects local link cost change
+bad news travels slow - “count to
+infinity” problem!
+44 iterations before algorithm
+stabilizes: see text
+
+60
+
+x
+
+4
+
+y
+
+1
+
+z
+
+50
+
+poisoned reverse message helps solve the problem
+
+
+If Z routes through Y to get to X :
+ Z tells Y its (Z’s) distance to X is infinite (so Y won’t route
+to X via Z)
+
+
+
+will this completely solve count to infinity problem?
+
+Network Layer 4-17
+
+Comparison of LS and DV algorithms
+message complexity
+
+
+
+LS: with n nodes, E links, O(nE)
+msgs sent
+DV: exchange between neighbors
+only
+ convergence time varies
+
+speed of convergence
+
+
+
+
+O(n2)
+
+LS:
+algorithm requires
+O(nE) msgs
+ may have oscillations
+DV: convergence time varies
+ may be routing loops
+ count-to-infinity problem
+
+robustness: what happens if
+router malfunctions?
+LS:
+ node can advertise incorrect
+link cost
+ each node computes only its
+own table
+
+DV:
+ DV node can advertise
+incorrect path cost
+ each node’s table used by
+others
+• error propagate thru
+network
+
+Network Layer 4-18
+
+Chapter 4: outline
+4.1 introduction
+4.2 virtual circuit and
+datagram networks
+4.3 what’s inside a router
+4.4 IP: Internet Protocol
+
+
+
+
+
+datagram format
+IPv4 addressing
+ICMP
+IPv6
+
+4.5 routing algorithms
+ link state
+ distance vector
+ hierarchical routing
+
+4.6 routing in the Internet
+ RIP
+ OSPF
+ BGP
+
+4.7 broadcast and multicast
+routing
+
+Network Layer 4-19
+
+Hierarchical routing
+our routing study thus far - idealization
+ all routers identical
+ network “flat”
+… not true in practice
+scale: with 600 million
+destinations:
+
+
+
+can’t store all dest’s in
+routing tables!
+routing table exchange
+would swamp links!
+
+administrative autonomy
+
+
+
+
+internet = network of
+networks
+each network admin may
+want to control routing in
+its own network
+
+Network Layer 4-20
+
+Hierarchical routing
+
+
+
+
+aggregate routers into
+regions, “autonomous
+systems” (AS)
+routers in same AS
+run same routing
+protocol
+
+gateway router:
+
+
+
+at “edge” of its own AS
+has link to router in
+another AS
+
+ “intra-AS” routing
+protocol
+ routers in different AS
+can run different intraAS routing protocol
+
+Network Layer 4-21
+
+Interconnected ASes
+3c
+
+3a
+3b
+AS3
+
+2a
+1c
+1a
+
+1d
+
+2c
+2b
+AS2
+
+1b AS1
+
+Intra-AS
+Routing
+algorithm
+
+Inter-AS
+Routing
+algorithm
+
+Forwarding
+table
+
+
+
+forwarding table
+configured by both intraand inter-AS routing
+algorithm
+ intra-AS sets entries
+for internal dests
+ inter-AS & intra-AS
+sets entries for
+external dests
+Network Layer 4-22
+
+Inter-AS tasks
+
+
+suppose router in AS1
+receives datagram
+destined outside of AS1-3:
+ router should forward
+packet to gateway
+router, but which one?
+
+AS1 must:
+1.
+learn which dests are
+reachable through AS2,
+which through AS3
+2.
+propagate this
+reachability info to all
+routers in AS1
+job of inter-AS routing!
+
+3c
+3b
+other
+networks
+
+3a
+AS3
+
+2c
+
+1c
+1a
+AS1
+
+1d
+
+2a
+1b
+
+2b
+
+other
+networks
+
+AS2
+Network Layer 4-23
+
+Example: setting forwarding table in router 1d
+
+
+
+
+suppose AS1 learns (via inter-AS protocol) that subnet x
+reachable via AS3 (gateway 1c), but not via AS2
+ inter-AS protocol propagates reachability info to all internal
+routers
+router 1d determines from intra-AS routing info that its
+interface I is on the least cost path to 1c
+ installs forwarding table entry (x,I)
+x
+
+3c
+3b
+other
+networks
+
+3a
+AS3
+
+2c
+
+1c
+1a
+AS1
+
+1d
+
+2a
+1b
+
+2b
+
+other
+networks
+
+AS2
+Network Layer 4-24
+
+Example: choosing among multiple ASes
+
+
+
+now suppose AS1 learns from inter-AS protocol that subnet
+x is reachable from AS3 and from AS2.
+to configure forwarding table, router 1d must determine
+which gateway it should forward packets towards for dest x
+ this is also job of inter-AS routing protocol!
+
+x
+
+3c
+3b
+other
+networks
+
+3a
+AS3
+
+2c
+
+1c
+1a
+AS1
+
+1d
+
+2a
+1b
+
+2b
+
+other
+networks
+
+AS2
+
+?
+Network Layer 4-25
+
+Example: choosing among multiple ASes
+
+
+
+
+
+now suppose AS1 learns from inter-AS protocol that subnet
+x is reachable from AS3 and from AS2.
+to configure forwarding table, router 1d must determine
+towards which gateway it should forward packets for dest x
+ this is also job of inter-AS routing protocol!
+hot potato routing: send packet towards closest of two
+routers based on intra-AS costs – just get it out of our AS
+ASAP!
+
+learn from inter-AS
+protocol that subnet
+x is reachable via
+multiple gateways
+
+use routing info
+from intra-AS
+protocol to determine
+costs of least-cost
+paths to each
+of the gateways
+
+hot potato routing:
+choose the gateway
+that has the
+smallest least cost
+
+determine from
+forwarding table the
+interface I that leads
+to least-cost gateway.
+Enter (x,I) in
+forwarding table
+
+Network Layer 4-26
+
+Chapter 4: outline
+4.1 introduction
+4.2 virtual circuit and
+datagram networks
+4.3 what’s inside a router
+4.4 IP: Internet Protocol
+
+
+
+
+
+datagram format
+IPv4 addressing
+ICMP
+IPv6
+
+4.5 routing algorithms
+ link state
+ distance vector
+ hierarchical routing
+
+4.6 routing in the Internet
+ RIP
+ OSPF
+ BGP
+
+4.7 broadcast and multicast
+routing
+
+Network Layer 4-27
+
+

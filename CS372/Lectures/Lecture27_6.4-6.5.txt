@@ -1,0 +1,649 @@
+Chapter 6 outline
+6.1 Introduction
+Wireless
+6.2 Wireless links,
+characteristics
+ CDMA
+
+6.3 IEEE 802.11 wireless
+LANs (“Wi-Fi”)
+ Deploying
+
+Mobility
+6.5 Principles: addressing and
+routing to mobile users
+6.6 Mobile IP
+6.7 Handling mobility in
+cellular networks
+6.8 Mobility and higher-layer
+protocols
+
+6.4 Cellular Internet access
+ architecture
+ standards (e.g., GSM)
+
+6.9 Summary
+Wireless, Mobile Networks
+
+6-1
+
+802.11: Channels
+
+
+802.11b: 2.4GHz-2.485GHz spectrum divided into 11
+channels at different frequencies
+ AP admin chooses frequency for AP, or they can autohop based on measured interference:
+ interference possible: channel can be same as that
+chosen by neighboring AP!
+
+https://igscomputers.co.uk/how-to-choose-the-right-wi-fi-channel-and-avoid-interference/
+
+Wireless, Mobile Networks
+
+6-2
+
+802.11: Channels
+
+https://photosync-app.com
+
+Wireless, Mobile Networks
+
+6-3
+
+802.11: Channels
+
+
+It is worse to use the non-big three (1, 6, 11), even if
+they’re full!
+ Collisions happen on BOTH ends, and the result is a lower
+transmission rate
+
+http://www.howtogeek.com/197268/how-to-find-the-bestwi-fi-channel-for-your-router-on-any-operating-system/
+
+Wireless, Mobile Networks
+
+6-4
+
+802.11: WAP Placement
+
+
+When placing wireless access points in a building, use a
+method that:
+ Centralizes the WAPs
+ Separates the channels from overlapping (as much as possible)
+ Uses the same SSID (network name) and password
+ Turn off low data rates if possible
+• Some WAPs offer low data rates, which makes devices “stick”
+to them as they move around, which prevents devices from
+associating with closer, better WAPs
+• In some cases, using different SSIDs will help the users to
+know which WAP they’re connected to, if stickiness is a
+problem
+
+Wireless, Mobile Networks
+
+6-5
+
+802.11: Separation
+
+1
+6
+11
+
+1
+
+http://forum.projetoderedes.com.br/viewtopic.php?t=775
+
+Wireless, Mobile Networks
+
+6-6
+
+802.11: Deployment
+
+
+Deployment Diagram:
+
+Ideally, the router should
+not have wifi (why?)
+
+Wireless, Mobile Networks
+
+6-7
+
+Chapter 6 outline
+6.1 Introduction
+Wireless
+6.2 Wireless links,
+characteristics
+ CDMA
+
+6.3 IEEE 802.11 wireless
+LANs (“Wi-Fi”)
+ Deploying
+
+Mobility
+6.5 Principles: addressing and
+routing to mobile users
+6.6 Mobile IP
+6.7 Handling mobility in
+cellular networks
+6.8 Mobility and higher-layer
+protocols
+
+6.4 Cellular Internet access
+ architecture
+ standards (e.g., GSM)
+
+6.9 Summary
+Wireless, Mobile Networks
+
+6-8
+
+Components of cellular network architecture
+MSC
+
+connects cells to wired tel. net.
+ manages call setup (more later!)
+ handles mobility (more later!)
+
+
+cell
+
+covers geographical
+region
+ base station (BS)
+analogous to 802.11 AP
+ mobile users attach to
+network through BS
+ air-interface: physical
+and link layer protocol
+between mobile and BS
+
+
+Mobile
+Switching
+Center
+
+Public telephone
+network
+
+Mobile
+Switching
+Center
+
+Wireless, Mobile Networks
+
+6-9
+
+Cellular networks: the first hop
+Two techniques for sharing
+mobile-to-BS radio spectrum
+ combined FDM/TDM: divide
+spectrum in frequency
+channels, divide each channel
+into time slots
+ CDMA: code division multiple
+frequency
+access
+
+time slots
+
+bands
+
+Wireless, Mobile Networks 6-10
+
+2G (voice) network architecture
+Base station system (BSS)
+
+MSC
+BTS
+
+G
+
+BSC
+
+Public
+telephone
+network
+
+Gateway
+MSC
+
+Legend
+
+Base transceiver station (BTS)
+Base station controller (BSC)
+Mobile Switching Center (MSC)
+Mobile subscribers
+Wireless, Mobile Networks 6-11
+
+3G (voice+data) network architecture
+MSC
+G
+radio
+network
+controller
+
+Gateway
+MSC
+G
+
+SGSN
+Key insight: new cellular data
+network operates in parallel
+(except at edge) with existing
+cellular voice network
+ voice network unchanged in core
+ data network operates in parallel
+
+Public
+telephone
+network
+
+Public
+Internet
+
+GGSN
+Serving GPRS Support Node (SGSN)
+Gateway GPRS Support Node (GGSN)
+
+Wireless, Mobile Networks 6-12
+
+3G (voice+data) network architecture
+MSC
+G
+radio
+network
+controller
+
+Public
+telephone
+network
+
+Gateway
+MSC
+G
+SGSN
+
+Public
+Internet
+
+GGSN
+radio interface
+(WCDMA, HSPA)
+radio access network
+Universal Terrestrial Radio
+Access Network (UTRAN)
+
+core network
+General Packet Radio Service
+(GPRS) Core Network
+
+public
+Internet
+
+Wireless, Mobile Networks 6-13
+
+Chapter 6 outline
+6.1 Introduction
+Wireless
+6.2 Wireless links,
+characteristics
+ CDMA
+
+6.3 IEEE 802.11 wireless
+LANs (“Wi-Fi”)
+ Deploying
+
+Mobility
+6.5 Principles: addressing and
+routing to mobile users
+6.6 Mobile IP
+6.7 Handling mobility in
+cellular networks
+6.8 Mobility and higher-layer
+protocols
+
+6.4 Cellular Internet Access
+ architecture
+ standards (e.g., GSM)
+
+6.9 Summary
+Wireless, Mobile Networks 6-14
+
+What is mobility?
+
+
+spectrum of mobility, from the network perspective:
+
+no mobility
+
+mobile wireless user,
+using same access
+point
+
+high mobility
+
+mobile user,
+connecting/
+disconnecting from
+network using
+DHCP.
+
+mobile user, passing
+through multiple
+access point while
+maintaining ongoing
+connections (like cell
+phone)
+Wireless, Mobile Networks 6-15
+
+Mobility: vocabulary
+home network: permanent
+“home” of mobile
+(e.g., 128.119.40/24)
+
+home agent: entity that will
+perform mobility functions on
+behalf of mobile, when mobile is
+remote
+
+wide area
+network
+
+permanent address:
+address in home
+network, can always be
+used to reach mobile
+e.g., 128.119.40.186
+
+Wireless, Mobile Networks 6-16
+
+Mobility: more vocabulary
+permanent address: remains
+constant (e.g., 128.119.40.186)
+
+visited network: network in
+which mobile currently
+resides (e.g., 79.129.13/24)
+
+care-of-address: address
+in visited network.
+(e.g., 79,129.13.2)
+
+wide area
+network
+
+correspondent: wants
+to communicate with
+mobile
+
+foreign agent: entity in
+visited network that
+performs mobility
+functions on behalf of
+mobile.
+Wireless, Mobile Networks 6-17
+
+How do you contact a mobile friend:
+Consider friend frequently changing
+addresses, how do you find her?
+
+
+
+
+
+I wonder where
+Alice moved to?
+
+search all phone books?
+call her parents?
+expect her to let you
+know where he/she is?
+
+Wireless, Mobile Networks 6-18
+
+Mobility: approaches
+
+
+
+
+let routing handle it: routers advertise permanent address of
+mobile-nodes-in-residence via usual routing table exchange.
+ routing tables indicate where each mobile located
+ no changes to end-systems
+let end-systems handle it:
+ indirect routing: communication from correspondent to
+mobile goes through home agent, then forwarded to
+remote
+ direct routing: correspondent gets foreign address of
+mobile, sends directly to mobile
+
+Wireless, Mobile Networks 6-19
+
+Mobility: approaches
+
+
+
+
+let routing handle it: routers advertise permanent address of
+not via usual routing table exchange.
+mobile-nodes-in-residence
+scalable
+ routing tables indicate
+where each mobile located
+to millions of
+ no changes to end-systems
+mobiles
+let end-systems handle it:
+ indirect routing: communication from correspondent to
+mobile goes through home agent, then forwarded to
+remote
+ direct routing: correspondent gets foreign address of
+mobile, sends directly to mobile
+
+Wireless, Mobile Networks 6-20
+
+Mobility: registration
+visited network
+
+home network
+
+2
+
+1
+
+wide area
+network
+
+foreign agent contacts home
+agent home: “this mobile is
+resident in my network”
+
+mobile contacts
+foreign agent on
+entering visited
+network
+
+end result:
+ foreign agent knows about mobile
+ home agent knows location of mobile
+Wireless, Mobile Networks 6-21
+
+Mobility via indirect routing
+home agent intercepts
+packets, forwards to
+foreign agent
+
+foreign agent
+receives packets,
+forwards to mobile
+
+visited
+network
+
+home
+network
+
+3
+
+1
+correspondent
+addresses packets
+using home address of
+mobile
+
+wide area
+network
+2
+
+4
+
+mobile replies
+directly to
+correspondent
+
+Wireless, Mobile Networks 6-22
+
+Indirect Routing: comments
+
+
+mobile uses two addresses:
+ permanent address: used by correspondent (hence
+mobile location is transparent to correspondent)
+ care-of-address: used by home agent to forward
+datagrams to mobile
+
+foreign agent functions may be done by mobile itself
+ triangle routing: correspondent-home-networkmobile
+
+
+ inefficient when
+correspondent, mobile
+are in same network
+Wireless, Mobile Networks 6-23
+
+Indirect routing: moving between networks
+suppose mobile user moves to another network
+ registers with new foreign agent
+ new foreign agent registers with home agent
+ home agent update care-of-address for mobile
+ packets continue to be forwarded to mobile (but
+with new care-of-address)
+ mobility, changing foreign networks transparent: on
+going connections can be maintained!
+
+
+Wireless, Mobile Networks 6-24
+
+Mobility via direct routing
+
+correspondent forwards
+to foreign agent
+
+foreign agent
+receives packets,
+forwards to mobile
+
+visited
+network
+
+home
+network
+3
+1
+correspondent
+requests, receives
+foreign address of
+mobile
+
+2
+4
+mobile replies
+directly to
+correspondent
+
+Wireless, Mobile Networks 6-25
+
+Mobility via direct routing: comments
+overcome triangle routing problem
+ non-transparent to correspondent: correspondent
+must get care-of-address from home agent
+
+
+ what if mobile changes visited network?
+
+3
+1
+
+2
+
+4
+
+Wireless, Mobile Networks 6-26
+
+Accommodating mobility with direct routing
+anchor foreign agent: FA in first visited network
+ data always routed first to anchor FA
+ when mobile moves: new FA arranges to have
+data forwarded from old FA (chaining)
+
+
+foreign net visited
+at session start
+
+wide area
+network
+
+anchor
+foreign
+agent
+
+1
+
+2
+4
+5
+
+correspondent
+agent
+correspondent
+
+3
+new foreign
+agent
+
+new
+foreign
+network
+
+Wireless, Mobile Networks 6-27
+
+Chapter 6 outline
+6.1 Introduction
+Wireless
+6.2 Wireless links,
+characteristics
+ CDMA
+
+6.3 IEEE 802.11 wireless
+LANs (“Wi-Fi”)
+ Deploying
+
+Mobility
+6.5 Principles: addressing and
+routing to mobile users
+6.6 Mobile IP
+6.7 Handling mobility in
+cellular networks
+6.8 Mobility and higher-layer
+protocols
+
+6.4 Cellular Internet Access
+ architecture
+ standards (e.g., GSM)
+
+6.9 Summary
+Wireless, Mobile Networks 6-28
+
+

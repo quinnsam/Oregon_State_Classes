@@ -1,0 +1,668 @@
+NAT: network address translation
+WAN
+rest of
+Internet
+
+LAN
+local network
+(e.g., home network)
+10.0.0/24
+
+10.0.0.1
+
+10.0.0.4
+10.0.0.2
+138.76.29.7
+10.0.0.3
+
+all datagrams leaving local
+network have same single
+source NAT IP address:
+138.76.29.7,different source
+port numbers
+
+datagrams with source or
+destination in this network
+have 10.0.0/24 address for
+source, destination (as usual)
+Network Layer 4-1
+
+NAT: network address translation
+motivation: local network uses just one IP address as far
+as outside world is concerned:
+ range of addresses not needed from ISP: just one
+IP address for all devices
+ can change addresses of devices in local network
+without notifying outside world
+ can change ISP without changing addresses of
+devices in local network
+ devices inside local net not explicitly addressable,
+visible by outside world (a security plus)
+
+Network Layer 4-2
+
+NAT: network address translation
+implementation: NAT router must:
+ outgoing datagrams: replace (source IP address, port #) of
+every outgoing datagram to (NAT IP address, new port #)
+. . . remote clients/servers will respond using (NAT IP
+address, new port #) as destination addr
+ remember (in NAT translation table) every (source IP address,
+port #) to (NAT IP address, new port #) translation pair
+ incoming datagrams: replace (NAT IP address, new port #) in
+dest fields of every incoming datagram with corresponding
+(source IP address, port #) stored in NAT table
+
+Network Layer 4-3
+
+NAT: network address translation
+2: NAT router
+changes datagram
+source addr from
+10.0.0.1:3345 to
+138.76.29.7:5001,
+updates table
+
+NAT translation table
+WAN side addr
+LAN side addr
+
+1: host 10.0.0.1
+sends datagram to
+128.119.40.186:80
+
+138.76.29.7:5001 10.0.0.1:3345
+……
+……
+
+S: 10.0.0.1:3345
+D: 128.119.40.186:80
+
+10.0.0.1
+
+1
+
+2
+
+S: 138.76.29.7:5001
+D: 128.119.40.186:80
+
+138.76.29.7
+S: 128.119.40.186:80
+D: 138.76.29.7:5001
+
+3: reply arrives
+dest. address:
+138.76.29.7:5001
+
+3
+
+10.0.0.4
+S: 128.119.40.186:80
+D: 10.0.0.1:3345
+
+10.0.0.2
+
+4
+
+10.0.0.3
+4: NAT router
+changes datagram
+dest addr from
+138.76.29.7:5001 to 10.0.0.1:3345
+
+Network Layer 4-4
+
+NAT: network address translation
+
+
+
+
+16-bit port-number field:
+ 60,000 simultaneous connections with a single
+LAN-side address!
+NAT is controversial:
+ routers should only process up to layer 3 (not
+layer 4, network, where TCP ports are defined)
+ violates end-to-end argument
+• NAT possibility must be taken into account by app
+designers, e.g., P2P applications
+
+ address shortage should instead be solved by IPv6
+Network Layer 4-5
+
+NAT traversal problem
+
+
+client wants to connect to
+server with address 10.0.0.1
+ server address 10.0.0.1 local to
+LAN (client can’t use it as
+destination addr)
+ only one externally visible NATed
+address: 138.76.29.7
+
+
+
+solution1: statically configure
+NAT to forward incoming
+connection requests at given
+port to server at given port
+
+10.0.0.1
+
+client
+
+?
+10.0.0.4
+
+138.76.29.7
+
+NAT
+router
+
+ e.g., (123.76.29.7, port 2500)
+always forwarded to 10.0.0.1 port
+25000
+ Use different ports for different
+services
+Network Layer 4-6
+
+NAT traversal problem
+
+
+solution 2: Universal Plug and Play
+(UPnP) Internet Gateway Device
+(IGD) Protocol. Allows NATed
+host to:
+ learn public IP address
+(138.76.29.7)
+ add/remove port mappings
+(with lease times)
+
+10.0.0.1
+
+IGD
+
+NAT
+router
+
+i.e., automate static NAT port
+map configuration
+
+
+Holy buckets is that insecure!
+
+ Not used on commercial routers
+
+Network Layer 4-7
+
+NAT traversal problem
+
+
+solution 3: relaying (used in Skype)
+ NATed client establishes connection to relay
+ external client connects to relay
+ relay bridges packets between to connections
+2. connection to
+relay initiated
+by client
+
+client
+
+3. relaying
+established
+
+1. connection to
+relay initiated
+by NATed host
+
+138.76.29.7
+
+10.0.0.1
+
+NAT
+router
+
+Network Layer 4-8
+
+Chapter 4: outline
+4.1 introduction
+4.2 virtual circuit and
+datagram networks
+4.3 what’s inside a router
+4.4 IP: Internet Protocol
+
+
+
+
+
+datagram format
+IPv4 addressing
+ICMP
+IPv6
+
+4.5 routing algorithms
+ link state
+ distance vector
+ hierarchical routing
+
+4.6 routing in the Internet
+ RIP
+ OSPF
+ BGP
+
+4.7 broadcast and multicast
+routing
+
+Network Layer 4-9
+
+ICMP: internet control message protocol
+
+
+used by hosts & routers
+to communicate networklevel information
+ error reporting:
+unreachable host, network,
+port, protocol
+ echo request/reply (used by
+ping)
+
+
+
+network-layer “above” IP:
+ ICMP msgs carried in IP
+datagrams
+
+
+
+ICMP message: type, code
+plus first 8 bytes of IP
+datagram causing error
+
+Type
+0
+3
+3
+3
+3
+3
+3
+4
+
+Code
+0
+0
+1
+2
+3
+6
+7
+0
+
+8
+9
+10
+11
+12
+
+0
+0
+0
+0
+0
+
+description
+echo reply (ping)
+dest. network unreachable
+dest host unreachable
+dest protocol unreachable
+dest port unreachable
+dest network unknown
+dest host unknown
+source quench (congestion
+control - not used)
+echo request (ping)
+route advertisement
+router discovery
+TTL expired
+bad IP header
+
+Network Layer 4-10
+
+Traceroute and ICMP
+
+
+source sends series of
+UDP segments to dest
+ first set has TTL =1
+ second set has TTL=2, etc.
+ unlikely port number
+
+
+
+when nth set of datagrams
+arrives to nth router:
+ router discards datagrams
+ and sends source ICMP
+messages (type 11, code 0)
+ ICMP messages includes
+name of router & IP address
+
+3 probes
+
+
+
+when ICMP messages
+arrives, source records
+RTTs
+
+stopping criteria:
+ UDP segment eventually
+arrives at destination host
+ destination returns ICMP
+“port unreachable”
+message (type 3, code 3)
+ source stops
+
+3 probes
+
+3 probes
+Network Layer 4-11
+
+IPv6: motivation
+
+
+
+
+initial motivation: 32-bit address space is completely
+allocated.
+additional motivation:
+ header format helps speed processing/forwarding
+ header changes to facilitate QoS
+
+Network Layer 4-12
+
+IPv6: motivation
+
+
+IPv6 uses 128-bit addresses
+ 2128 > 232
+ 3.4 * 1038 > 4.2 * 109
+ This is 50 octillion addresses for each of 6.5 billion
+people on earth
+
+50 octillion addys*:
+50,000,000,000,000,000,000,000,000,000
+
+IPv6: datagram format
+IPv6 datagram format:
+ fixed-length 40 byte header
+ no fragmentation allowed
+
+Network Layer 4-14
+
+IPv6 datagram format
+priority: identify priority among datagrams in flow
+flow Label: identify datagrams in same “flow.”
+(concept of“flow” not well defined).
+next header: identify upper layer protocol for data (i.e. TCP)
+ver
+
+pri
+flow label
+hop limit
+payload len
+next hdr
+source address
+(128 bits)
+destination address
+(128 bits)
+data
+
+32 bits
+
+Network Layer 4-15
+
+Other changes from IPv4
+
+
+
+
+
+checksum: removed entirely to reduce processing
+time at each hop
+options: allowed, but outside of header, indicated
+by “Next Header” field
+ICMPv6: new version of ICMP
+ additional message types, e.g. “Packet Too Big”
+ multicast group management functions
+
+Network Layer 4-16
+
+Transition from IPv4 to IPv6
+
+
+
+
+not all routers can be upgraded simultaneously
+ no “flag days”
+ how will network operate with mixed IPv4 and
+IPv6 routers?
+tunneling: IPv6 datagram carried as payload in IPv4
+datagram among IPv4 routers
+IPv4 header fields
+IPv4 source, dest addr
+
+IPv6 header fields
+IPv6 source dest addr
+
+IPv4 payload
+
+UDP/TCP payload
+
+IPv6 datagram
+IPv4 datagram
+Network Layer 4-17
+
+Tunneling
+IPv4 tunnel
+connecting IPv6 routers
+
+A
+
+B
+
+IPv6
+
+IPv6
+
+A
+
+B
+
+C
+
+IPv6
+
+IPv6
+
+IPv4
+
+logical view:
+
+E
+
+F
+
+IPv6
+
+IPv6
+
+D
+
+E
+
+F
+
+IPv4
+
+IPv6
+
+IPv6
+
+physical view:
+
+Network Layer 4-18
+
+Tunneling
+IPv4 tunnel
+connecting IPv6 routers
+
+A
+
+B
+
+IPv6
+
+IPv6
+
+A
+
+B
+
+C
+
+IPv6
+
+IPv6
+
+IPv4
+
+logical view:
+
+E
+
+F
+
+IPv6
+
+IPv6
+
+D
+
+E
+
+F
+
+IPv4
+
+IPv6
+
+IPv6
+
+physical view:
+
+flow: X
+src: A
+dest: F
+
+data
+
+A-to-B:
+IPv6
+
+src:B
+dest: E
+
+src:B
+dest: E
+
+src:B
+dest: E
+
+Flow: X
+Src: A
+Dest: F
+
+Flow: X
+Src: A
+Dest: F
+
+Flow: X
+Src: A
+Dest: F
+
+data
+
+data
+
+data
+
+B-to-C:
+C-to-D:
+D-to-E:
+IPv6 inside IPv6 insideIPv6 inside
+IPv4
+IPv4
+IPv4
+
+flow: X
+src: A
+dest: F
+
+data
+
+E-to-F:
+IPv6
+Network Layer 4-19
+
+IPv6: adoption
+
+
+US National Institutes of Standards estimate [2013]:
+ ~3% of industry IP routers
+ ~11% of US gov’t routers
+
+
+
+Long (long!) time for deployment, use
+ 20 years and counting!
+ think of application-level changes in last 20 years: WWW,
+Facebook, …
+ Why?
+
+Network Layer 4-20
+
+Chapter 4: outline
+4.1 introduction
+4.2 virtual circuit and
+datagram networks
+4.3 what’s inside a router
+4.4 IP: Internet Protocol
+
+
+
+
+
+datagram format
+IPv4 addressing
+ICMP
+IPv6
+
+4.5 routing algorithms
+ link state
+ distance vector
+ hierarchical routing
+
+4.6 routing in the Internet
+ RIP
+ OSPF
+ BGP
+
+4.7 broadcast and multicast
+routing
+
+Network Layer 4-21
+
+

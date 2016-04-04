@@ -1,3 +1,6 @@
 [submodule "CS312/cs312"]
 	path = CS312/cs312
 	url = https://github.com/osuosl/cs312.git
+[submodule "CS290"]
+	path = CS290
+	url = https://github.com/quinnsam/CS290.git

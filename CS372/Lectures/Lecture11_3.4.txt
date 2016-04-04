@@ -1,0 +1,1343 @@
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-1
+
+Principles of reliable data transfer
+
+
+important in application, transport, link layers
+ top-10 list of important networking topics!
+
+
+
+characteristics of unreliable channel will determine
+complexity of reliable data transfer protocol (rdt)
+Transport Layer 3-2
+
+Principles of reliable data transfer
+
+
+important in application, transport, link layers
+ top-10 list of important networking topics!
+
+
+
+characteristics of unreliable channel will determine
+complexity of reliable data transfer protocol (rdt)
+Transport Layer 3-3
+
+Principles of reliable data transfer
+
+
+important in application, transport, link layers
+ top-10 list of important networking topics!
+
+
+
+characteristics of unreliable channel will determine
+complexity of reliable data transfer protocol (rdt)
+Transport Layer 3-4
+
+Reliable data transfer: getting started
+rdt_send(): called from above,
+(e.g., by app.). Passed data to
+deliver to receiver upper layer
+
+send
+side
+
+udt_send(): called by rdt,
+to transfer packet over
+unreliable channel to receiver
+
+deliver_data(): called by
+rdt to deliver data to upper
+
+receive
+side
+
+rdt_rcv(): called when packet
+arrives on rcv-side of channel
+Transport Layer 3-5
+
+Reliable data transfer: getting started
+we’ll:
+ incrementally develop sender, receiver sides of
+reliable data transfer protocol (rdt)
+ consider only unidirectional data transfer
+ but control info will flow on both directions!
+
+
+use finite state machines (FSM) to specify sender,
+receiver
+event causing state transition
+actions taken on state transition
+
+state: when in this
+“state” next state
+uniquely determined
+by next event
+
+state
+1
+
+event
+actions
+
+state
+2
+
+Transport Layer 3-6
+
+rdt1.0: reliable transfer over a reliable channel
+
+
+underlying channel perfectly reliable
+ no bit errors
+ no loss of packets
+
+
+
+separate FSMs for sender, receiver:
+ sender sends data into underlying channel
+ receiver reads data from underlying channel
+Wait for
+call from
+above
+
+rdt_send(data)
+packet = make_pkt(data)
+udt_send(packet)
+
+sender
+
+Wait for
+call from
+below
+
+rdt_rcv(packet)
+extract (packet,data)
+deliver_data(data)
+
+receiver
+Transport Layer 3-7
+
+rdt2.0: channel with bit errors
+
+
+underlying channel may flip bits in packet
+ checksum to detect bit errors
+
+
+
+
+
+the question: how to recover from errors:
+
+ acknowledgements (ACKs): receiver explicitly tells sender
+that pkt received OK
+ negative acknowledgements (NAKs): receiver explicitly tells
+sender that pkt had errors
+ sender
+retransmits
+pkt onrecover
+receipt of
+NAK“errors”
+How
+do humans
+from
+new mechanisms in rdt2.0 (beyond rdt1.0):
+during conversation?
+ error detection
+ receiver feedback: control msgs (ACK,NAK) rcvr>sender
+
+Transport Layer 3-8
+
+rdt2.0: channel with bit errors
+
+
+underlying channel may flip bits in packet
+ checksum to detect bit errors
+
+
+
+
+
+the question: how to recover from errors:
+ acknowledgements (ACKs): receiver explicitly tells sender
+that pkt received OK
+ negative acknowledgements (NAKs): receiver explicitly tells
+sender that pkt had errors
+ sender retransmits pkt on receipt of NAK
+new mechanisms in rdt2.0 (beyond rdt1.0):
+ error detection
+ feedback: control msgs (ACK,NAK) from receiver to
+sender
+
+Transport Layer 3-9
+
+rdt2.0: FSM specification
+rdt_send(data)
+sndpkt = make_pkt(data, checksum)
+udt_send(sndpkt)
+rdt_rcv(rcvpkt) &&
+isNAK(rcvpkt)
+Wait for
+Wait for
+call from
+ACK or
+udt_send(sndpkt)
+above
+NAK
+
+rdt_rcv(rcvpkt) && isACK(rcvpkt)
+L
+
+sender
+
+receiver
+rdt_rcv(rcvpkt) &&
+corrupt(rcvpkt)
+udt_send(NAK)
+
+Wait for
+call from
+below
+rdt_rcv(rcvpkt) &&
+notcorrupt(rcvpkt)
+extract(rcvpkt,data)
+deliver_data(data)
+udt_send(ACK)
+Transport Layer 3-10
+
+rdt2.0: operation with no errors
+rdt_send(data)
+snkpkt = make_pkt(data, checksum)
+udt_send(sndpkt)
+rdt_rcv(rcvpkt) &&
+isNAK(rcvpkt)
+Wait for
+Wait for
+call from
+ACK or
+udt_send(sndpkt)
+above
+NAK
+
+rdt_rcv(rcvpkt) && isACK(rcvpkt)
+L
+
+rdt_rcv(rcvpkt) &&
+corrupt(rcvpkt)
+udt_send(NAK)
+
+Wait for
+call from
+below
+rdt_rcv(rcvpkt) &&
+notcorrupt(rcvpkt)
+extract(rcvpkt,data)
+deliver_data(data)
+udt_send(ACK)
+Transport Layer 3-11
+
+rdt2.0: error scenario
+rdt_send(data)
+snkpkt = make_pkt(data, checksum)
+udt_send(sndpkt)
+rdt_rcv(rcvpkt) &&
+isNAK(rcvpkt)
+Wait for
+Wait for
+call from
+ACK or
+udt_send(sndpkt)
+above
+NAK
+
+rdt_rcv(rcvpkt) && isACK(rcvpkt)
+L
+
+rdt_rcv(rcvpkt) &&
+corrupt(rcvpkt)
+udt_send(NAK)
+
+Wait for
+call from
+below
+rdt_rcv(rcvpkt) &&
+notcorrupt(rcvpkt)
+extract(rcvpkt,data)
+deliver_data(data)
+udt_send(ACK)
+Transport Layer 3-12
+
+rdt2.0 has a fatal flaw!
+what happens if
+ACK/NAK corrupted?
+
+
+
+
+sender doesn’t know
+what happened at
+receiver!
+can’t just retransmit:
+possible duplicate
+
+handling duplicates:
+
+
+
+
+
+sender retransmits
+current pkt if ACK/NAK
+corrupted
+sender adds sequence
+number to each pkt
+receiver discards (doesn’t
+deliver up) duplicate pkt
+
+stop and wait
+sender sends one packet,
+then waits for receiver
+response
+Transport Layer 3-13
+
+rdt2.1: sender, handles garbled ACK/NAKs
+rdt_send(data)
+
+sndpkt = make_pkt(0, data, checksum)
+udt_send(sndpkt)
+rdt_rcv(rcvpkt) &&
+( corrupt(rcvpkt) ||
+Wait
+for
+Wait for
+isNAK(rcvpkt) )
+ACK or
+call 0 from
+udt_send(sndpkt)
+NAK 0
+above
+
+rdt_rcv(rcvpkt)
+&& notcorrupt(rcvpkt)
+&& isACK(rcvpkt)
+
+rdt_rcv(rcvpkt)
+&& notcorrupt(rcvpkt)
+&& isACK(rcvpkt)
+
+L
+
+rdt_rcv(rcvpkt) &&
+( corrupt(rcvpkt) ||
+isNAK(rcvpkt) )
+udt_send(sndpkt)
+
+L
+Wait for
+ACK or
+NAK 1
+
+Wait for
+call 1 from
+above
+
+rdt_send(data)
+sndpkt = make_pkt(1, data, checksum)
+udt_send(sndpkt)
+
+Transport Layer 3-14
+
+rdt2.1: receiver, handles garbled ACK/NAKs
+rdt_rcv(rcvpkt) && notcorrupt(rcvpkt)
+&& has_seq0(rcvpkt)
+
+rdt_rcv(rcvpkt) && (corrupt(rcvpkt)
+
+extract(rcvpkt,data)
+deliver_data(data)
+sndpkt = make_pkt(ACK, chksum)
+udt_send(sndpkt)
+rdt_rcv(rcvpkt) && (corrupt(rcvpkt)
+
+sndpkt = make_pkt(NAK, chksum)
+udt_send(sndpkt)
+rdt_rcv(rcvpkt) &&
+not corrupt(rcvpkt) &&
+has_seq1(rcvpkt)
+
+sndpkt = make_pkt(ACK, chksum)
+udt_send(sndpkt)
+
+sndpkt = make_pkt(NAK, chksum)
+udt_send(sndpkt)
+Wait for
+0 from
+below
+
+Wait for
+1 from
+below
+
+rdt_rcv(rcvpkt) && notcorrupt(rcvpkt)
+&& has_seq1(rcvpkt)
+
+rdt_rcv(rcvpkt) &&
+not corrupt(rcvpkt) &&
+has_seq0(rcvpkt)
+sndpkt = make_pkt(ACK, chksum)
+udt_send(sndpkt)
+
+extract(rcvpkt,data)
+deliver_data(data)
+sndpkt = make_pkt(ACK, chksum)
+udt_send(sndpkt)
+Transport Layer 3-15
+
+rdt2.1: discussion
+sender:
+ seq # added to pkt
+ two seq. #’s (0,1) will
+suffice. Why?
+ must check if received
+ACK/NAK corrupted
+ twice as many states
+ state must “remember”
+whether “expected”
+pkt should have seq #
+of 0 or 1
+
+receiver:
+ must check if received
+packet is duplicate
+ state indicates whether
+0 or 1 is expected pkt
+seq #
+
+
+note: receiver can not
+know if its last
+ACK/NAK received
+OK at sender
+
+Transport Layer 3-16
+
+rdt2.2: a NAK-free protocol
+
+
+
+same functionality as rdt2.1, using ACKs only
+instead of NAK, receiver sends ACK for last pkt
+received OK
+ receiver must explicitly include seq # of pkt being ACKed
+
+
+
+duplicate ACK at sender results in same action as
+NAK: retransmit current pkt
+
+Transport Layer 3-17
+
+rdt2.2: sender, receiver fragments
+rdt_send(data)
+sndpkt = make_pkt(0, data, checksum)
+udt_send(sndpkt)
+rdt_rcv(rcvpkt) &&
+( corrupt(rcvpkt) ||
+Wait for
+Wait for
+isACK(rcvpkt,1) )
+ACK
+call 0 from
+0
+udt_send(sndpkt)
+above
+
+sender FSM
+fragment
+
+rdt_rcv(rcvpkt) &&
+(corrupt(rcvpkt) ||
+has_seq1(rcvpkt))
+udt_send(sndpkt)
+
+Wait for
+0 from
+below
+
+rdt_rcv(rcvpkt)
+&& notcorrupt(rcvpkt)
+&& isACK(rcvpkt,0)
+
+receiver FSM
+fragment
+
+L
+
+rdt_rcv(rcvpkt) && notcorrupt(rcvpkt)
+&& has_seq1(rcvpkt)
+extract(rcvpkt,data)
+deliver_data(data)
+sndpkt = make_pkt(ACK1, chksum)
+udt_send(sndpkt)
+
+Transport Layer 3-18
+
+rdt3.0: channels with errors and loss
+new assumption:
+underlying channel can
+also lose packets
+(data, ACKs)
+ checksum, seq. #,
+ACKs, retransmissions
+will be of help … but
+not enough
+
+approach: sender waits
+“reasonable” amount of
+time for ACK
+
+
+
+
+
+retransmits if no ACK
+received in this time
+if pkt (or ACK) just delayed
+(not lost):
+ retransmission will be
+duplicate, but seq. #’s
+already handles this
+ receiver must specify seq
+# of pkt being ACKed
+requires countdown timer
+Transport Layer 3-19
+
+rdt3.0 sender
+rdt_send(data)
+sndpkt = make_pkt(0, data, checksum)
+udt_send(sndpkt)
+start_timer
+
+rdt_rcv(rcvpkt)
+
+L
+
+rdt_rcv(rcvpkt)
+&& notcorrupt(rcvpkt)
+&& isACK(rcvpkt,1)
+
+rdt_rcv(rcvpkt) &&
+( corrupt(rcvpkt) ||
+isACK(rcvpkt,0) )
+
+timeout
+udt_send(sndpkt)
+start_timer
+rdt_rcv(rcvpkt)
+&& notcorrupt(rcvpkt)
+&& isACK(rcvpkt,0)
+stop_timer
+
+stop_timer
+
+timeout
+udt_send(sndpkt)
+start_timer
+
+L
+
+Wait
+for
+ACK0
+
+Wait for
+call 0from
+above
+
+L
+
+rdt_rcv(rcvpkt) &&
+( corrupt(rcvpkt) ||
+isACK(rcvpkt,1) )
+
+Wait
+for
+ACK1
+
+Wait for
+call 1 from
+above
+rdt_send(data)
+
+rdt_rcv(rcvpkt)
+
+L
+
+sndpkt = make_pkt(1, data, checksum)
+udt_send(sndpkt)
+start_timer
+
+Transport Layer 3-20
+
+rdt3.0 in action
+receiver
+
+sender
+send pkt0
+rcv ack0
+send pkt1
+rcv ack1
+send pkt0
+
+pkt0
+ack0
+
+pkt1
+ack1
+pkt0
+ack0
+
+(a) no loss
+
+send pkt0
+rcv pkt0
+send ack0
+
+rcv pkt1
+send ack1
+rcv pkt0
+send ack0
+
+receiver
+
+sender
+
+rcv ack0
+send pkt1
+
+pkt0
+ack0
+
+rcv pkt0
+send ack0
+
+pkt1
+
+X
+
+loss
+
+timeout
+
+resend pkt1
+
+rcv ack1
+send pkt0
+
+pkt1
+ack1
+
+pkt0
+ack0
+
+rcv pkt1
+send ack1
+rcv pkt0
+send ack0
+
+(b) packet loss
+Transport Layer 3-21
+
+rdt3.0 in action
+receiver
+
+sender
+send pkt0
+
+pkt0
+
+rcv ack0
+send pkt1
+
+ack0
+pkt1
+ack1
+
+X
+
+rcv pkt0
+send ack0
+rcv pkt1
+send ack1
+
+loss
+
+timeout
+
+resend pkt1
+
+rcv ack1
+send pkt0
+
+pkt1
+ack1
+pkt0
+ack0
+
+(c) ACK loss
+
+rcv pkt1
+
+(detect duplicate)
+
+send ack1
+
+rcv pkt0
+send ack0
+
+receiver
+
+sender
+send pkt0
+rcv ack0
+send pkt1
+
+pkt0
+
+rcv pkt0
+send ack0
+
+ack0
+pkt1
+
+rcv pkt1
+send ack1
+
+ack1
+
+timeout
+
+resend pkt1
+rcv ack1
+send pkt0
+rcv ack1
+send pkt0
+
+pkt1
+
+rcv pkt1
+
+pkt0
+ack1
+ack0
+pkt0
+
+(detect duplicate)
+
+ack0
+
+(detect duplicate)
+
+send ack1
+rcv pkt0
+send ack0
+rcv pkt0
+
+send ack0
+
+(d) premature timeout/ delayed ACK
+Transport Layer 3-22
+
+Performance of rdt3.0
+
+
+
+rdt3.0 is correct, but performance stinks
+e.g.: 1 Gbps link, 15 ms prop. delay, 8000 bit packet:
+L
+
+8000 bits
+
+Dtrans = R =
+109 bits/sec
+
+= 8 microsecs
+
+ U sender: utilization – fraction of time sender busy sending
+U
+
+sender =
+
+L/R
+RTT + L / R
+
+=
+
+.008
+30.008
+
+= 0.00027
+
+ if RTT=30 msec, 1KB pkt every 30 msec: 33kB/sec thruput
+over 1 Gbps link
+
+
+network protocol limits use of physical resources!
+Transport Layer 3-23
+
+rdt3.0: stop-and-wait operation
+sender
+
+receiver
+
+first packet bit transmitted, t = 0
+last packet bit transmitted, t = L / R
+first packet bit arrives
+last packet bit arrives, send ACK
+
+RTT
+
+ACK arrives, send next
+packet, t = RTT + L / R
+
+U
+
+sender =
+
+L/R
+RTT + L / R
+
+=
+
+.008
+30.008
+
+= 0.00027
+
+Transport Layer 3-24
+
+Pipelined protocols
+pipelining: sender allows multiple, “in-flight”, yet-tobe-acknowledged pkts
+ range of sequence numbers must be increased
+ buffering at sender and/or receiver
+
+
+
+two generic forms of pipelined protocols: go-Back-N,
+selective repeat
+Transport Layer 3-25
+
+Pipelining: increased utilization
+sender
+
+receiver
+
+first packet bit transmitted, t = 0
+last bit transmitted, t = L / R
+
+first packet bit arrives
+last packet bit arrives, send ACK
+last bit of 2nd packet arrives, send ACK
+last bit of 3rd packet arrives, send ACK
+
+RTT
+
+ACK arrives, send next
+packet, t = RTT + L / R
+
+3-packet pipelining increases
+utilization by a factor of 3!
+
+U
+
+sender =
+
+3L / R
+RTT + L / R
+
+=
+
+.0024
+30.008
+
+= 0.00081
+
+Transport Layer 3-26
+
+Pipelined protocols: overview
+Go-back-N:
+ sender can have up to
+N unacked packets in
+pipeline
+ receiver only sends
+cumulative ack
+
+Selective Repeat:
+ sender can have up to N
+unack’ed packets in
+pipeline
+ rcvr sends individual ack
+for each packet
+
+ doesn’t ack packet if
+there’s a gap
+
+
+
+sender has timer for
+oldest unacked packet
+ when timer expires,
+retransmit all unacked
+packets
+
+
+
+sender maintains timer
+for each unacked packet
+ when timer expires,
+retransmit only that
+unacked packet
+Transport Layer 3-27
+
+Go-Back-N: sender
+
+
+
+
+
+
+
+
+k-bit seq # in pkt header
+“window” of up to N, consecutive unack’ed pkts allowed
+
+ACK(n): ACKs all pkts up to, including seq # n - “cumulative
+ACK”
+ may receive duplicate ACKs (see receiver)
+timer for oldest in-flight pkt
+timeout(n): retransmit packet n and all higher seq # pkts in
+window
+Transport Layer 3-28
+
+GBN: sender extended FSM
+rdt_send(data)
+
+L
+base=1
+nextseqnum=1
+
+if (nextseqnum < base+N) {
+sndpkt[nextseqnum] = make_pkt(nextseqnum,data,chksum)
+udt_send(sndpkt[nextseqnum])
+if (base == nextseqnum)
+start_timer
+nextseqnum++
+}
+else
+refuse_data(data)
+
+Wait
+rdt_rcv(rcvpkt)
+&& corrupt(rcvpkt)
+
+timeout
+start_timer
+udt_send(sndpkt[base])
+udt_send(sndpkt[base+1])
+…
+udt_send(sndpkt[nextseqnum-1])
+
+rdt_rcv(rcvpkt) &&
+notcorrupt(rcvpkt)
+base = getacknum(rcvpkt)+1
+If (base == nextseqnum)
+stop_timer
+else
+start_timer
+
+Transport Layer 3-29
+
+GBN: receiver extended FSM
+default
+udt_send(sndpkt)
+
+L
+Wait
+expectedseqnum=1
+sndpkt =
+make_pkt(expectedseqnum,ACK,chksum)
+
+rdt_rcv(rcvpkt)
+&& notcurrupt(rcvpkt)
+&& hasseqnum(rcvpkt,expectedseqnum)
+extract(rcvpkt,data)
+deliver_data(data)
+sndpkt = make_pkt(expectedseqnum,ACK,chksum)
+udt_send(sndpkt)
+expectedseqnum++
+
+ACK-only: always send ACK for correctly-received
+pkt with highest in-order seq #
+ may generate duplicate ACKs
+ need only remember expectedseqnum
+
+
+out-of-order pkt:
+ discard (don’t buffer): no receiver buffering!
+ re-ACK pkt with highest in-order seq #
+Transport Layer 3-30
+
+GBN in action
+sender window (N=4)
+012345678
+
+012345678
+012345678
+012345678
+
+012345678
+012345678
+
+sender
+send pkt0
+send pkt1
+send pkt2
+send pkt3
+(wait)
+
+rcv ack0, send pkt4
+rcv ack1, send pkt5
+ignore duplicate ACK
+
+pkt 2 timeout
+012345678
+012345678
+012345678
+012345678
+
+send
+send
+send
+send
+
+pkt2
+pkt3
+pkt4
+pkt5
+
+receiver
+
+Xloss
+
+receive pkt0, send ack0
+receive pkt1, send ack1
+receive pkt3, discard,
+(re)send ack1
+receive pkt4, discard,
+(re)send ack1
+receive pkt5, discard,
+(re)send ack1
+
+rcv
+rcv
+rcv
+rcv
+
+pkt2,
+pkt3,
+pkt4,
+pkt5,
+
+deliver,
+deliver,
+deliver,
+deliver,
+
+send
+send
+send
+send
+
+ack2
+ack3
+ack4
+ack5
+
+Transport Layer 3-31
+
+Selective repeat
+
+
+receiver individually acknowledges all correctly
+received pkts
+ buffers pkts, as needed, for eventual in-order delivery
+to upper layer
+
+
+
+sender only resends pkts for which ACK not
+received
+ sender timer for each unACKed pkt
+
+
+
+sender window
+ N consecutive seq #’s
+ limits seq #s of sent, unACKed pkts
+
+Transport Layer 3-32
+
+Selective repeat: sender, receiver windows
+
+Transport Layer 3-33
+
+Selective repeat
+sender
+data from above:
+
+
+if next available seq # in
+window, send pkt
+
+timeout(n):
+resend pkt n, restart
+timer
+ACK(n) in [sendbase,sendbase+N]:
+ mark pkt n as received
+ if n smallest unACKed
+pkt, advance window base
+to next unACKed seq #
+
+receiver
+pkt n in [rcvbase, rcvbase+N-1]
+
+
+
+
+
+
+
+send ACK(n)
+out-of-order: buffer
+in-order: deliver (also
+deliver buffered, in-order
+pkts), advance window to
+next not-yet-received pkt
+
+pkt n in [rcvbase-N,rcvbase-1]
+
+
+ACK(n)
+
+otherwise:
+
+
+ignore
+
+Transport Layer 3-34
+
+Selective repeat in action
+sender window (N=4)
+012345678
+012345678
+012345678
+012345678
+
+012345678
+
+012345678
+
+sender
+send pkt0
+send pkt1
+send pkt2
+send pkt3
+(wait)
+
+receiver
+
+Xloss
+
+rcv ack0, send pkt4
+rcv ack1, send pkt5
+record ack3 arrived
+
+pkt 2 timeout
+012345678
+012345678
+012345678
+012345678
+
+receive pkt0, send ack0
+receive pkt1, send ack1
+receive pkt3, buffer,
+send ack3
+receive pkt4, buffer,
+send ack4
+receive pkt5, buffer,
+send ack5
+
+send pkt2
+
+record ack4 arrived
+record ack5 arrived
+
+rcv pkt2; deliver pkt2,
+pkt3, pkt4, pkt5; send ack2
+
+Q: what happens when ack2 arrives?
+Transport Layer 3-35
+
+Selective repeat:
+dilemma
+example:
+
+
+
+
+
+
+seq #’s: 0, 1, 2, 3
+window size=3
+receiver sees no
+difference in two
+scenarios!
+duplicate data
+accepted as new in
+(b)
+
+Q: what relationship
+between seq # size
+and window size to
+avoid problem in (b)?
+
+receiver window
+(after receipt)
+
+sender window
+(after receipt)
+0123012
+
+pkt0
+
+0123012
+
+pkt1
+
+0123012
+
+0123012
+
+pkt2
+
+0123012
+
+0123012
+
+pkt3
+
+0123012
+
+pkt0
+
+(a) no problem
+
+0123012
+
+X
+will accept packet
+with seq number 0
+
+receiver can’t see sender side.
+receiver behavior identical in both cases!
+something’s (very) wrong!
+0123012
+
+pkt0
+
+0123012
+
+pkt1
+
+0123012
+
+0123012
+
+pkt2
+
+0123012
+
+X
+X
+timeout
+retransmit pkt0 X
+0123012
+
+(b) oops!
+
+pkt0
+
+0123012
+
+will accept packet
+with seq number 0
+Transport Layer 3-36
+
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-37
+
+

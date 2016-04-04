@@ -1,0 +1,1054 @@
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-1
+
+TCP: Overview
+
+
+RFCs: 793,1122,1323, 2018, 2581
+
+point-to-point:
+
+
+
+ one sender, one receiver
+
+
+
+
+ bi-directional data flow
+in same connection
+ MSS: maximum segment
+size
+
+reliable, in-order byte
+stream:
+ no “message boundaries”
+
+pipelined:
+
+full duplex data:
+
+
+
+connection-oriented:
+ handshaking (exchange
+of control msgs) inits
+sender, receiver state
+before data exchange
+
+ TCP congestion and
+flow control set window
+size
+
+
+flow controlled:
+ sender will not
+overwhelm receiver
+Transport Layer 3-2
+
+TCP segment structure
+32 bits
+URG: urgent data
+(generally not used)
+ACK: ACK #
+valid
+
+PSH: push data now
+(generally not used)
+RST, SYN, FIN:
+connection estab
+(setup, teardown
+commands)
+Internet
+checksum
+(as in UDP)
+
+source port #
+
+dest port #
+
+sequence number
+acknowledgement number
+head not
+UAP R S F
+len used
+
+checksum
+
+counting
+by bytes
+of data
+(not segments!)
+
+receive window
+Urg data pointer
+
+options (variable length)
+
+# bytes
+rcvr willing
+to accept
+
+application
+data
+(variable length)
+
+Transport Layer 3-3
+
+TCP seq. numbers, ACKs
+sequence numbers:
+byte stream “number” of
+first byte in segment’s
+data
+acknowledgements:
+seq # of next byte
+expected from other side
+cumulative ACK
+Q: how receiver handles
+out-of-order segments
+A: TCP spec doesn’t say,
+- up to implementor
+
+outgoing segment from sender
+source port #
+
+dest port #
+
+sequence number
+acknowledgement number
+rwnd
+checksum
+
+urg pointer
+
+window size
+
+N
+
+sender sequence number space
+sent
+ACKed
+
+sent, not- usable not
+yet ACKed but not usable
+(“in-flight”) yet sent
+
+incoming segment to sender
+source port #
+
+dest port #
+
+sequence number
+acknowledgement number
+rwnd
+A
+checksum
+
+urg pointer
+
+Transport Layer 3-4
+
+TCP seq. numbers, ACKs
+Host B
+
+Host A
+
+User
+types
+‘C’
+
+host ACKs
+receipt
+of echoed
+‘C’
+
+Seq=42, ACK=79, data = ‘C’
+
+Seq=79, ACK=43, data = ‘C’
+
+host ACKs
+receipt of
+‘C’, echoes
+back ‘C’
+
+Seq=43, ACK=80
+
+simple telnet scenario
+
+Transport Layer 3-5
+
+TCP round trip time, timeout
+Q: how to set TCP
+timeout value?
+
+
+Q: how to estimate RTT?
+
+
+longer than RTT
+ but RTT varies
+
+
+
+
+
+too short: premature
+timeout, unnecessary
+retransmissions
+too long: slow reaction
+to segment loss
+
+
+
+SampleRTT: measured
+time from segment
+transmission until ACK
+receipt
+ ignore retransmissions
+SampleRTT will vary, want
+estimated RTT “smoother”
+ average several recent
+measurements, not just
+current SampleRTT
+
+Transport Layer 3-6
+
+TCP round trip time, timeout
+EstimatedRTT = (1- )*EstimatedRTT + *SampleRTT
+
+
+
+RTT: gaia.cs.umass.edu to fantasia.eurecom.fr
+
+350
+
+RTT: gaia.cs.umass.edu to fantasia.eurecom.fr
+
+RTT (milliseconds)
+
+
+
+exponential weighted moving average
+influence of past sample decreases exponentially fast
+typical value:  = 0.125
+RTT (milliseconds)
+
+
+
+300
+
+250
+
+200
+
+sampleRTT
+150
+
+EstimatedRTT
+
+100
+1
+
+8
+
+15
+
+22
+
+29
+
+36
+
+43
+
+50
+
+57
+
+64
+
+71
+
+time (seconnds)
+
+time (seconds)
+SampleRTT
+
+Estimated RTT
+
+78
+
+85
+
+92
+
+99
+
+106
+
+Transport Layer 3-7
+
+TCP round trip time, timeout
+
+
+timeout interval: EstimatedRTT plus “safety margin”
+ large variation in EstimatedRTT -> larger safety margin
+
+
+
+estimate SampleRTT deviation from EstimatedRTT:
+DevRTT = (1-)*DevRTT +
+*|SampleRTT-EstimatedRTT|
+
+(typically,  = 0.25)
+
+TimeoutInterval = EstimatedRTT + 4*DevRTT
+estimated RTT
+
+“safety margin”
+
+Transport Layer 3-8
+
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-9
+
+TCP reliable data transfer
+
+
+TCP creates rdt service
+on top of IP’s unreliable
+service
+ pipelined segments
+ cumulative acks
+ single retransmission
+timer
+
+
+
+retransmissions
+triggered by:
+
+let’s initially consider
+simplified TCP sender:
+ ignore duplicate acks
+ ignore flow control,
+congestion control
+
+ timeout events
+ duplicate acks
+
+Transport Layer 3-10
+
+TCP sender events:
+data rcvd from app:
+ create segment with
+seq #
+ seq # is byte-stream
+number of first data
+byte in segment
+ start timer if not
+already running
+ think of timer as for
+oldest unacked
+segment
+ expiration interval:
+TimeOutInterval
+
+timeout:
+ retransmit segment
+that caused timeout
+ restart timer
+ack rcvd:
+ if ack acknowledges
+previously unacked
+segments
+ update what is known
+to be ACKed
+ start timer if there are
+still unacked segments
+Transport Layer 3-11
+
+TCP sender (simplified)
+
+L
+NextSeqNum = InitialSeqNum
+SendBase = InitialSeqNum
+
+wait
+for
+event
+
+data received from application above
+create segment, seq. #: NextSeqNum
+pass segment to IP (i.e., “send”)
+NextSeqNum = NextSeqNum + length(data)
+if (timer currently not running)
+start timer
+
+timeout
+retransmit not-yet-acked segment
+with smallest seq. #
+start timer
+
+ACK received, with ACK field value y
+if (y > SendBase) {
+SendBase = y
+/* SendBase–1: last cumulatively ACKed byte */
+if (there are currently not-yet-acked segments)
+start timer
+else stop timer
+}
+
+Transport Layer 3-12
+
+TCP: retransmission scenarios
+Host B
+
+Host A
+
+Host B
+
+Host A
+
+SendBase=92
+
+X
+
+ACK=100
+
+Seq=92, 8 bytes of data
+
+timeout
+
+timeout
+
+Seq=92, 8 bytes of data
+
+Seq=100, 20 bytes of data
+
+ACK=100
+ACK=120
+Seq=92, 8 bytes of data
+
+SendBase=100
+ACK=100
+
+Seq=92, 8
+bytes of data
+
+SendBase=120
+ACK=120
+SendBase=120
+
+lost ACK scenario
+
+premature timeout
+Transport Layer 3-13
+
+TCP: retransmission scenarios
+Host B
+
+Host A
+
+Seq=92, 8 bytes of data
+
+timeout
+
+Seq=100, 20 bytes of data
+
+X
+
+ACK=100
+
+ACK=120
+
+Seq=120, 15 bytes of data
+
+cumulative ACK
+Transport Layer 3-14
+
+TCP ACK generation
+
+[RFC 1122, RFC 2581]
+
+event at receiver
+
+TCP receiver action
+
+arrival of in-order segment with
+expected seq #. All data up to
+expected seq # already ACKed
+
+delayed ACK. Wait up to 500ms
+for next segment. If no next segment,
+send ACK
+
+arrival of in-order segment with
+expected seq #. One other
+segment has ACK pending
+
+immediately send single cumulative
+ACK, ACKing both in-order segments
+
+arrival of out-of-order segment
+higher-than-expect seq. # .
+Gap detected
+
+immediately send duplicate ACK,
+indicating seq. # of next expected byte
+
+arrival of segment that
+partially or completely fills gap
+
+immediate send ACK, provided that
+segment starts at lower end of gap
+Transport Layer 3-15
+
+TCP fast retransmit
+
+
+time-out period often
+relatively long:
+ long delay before
+resending lost packet
+
+
+
+detect lost segments
+via duplicate ACKs.
+ sender often sends
+many segments backto-back
+ if segment is lost, there
+will likely be many
+duplicate ACKs.
+
+TCP fast retransmit
+
+if sender receives 3
+ACKs for same data
+(“triple
+(“triple duplicate
+duplicate ACKs”),
+ACKs”),
+
+resend unacked
+segment with smallest
+seq #
+ likely that unacked
+segment lost, so don’t
+wait for timeout
+
+Transport Layer 3-16
+
+TCP fast retransmit
+Host B
+
+Host A
+
+Seq=92, 8 bytes of data
+Seq=100, 20 bytes of data
+
+Doesn’t matter
+what these 3 are
+
+X
+timeout
+
+ACK=100
+ACK=100
+ACK=100
+
+ACK=100
+Seq=100, 20 bytes of data
+
+fast retransmit after sender
+receipt of triple duplicate ACK
+
+Transport Layer 3-17
+
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-18
+
+TCP flow control
+application may
+remove data from
+TCP socket buffers ….
+… slower than TCP
+receiver is delivering
+(sender is sending)
+
+application
+process
+application
+
+TCP
+code
+
+IP
+code
+
+flow control
+
+receiver controls sender, so
+sender won’t overflow receiver’s
+buffer by transmitting too much,
+too fast
+
+OS
+
+TCP socket
+receiver buffers
+
+from sender
+
+receiver protocol stack
+Transport Layer 3-19
+
+TCP flow control
+
+
+receiver “advertises” free
+buffer space by including
+rwnd value in TCP header
+of receiver-to-sender
+segments
+ RcvBuffer size set via
+socket options (typical default
+is 4096 bytes)
+ many operating systems
+autoadjust RcvBuffer
+
+
+
+
+
+sender limits amount of
+unacked (“in-flight”) data to
+receiver’s rwnd value
+guarantees receive buffer
+will not overflow
+
+to application process
+
+RcvBuffer
+rwnd
+
+buffered data
+free buffer space
+
+TCP segment payloads
+
+receiver-side buffering
+
+Transport Layer 3-20
+
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-21
+
+Connection Management
+before exchanging data, sender/receiver “handshake”:
+
+
+
+agree to establish connection (each knowing the other willing
+to establish connection)
+agree on connection parameters
+application
+
+application
+
+connection state: ESTAB
+connection variables:
+seq # client-to-server
+server-to-client
+rcvBuffer size
+at server,client
+
+connection state: ESTAB
+connection Variables:
+seq # client-to-server
+server-to-client
+rcvBuffer size
+at server,client
+
+network
+
+network
+
+Socket clientSocket =
+newSocket("hostname","port
+number");
+
+Socket connectionSocket =
+welcomeSocket.accept();
+Transport Layer 3-22
+
+Agreeing to establish a connection
+2-way handshake:
+
+Q: will 2-way handshake
+always work in
+network?
+
+Let’s talk
+ESTAB
+
+OK
+
+ESTAB
+
+
+
+
+
+
+
+choose x
+ESTAB
+
+
+
+req_conn(x)
+acc_conn(x)
+
+variable delays
+retransmitted messages
+(e.g. req_conn(x)) due to
+message loss
+message reordering
+can’t “see” other side
+
+ESTAB
+
+Transport Layer 3-23
+
+Agreeing to establish a connection
+2-way handshake failure scenarios:
+
+choose x
+
+choose x
+
+req_conn(x)
+
+req_conn(x)
+ESTAB
+
+ESTAB
+
+retransmit
+req_conn(x)
+
+retransmit
+req_conn(x)
+
+acc_conn(x)
+
+ESTAB
+
+ESTAB
+
+req_conn(x)
+
+client
+terminates
+
+connection
+x completes
+
+acc_conn(x)
+data(x+1)
+
+retransmit
+data(x+1)
+server
+forgets x
+ESTAB
+
+2nd conn is a half-open connection!
+(no client!)
+
+client
+terminates
+
+connection
+x completes
+
+req_conn(x)
+data(x+1)
+
+accept
+data(x+1)
+server
+forgets x
+ESTAB
+accept
+data(x+1)
+
+Transport Layer 3-24
+
+TCP 3-way handshake
+client state
+
+server state
+
+LISTEN
+
+LISTEN
+
+choose init seq num, x
+send TCP SYN msg
+
+SYNSENT
+
+received SYNACK(x)
+indicates server is live;
+ESTAB
+send ACK for SYNACK;
+this segment may contain
+client-to-server data
+
+SYNbit=1, Seq=x
+
+choose init seq num, y
+send TCP SYNACK
+SYN RCVD
+msg, acking SYN
+
+SYNbit=1, Seq=y
+ACKbit=1; ACKnum=x+1
+
+ACKbit=1, ACKnum=y+1
+received ACK(y)
+indicates client is live
+
+ESTAB
+
+Transport Layer 3-25
+
+TCP 3-way handshake: FSM
+closed
+Socket connectionSocket =
+welcomeSocket.accept();
+
+L
+SYN(x)
+SYNACK(seq=y,ACKnum=x+1)
+create new socket for
+communication back to client
+
+listen
+
+Socket clientSocket =
+newSocket("hostname","port
+number");
+
+SYN(seq=x)
+
+SYN
+sent
+
+SYN
+rcvd
+
+SYNACK(seq=y,ACKnum=x+1)
+ACK(ACKnum=y+1)
+
+ESTAB
+
+ACK(ACKnum=y+1)
+
+L
+Transport Layer 3-26
+
+TCP: closing a connection
+
+
+client, server each close their side of connection
+ send TCP segment with FIN bit = 1
+
+
+
+respond to received FIN with ACK
+ on receiving FIN, ACK can be combined with own FIN
+
+
+
+simultaneous FIN exchanges can be handled
+
+Transport Layer 3-27
+
+TCP: closing a connection
+client state
+
+server state
+
+ESTAB
+
+ESTAB
+clientSocket.close()
+
+FIN_WAIT_1
+
+FIN_WAIT_2
+
+can no longer
+send but can
+receive data
+
+FINbit=1, seq=x
+CLOSE_WAIT
+ACKbit=1; ACKnum=x+1
+
+wait for server
+close
+
+FINbit=1, seq=y
+
+TIMED_WAIT
+timed wait
+for 2*max
+segment lifetime
+
+can still
+send data
+
+LAST_ACK
+can no longer
+send data
+
+ACKbit=1; ACKnum=y+1
+CLOSED
+
+CLOSED
+Transport Layer 3-28
+
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-29
+
+

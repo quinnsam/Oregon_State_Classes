@@ -1,0 +1,629 @@
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer
+
+5-1
+
+MAC addresses and ARP
+
+
+32-bit (4-byte) IP address:
+ network-layer address for interface
+ used for layer 3 (network layer) forwarding
+
+
+
+48-bit (6-byte) MAC/LAN/physical/Ethernet address:
+ function: used ‘locally” to get frame from one interface to
+another physically-connected interface (same network, in IPaddressing sense)
+ burned in NIC ROM, also sometimes software settable
+ e.g.: 1A-2F-BB-76-09-AD
+hexadecimal (base 16) notation
+(each character represents 4 bits)
+(each pair represents one byte)
+Link Layer
+
+5-2
+
+LAN addresses and ARP
+each adapter on LAN has unique LAN address
+1A-2F-BB-76-09-AD
+
+LAN
+(wired or
+wireless)
+
+adapter
+
+71-65-F7-2B-08-53
+58-23-D7-FA-20-B0
+
+0C-C4-11-6F-E3-98
+
+Link Layer
+
+5-3
+
+LAN addresses (more)
+
+
+
+
+MAC address allocation administered by IEEE
+manufacturer buys portion of MAC address space
+(to assure uniqueness)
+analogy:
+ MAC address: like Social Security Number
+ IP address: like postal address
+
+
+
+MAC flat address ➜ portability
+
+ can move LAN card from one LAN to another
+
+
+IP hierarchical address not portable
+ address depends on IP subnet to which node is
+attached
+Link Layer
+
+5-4
+
+ARP: address resolution protocol
+Question: how to determine
+interface’s MAC address,
+knowing its IP address?
+Question: why do we care about this?
+
+Answer: because at the link layer,
+nodes cannot talk to other nodes based
+on IP addresses.
+
+Link Layer
+
+5-5
+
+ARP: address resolution protocol
+Question: how to determine
+interface’s MAC address,
+knowing its IP address?
+137.196.7.78
+1A-2F-BB-76-09-AD
+137.196.7.23
+137.196.7.14
+
+LAN
+71-65-F7-2B-08-53
+
+58-23-D7-FA-20-B0
+
+0C-C4-11-6F-E3-98
+
+ARP table: each IP node (host,
+router) on LAN has table
+ IP/MAC address
+mappings for some LAN
+nodes:
+< IP address; MAC address; TTL>
+
+ TTL (Time To Live):
+time after which address
+mapping will be
+forgotten (typically 20
+min)
+
+137.196.7.88
+
+Link Layer
+
+5-6
+
+ARP protocol: same LAN
+
+
+A wants to send datagram
+to B
+ But B’s MAC address not in
+A’s ARP table.
+
+
+
+A broadcasts ARP query
+packet containing B's IP
+address to all MAC
+addresses:
+dest MAC address =
+FF-FF-FF-FF-FF-FF
+ all nodes on LAN receive
+ARP query
+
+
+
+
+
+B receives ARP packet,
+replies to A with its (B's)
+MAC address
+
+A caches (saves) IP-toMAC address pair in its
+ARP table until
+information becomes old
+(times out)
+ It’s soft state: information
+that times out (goes away)
+unless refreshed
+
+
+
+ARP is “plug-and-play”:
+ nodes create their ARP
+tables without intervention
+from net administrator
+
+ frame sent to A’s MAC
+address (unicast)
+Link Layer
+
+5-7
+
+Addressing: routing to another LAN
+walkthrough: send datagram from A to B via R
+ focus on addressing – at IP (datagram) and MAC layer (frame)
+ assume A knows B’s IP address
+ assume A knows IP address of first hop router, R (how?)
+• Default gateway, identified in DHCP or statically assigned
+
+ assume A knows R’s MAC address (how?)
+• A does ARP resolution of R’s IP address to R’s MAC
+
+A
+
+B
+
+R
+
+111.111.111.111
+74-29-9C-E8-FF-55
+
+222.222.222.222
+49-BD-D2-C7-56-2A
+222.222.222.220
+1A-23-F9-CD-06-9B
+
+111.111.111.112
+CC-49-DE-D0-AB-7D
+
+111.111.111.110
+E6-E9-00-17-BB-4B
+
+222.222.222.221
+88-B2-2F-54-1A-0F
+Link Layer
+
+5-8
+
+Addressing: routing to another LAN
+A creates IP datagram with IP source A, destination B
+A creates link-layer frame with R's MAC address as dest, frame
+contains A-to-B IP datagram
+
+
+
+
+
+MAC src: 74-29-9C-E8-FF-55
+MAC dest: E6-E9-00-17-BB-4B
+IP src: 111.111.111.111
+IP dest: 222.222.222.222
+
+IP
+Eth
+Phy
+
+A
+
+B
+
+R
+
+111.111.111.111
+74-29-9C-E8-FF-55
+
+222.222.222.222
+49-BD-D2-C7-56-2A
+222.222.222.220
+1A-23-F9-CD-06-9B
+
+111.111.111.112
+CC-49-DE-D0-AB-7D
+
+111.111.111.110
+E6-E9-00-17-BB-4B
+
+222.222.222.221
+88-B2-2F-54-1A-0F
+Link Layer
+
+5-9
+
+Addressing: routing to another LAN
+frame sent from A to R
+frame received at R, datagram extracted, passed up to IP
+
+
+
+
+MAC src: 74-29-9C-E8-FF-55
+MAC dest: E6-E9-00-17-BB-4B
+IP src: 111.111.111.111
+IP dest: 222.222.222.222
+IP src: 111.111.111.111
+IP dest: 222.222.222.222
+
+IP
+Eth
+Phy
+
+A
+
+IP
+Eth
+Phy
+
+R
+
+111.111.111.111
+74-29-9C-E8-FF-55
+
+B
+222.222.222.222
+49-BD-D2-C7-56-2A
+
+222.222.222.220
+1A-23-F9-CD-06-9B
+111.111.111.112
+CC-49-DE-D0-AB-7D
+
+111.111.111.110
+E6-E9-00-17-BB-4B
+
+222.222.222.221
+88-B2-2F-54-1A-0F
+Link Layer 5-10
+
+Addressing: routing to another LAN
+
+
+
+
+R forwards datagram with IP source A, destination B
+R creates link-layer frame with B's MAC address as dest, frame
+contains A-to-B IP datagram
+MAC src: 1A-23-F9-CD-06-9B
+MAC dest: 49-BD-D2-C7-56-2A
+IP src: 111.111.111.111
+IP dest: 222.222.222.222
+
+IP
+Eth
+Phy
+
+A
+
+R
+
+111.111.111.111
+74-29-9C-E8-FF-55
+
+IP
+Eth
+Phy
+
+B
+222.222.222.222
+49-BD-D2-C7-56-2A
+
+222.222.222.220
+1A-23-F9-CD-06-9B
+111.111.111.112
+CC-49-DE-D0-AB-7D
+
+111.111.111.110
+E6-E9-00-17-BB-4B
+
+222.222.222.221
+88-B2-2F-54-1A-0F
+Link Layer 5-11
+
+Addressing: routing to another LAN
+
+
+
+
+R forwards datagram with IP source A, destination B
+R creates link-layer frame with B's MAC address as dest, frame
+contains A-to-B IP datagram
+MAC src: 1A-23-F9-CD-06-9B
+MAC dest: 49-BD-D2-C7-56-2A
+IP src: 111.111.111.111
+IP dest: 222.222.222.222
+
+IP
+Eth
+Phy
+
+A
+
+R
+
+111.111.111.111
+74-29-9C-E8-FF-55
+
+IP
+Eth
+Phy
+
+B
+222.222.222.222
+49-BD-D2-C7-56-2A
+
+222.222.222.220
+1A-23-F9-CD-06-9B
+111.111.111.112
+CC-49-DE-D0-AB-7D
+
+111.111.111.110
+E6-E9-00-17-BB-4B
+
+222.222.222.221
+88-B2-2F-54-1A-0F
+Link Layer 5-12
+
+Addressing: routing to another LAN
+
+
+
+
+R forwards datagram with IP source A, destination B
+R creates link-layer frame with B's MAC address as dest, frame
+contains A-to-B IP datagram
+MAC src: 1A-23-F9-CD-06-9B
+MAC dest: 49-BD-D2-C7-56-2A
+IP src: 111.111.111.111
+IP dest: 222.222.222.222
+
+IP
+Eth
+Phy
+
+A
+
+R
+
+111.111.111.111
+74-29-9C-E8-FF-55
+
+B
+222.222.222.222
+49-BD-D2-C7-56-2A
+
+222.222.222.220
+1A-23-F9-CD-06-9B
+111.111.111.112
+CC-49-DE-D0-AB-7D
+
+111.111.111.110
+E6-E9-00-17-BB-4B
+
+222.222.222.221
+88-B2-2F-54-1A-0F
+Link Layer 5-13
+
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer 5-14
+
+Ethernet
+“dominant” wired LAN technology:
+ cheap $20 for NIC
+ first widely used LAN technology
+ simpler, cheaper than token LANs and ATM
+ kept up with speed race: 10 Mbps – 10 Gbps
+
+Metcalfe’s Ethernet sketch
+Link Layer 5-15
+
+Ethernet: unreliable, connectionless
+
+
+
+
+
+connectionless: no handshaking between sending and
+receiving NICs
+unreliable: receiving NIC doesn’t send acks or nacks
+to sending NIC
+ data in dropped frames recovered only if initial
+sender uses higher layer reliable data transfer
+(e.g., TCP), otherwise dropped data lost
+Ethernet’s MAC protocol: unslotted CSMA/CD wth
+binary backoff
+
+Link Layer 5-16
+
+Ethernet: physical topology
+
+
+bus: popular through mid 90s
+
+ all nodes in same collision domain (can collide with each
+other)
+
+
+
+star: prevails today
+
+ active switch in center
+ each “spoke” runs a (separate) Ethernet protocol (nodes
+do not collide with each other)
+
+switch
+
+bus: coaxial cable
+
+star
+Link Layer 5-17
+
+Ethernet frame structure
+sending adapter encapsulates IP datagram (or other
+network layer protocol packet) in Ethernet frame
+type
+dest.
+
+source
+
+preamble address address
+
+data
+(payload)
+
+CRC
+
+preamble:
+ 7 bytes with pattern 10101010 followed by one
+byte with pattern 10101011
+ used to synchronize receiver, sender clock rates
+
+Link Layer 5-18
+
+Ethernet frame structure (more)
+
+
+addresses: 6 byte source, destination MAC addresses
+ if adapter receives frame with matching destination
+address, or with broadcast address (e.g. ARP packet), it
+passes data in frame to network layer protocol
+ otherwise, adapter discards frame
+
+
+
+
+type: indicates higher layer protocol (mostly IP but
+others possible, e.g., Novell IPX, AppleTalk)
+CRC: cyclic redundancy check at receiver
+ error detected: frame is dropped
+type
+dest.
+
+source
+
+preamble address address
+
+data
+(payload)
+
+CRC
+
+Link Layer 5-19
+
+802.3 Ethernet standards: link & physical layers
+
+
+many different Ethernet standards
+ common MAC protocol and frame format
+ different speeds: 2 Mbps, 10 Mbps, 100 Mbps, 1Gbps,
+10G bps
+ different physical layer media: fiber, cable
+
+application
+transport
+network
+link
+physical
+
+MAC protocol
+and frame format
+100BASE-TX
+
+100BASE-T2
+
+100BASE-FX
+
+100BASE-T4
+
+100BASE-SX
+
+100BASE-BX
+
+copper (twister
+pair) physical layer
+
+fiber physical layer
+Link Layer 5-20
+
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer 5-21
+
+

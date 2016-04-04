@@ -1,0 +1,225 @@
+Chapter 3: Transport Layer
+our goals:
+
+
+understand
+principles behind
+transport layer
+services:
+ multiplexing,
+demultiplexing
+ reliable data transfer
+ flow control
+ congestion control
+
+
+
+learn about Internet
+transport layer protocols:
+ UDP: connectionless
+transport
+ TCP: connection-oriented
+reliable transport
+ TCP congestion control
+
+Transport Layer 3-1
+
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-2
+
+Transport services and protocols
+
+
+
+
+
+
+provide logical communication
+between app processes
+running on different hosts
+transport protocols run in
+end systems
+ send side: breaks app
+messages into segments,
+passes to network layer
+ rcv side: reassembles
+segments into messages,
+passes to app layer
+more than one transport
+protocol available to apps
+ Internet: TCP and UDP
+
+application
+transport
+network
+data link
+physical
+
+application
+transport
+network
+data link
+physical
+
+Transport Layer 3-3
+
+Transport vs. network layer
+network layer: logical
+communication
+between hosts
+ transport layer: logical
+communication
+between processes
+
+
+ relies on, enhances,
+network layer services
+ key fact: each layer
+knows how to access
+and communicate with
+the layers above and
+below it!
+
+application
+transport
+network
+data link
+physical
+
+application
+transport
+network
+data link
+physical
+
+Transport Layer 3-4
+
+Transport vs. network layer
+household analogy:
+12 kids in Ann’s house sending letters to 12 kids in Bill’s
+house:
+ hosts = houses
+ processes = kids
+ app messages = letters in envelopes
+ transport protocol = Ann and Bill who demux to
+in-house siblings
+ network-layer protocol = postal service
+
+Transport Layer 3-5
+
+Internet transport-layer protocols
+
+
+reliable, in-order
+delivery (TCP)
+ congestion control
+ flow control
+ connection setup
+
+
+
+unreliable, unordered
+delivery: UDP
+ no-frills extension of
+“best-effort” IP
+
+
+
+services not available:
+
+application
+transport
+network
+data link
+physical
+network
+data link
+physical
+
+network
+data link
+physical
+
+network
+data link
+physical
+network
+data link
+physical
+
+network
+data link
+physical
+
+network
+data link
+physical
+
+network
+data link
+physical
+
+application
+transport
+network
+data link
+physical
+
+ delay guarantees
+ bandwidth guarantees
+Transport Layer 3-6
+
+Chapter 3 outline
+3.1 transport-layer
+services
+3.2 multiplexing and
+demultiplexing
+3.3 connectionless
+transport: UDP
+3.4 principles of reliable
+data transfer
+
+3.5 connection-oriented
+transport: TCP
+
+
+
+
+
+segment structure
+reliable data transfer
+flow control
+connection management
+
+3.6 principles of congestion
+control
+3.7 TCP congestion control
+
+Transport Layer 3-7
+
+

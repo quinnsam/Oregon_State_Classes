@@ -1,0 +1,656 @@
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer
+
+5-1
+
+Ethernet switch
+
+
+
+
+
+
+link-layer device: takes an active role
+ store, forward Ethernet frames
+ examine incoming frame’s MAC address,
+selectively forward frame to one-or-more
+outgoing links when frame is to be forwarded on
+segment, uses CSMA/CD to access segment
+transparent
+ hosts are unaware of presence of switches
+plug-and-play, self-learning
+ switches do not need to be configured
+
+Link Layer
+
+5-2
+
+Switch: multiple simultaneous transmissions
+
+
+
+
+
+
+
+hosts have dedicated, direct
+connection to switch
+switches buffer packets
+Ethernet protocol used on each
+incoming link, but no collisions;
+full duplex
+ each link is its own collision
+domain
+switching: A-to-A’ and B-to-B’
+can transmit simultaneously,
+without collisions
+
+A
+B
+
+C’
+6
+
+1
+
+2
+
+4
+
+5
+B’
+
+3
+C
+
+A’
+switch with six interfaces
+(1,2,3,4,5,6)
+
+Link Layer
+
+5-3
+
+Switch forwarding table
+Q: how does switch know A’
+reachable via interface 4, B’
+reachable via interface 5?
+ A: each switch has a switch
+table, each entry:
+ (MAC address of host, interface to
+reach host, time stamp)
+ looks like a routing table!
+
+A
+B
+
+C’
+6
+
+1
+
+2
+
+4
+
+5
+B’
+
+3
+C
+
+A’
+
+Q: how are entries created,
+maintained in switch table?
+
+switch with six interfaces
+(1,2,3,4,5,6)
+
+ something like a routing protocol?
+Link Layer
+
+5-4
+
+Switch: self-learning
+
+
+switch learns which hosts
+can be reached through
+which interfaces
+ (only) when frame
+received, switch
+“learns” location of
+sender’s incoming LAN
+segment
+ records sender/location
+pair in switch table
+
+Remember: no ACKs
+when sending Ethernet
+frames!
+
+Source: A
+Dest: A’
+
+A
+
+B
+
+C’
+6
+
+1
+
+2
+4
+
+5
+B’
+
+3
+C
+
+A’
+
+MAC addr interface
+A
+
+A A’
+
+1
+
+TTL
+60
+
+Switch table
+(initially empty)
+
+Link Layer
+
+5-5
+
+Switch: frame filtering/forwarding
+when frame received at switch:
+1. record incoming link, MAC address of sending host
+2. index switch table using MAC destination address
+3. if entry found for destination, then
+{
+if destination on segment from which frame arrived
+then drop frame
+else
+forward frame on interface indicated by entry
+}
+else flood // forward on all interfaces except arriving one
+Link Layer
+
+5-6
+
+Self-learning, forwarding: example
+
+
+
+
+frame destination, A’,
+locaton unknown: flood
+destination A location
+known: selectively send
+on just one link
+
+Source: A
+Dest: A’
+
+A
+
+A A’
+B
+
+C’
+6
+
+1
+
+2
+
+A A’
+4
+5
+B’
+
+3
+C
+
+A’ A
+A’
+MAC addr interface
+A
+A’
+
+1
+4
+
+TTL
+60
+60
+
+switch table
+(initially empty)
+
+Link Layer
+
+5-7
+
+Interconnecting switches
+
+
+switches can be connected together
+S4
+S1
+
+S3
+
+S2
+
+A
+B
+
+C
+
+F
+
+D
+E
+
+I
+G
+
+H
+
+Q: sending from A to G - how does S1 know to
+forward frame destined to G via S4 and S3?
+ A: self learning! (works exactly the same as in
+single-switch case!)
+Link Layer
+
+5-8
+
+Self-learning multi-switch example
+Suppose C sends frame to I, I responds to C
+S4
+S1
+
+S3
+
+S2
+
+A
+B
+
+C
+
+F
+
+D
+E
+
+
+
+I
+G
+
+H
+
+Q: show switch tables and packet forwarding in S1, S2, S3, S4
+
+Link Layer
+
+5-9
+
+Institutional network
+mail server
+
+to external
+network
+
+router
+
+web server
+
+IP subnet
+
+Link Layer 5-10
+
+Switches vs. routers
+both are store-and-forward:
+ routers: network-layer
+devices (examine networklayer headers)
+ switches: link-layer devices
+(examine link-layer
+headers)
+both have forwarding tables:
+ routers: compute tables
+using routing algorithms, IP
+addresses
+ switches: learn forwarding
+table using flooding,
+learning, MAC addresses
+
+datagram
+
+frame
+
+application
+transport
+network
+link
+physical
+
+frame
+link
+physical
+
+switch
+
+network datagram
+link
+frame
+physical
+application
+transport
+network
+link
+physical
+Link Layer 5-11
+
+VLANs: motivation
+consider:
+
+
+
+
+Computer
+Science
+
+Electrical
+Engineering
+
+Computer
+Engineering
+
+CS user moves office to
+EE, but wants connect to
+CS switch?
+single broadcast domain:
+ all layer-2 broadcast
+traffic (ARP, DHCP,
+unknown location of
+destination MAC
+address) must cross
+entire LAN
+ security/privacy,
+efficiency issues
+
+Link Layer 5-12
+
+VLANs
+
+port-based VLAN: switch ports
+grouped (by switch management
+software) so that single physical
+switch ……
+
+Virtual Local
+Area Network
+
+switch(es) supporting
+VLAN capabilities can
+be configured to
+define multiple virtual
+LANS over single
+physical LAN
+infrastructure.
+
+1
+
+7
+
+9
+
+15
+
+2
+
+8
+
+10
+
+16
+
+…
+
+…
+
+Electrical Engineering
+(VLAN ports 1-8)
+
+Computer Science
+(VLAN ports 9-15)
+
+… operates as multiple virtual switches
+1
+
+7
+
+9
+
+15
+
+2
+
+8
+
+10
+
+16
+
+…
+Electrical Engineering
+(VLAN ports 1-8)
+
+…
+Computer Science
+(VLAN ports 9-16)
+Link Layer 5-13
+
+Port-based VLAN
+
+
+ can also define VLAN based on
+MAC addresses of endpoints,
+rather than switch port
+
+
+
+
+router
+
+traffic isolation: frames to/from
+ports 1-8 can only reach ports
+1-8
+
+dynamic membership: ports
+can be dynamically assigned
+among VLANs
+
+1
+
+7
+
+9
+
+15
+
+2
+
+8
+
+10
+
+16
+
+…
+Electrical Engineering
+(VLAN ports 1-8)
+
+…
+Computer Science
+(VLAN ports 9-15)
+
+forwarding between VLANS: done via routing
+(just as with separate switches)
+ in practice vendors sell combined switches+routers
+Link Layer 5-14
+
+VLANS spanning multiple switches
+1
+
+7
+
+9
+
+15
+
+1
+
+3
+
+5
+
+7
+
+2
+
+8
+
+10
+
+16
+
+2
+
+4
+
+6
+
+8
+
+…
+Electrical Engineering
+(VLAN ports 1-8)
+
+
+
+…
+Computer Science
+(VLAN ports 9-15)
+
+Ports 2,3,5 belong to EE VLAN
+Ports 4,6,7,8 belong to CS VLAN
+
+trunk port: carries frames between VLANS defined over
+multiple physical switches
+ frames forwarded within VLAN between switches can’t be vanilla 802.1
+frames (must carry VLAN ID info)
+ 802.1q protocol adds/removes additional header fields for frames
+forwarded between trunk ports
+
+Link Layer 5-15
+
+802.1q VLAN frame format
+type
+preamble
+
+dest.
+address
+
+source
+address
+
+data (payload)
+
+CRC
+
+802.1 frame
+
+type
+preamble
+
+dest.
+address
+
+source
+address
+
+2-byte Tag Protocol Identifier
+(value: 81-00)
+
+data (payload)
+
+CRC
+
+802.1Q frame
+
+Recomputed
+CRC
+
+Tag Control Information (12 bit VLAN ID field,
+3 bit priority field like IP TOS)
+
+Link Layer 5-16
+
+Link layer, LANs: outline
+5.1 introduction, services 5.5 link virtualization:
+MPLS
+5.2 error detection,
+correction
+5.6 data center
+networking
+5.3 multiple access
+protocols
+5.7 a day in the life of a
+web request
+5.4 LANs
+
+
+
+
+
+addressing, ARP
+Ethernet
+switches
+VLANS
+
+Link Layer 5-17
+
+

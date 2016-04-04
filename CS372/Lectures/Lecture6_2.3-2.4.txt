@@ -1,0 +1,673 @@
+Chapter 2: outline
+2.1 principles of network
+applications
+ app architectures
+ app requirements
+
+2.6 P2P applications
+2.7 socket programming
+with UDP and TCP
+
+2.2 Web and HTTP
+2.3 FTP
+2.4 electronic mail
+ SMTP, POP3, IMAP
+
+2.5 DNS
+
+Application Layer 2-1
+
+FTP: the file transfer protocol
+FTP
+user
+interface
+
+file transfer
+FTP
+client
+
+user
+at host
+
+
+
+
+local file
+system
+
+FTP
+server
+remote file
+system
+
+transfer file to/from remote host
+client/server model
+ client: side that initiates transfer (either to/from remote)
+ server: remote host
+
+
+
+
+ftp: RFC 959
+ftp server: port 21
+
+Application Layer 2-2
+
+FTP: separate control, data connections
+
+
+
+
+
+
+
+
+FTP client contacts FTP server
+at port 21, using TCP
+client authorized over control
+connection
+client browses remote
+directory, sends commands
+over control connection
+when server receives file
+transfer command, server
+opens 2nd TCP data
+connection (for file) to client
+after transferring one file,
+server closes data connection
+
+TCP control connection,
+server port 21
+
+FTP
+client
+
+
+
+
+
+
+TCP data connection,
+server port 20
+
+FTP
+server
+
+server opens another TCP
+data connection to transfer
+another file
+control connection: “out of
+band”
+FTP server maintains “state”:
+current directory, earlier
+authentication
+Application Layer 2-3
+
+FTP commands, responses
+sample commands:
+
+
+
+
+
+
+
+
+
+sent as ASCII text over
+control channel
+USER username
+PASS password
+LIST return list of file in
+current directory
+RETR filename
+retrieves (gets) file
+STOR filename stores
+(puts) file onto remote
+host
+
+sample return codes
+
+
+
+
+
+
+
+status code and phrase (as
+in HTTP)
+331 Username OK,
+password required
+125 data
+connection
+already open;
+transfer starting
+425 Can’t open
+data connection
+452 Error writing
+file
+Application Layer 2-4
+
+FTP doesn’t cut it nowadays
+totally insecure
+
+
+
+SFTP is the encrypted version
+Normally on port 22
+ Same port as SSH, because it IS using SSH
+
+Application Layer 2-5
+
+Chapter 2: outline
+2.1 principles of network
+applications
+ app architectures
+ app requirements
+
+2.6 P2P applications
+2.7 socket programming
+with UDP and TCP
+
+2.2 Web and HTTP
+2.3 FTP
+2.4 electronic mail
+ SMTP, POP3, IMAP
+
+2.5 DNS
+
+Application Layer 2-6
+
+Electronic mail
+
+outgoing
+message queue
+user mailbox
+
+Three major components:
+
+
+
+
+
+user agents
+mail servers
+simple mail transfer
+protocol: SMTP
+
+User Agent
+
+
+
+
+
+a.k.a. “mail reader”
+composing, editing, reading
+mail messages
+e.g., Outlook, Thunderbird,
+iPhone mail client
+outgoing, incoming
+messages stored on server
+
+user
+agent
+
+mail
+server
+
+user
+agent
+
+SMTP
+
+mail
+server
+
+user
+agent
+
+SMTP
+
+SMTP
+mail
+server
+
+user
+agent
+
+user
+agent
+user
+agent
+
+Application Layer 2-7
+
+Electronic mail: mail servers
+mail servers:
+
+
+
+
+mailbox contains incoming
+messages for user
+message queue of outgoing
+(to be sent) mail messages
+SMTP protocol between
+mail servers to send email
+messages
+ client: sending mail
+server
+ “server”: receiving mail
+server
+
+user
+agent
+
+mail
+server
+
+user
+agent
+
+SMTP
+
+mail
+server
+
+user
+agent
+
+SMTP
+
+SMTP
+mail
+server
+
+user
+agent
+
+user
+agent
+user
+agent
+
+Application Layer 2-8
+
+Electronic Mail: SMTP [RFC 2821]
+
+
+
+
+uses TCP to reliably transfer email message from
+client to server, port 25
+direct transfer: sending server to receiving
+server
+three phases of transfer
+ handshaking (greeting)
+ transfer of messages
+ closure
+
+
+
+command/response interaction (like HTTP, FTP)
+ commands: ASCII text
+ response: status code and phrase
+
+
+
+messages must be in 7-bit ASCI
+Application Layer 2-9
+
+Scenario: Alice sends message to Bob
+4) SMTP client sends Alice’s
+message over the TCP
+connection
+5) Bob’s mail server places the
+message in Bob’s mailbox
+6) Bob invokes his user agent
+to read message
+
+1) Alice uses UA to compose
+message “to”
+bob@someschool.edu
+2) Alice’s UA sends message to
+her mail server; message
+placed in message queue
+3) client side of SMTP opens
+TCP connection with Bob’s
+mail server
+
+1 user
+agent
+2
+
+mail
+server
+3
+Alice’s mail server
+
+user
+agent
+
+mail
+server
+6
+
+4
+5
+Bob’s mail server
+
+Application Layer 2-10
+
+Sample SMTP interaction – no security
+S:
+C:
+S:
+C:
+S:
+C:
+S:
+C:
+S:
+C:
+C:
+C:
+S:
+C:
+S:
+
+220 hamburger.edu
+HELO crepes.fr
+250 Hello crepes.fr, pleased to meet you
+MAIL FROM: <alice@crepes.fr>
+250 alice@crepes.fr... Sender ok
+RCPT TO: <bob@hamburger.edu>
+250 bob@hamburger.edu ... Recipient ok
+DATA
+354 Enter mail, end with "." on a line by itself
+Do you like ketchup?
+How about pickles?
+.
+250 Message accepted for delivery
+QUIT
+221 hamburger.edu closing connection
+
+Application Layer 2-11
+
+Sample SMTP interaction – w/ security
+# First step Generate an authentication key
+$ perl -MMIME::Base64 -e 'print encode_base64("\000myemail\@gmail.com\000mypassword")'
+AG5pY2UudHJ5QGdtYWlsLmNvbQBub2l0c25vdG15cGFzc3dvcmQ=
+
+Application Layer 2-12
+
+Sample SMTP interaction – w/ security
+$ openssl s_client -connect smtp.gmail.com:465 -crlf -ign_eof
+[... lots of openssl output ...]
+220 mx.google.com ESMTP m46sm11546481eeh.9
+EHLO localhost
+250-mx.google.com at your service, [1.2.3.4]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH
+250 ENHANCEDSTATUSCODES
+AUTH PLAIN AG5pY2UudHJ5QGdtYWlsLmNvbQBub2l0c25vdG15cGFzc3dvcmQ=
+235 2.7.0 Accepted
+MAIL FROM: <gryphius-demo@gmail.com>
+250 2.1.0 OK m46sm11546481eeh.9
+rcpt to: <somepoorguy@example.com>
+250 2.1.5 OK m46sm11546481eeh.9
+DATA
+354 Go ahead m46sm11546481eeh.9
+Subject: it works
+yay!
+.
+250 2.0.0 OK 1339757532 m46sm11546481eeh.9
+quit
+221 2.0.0 closing connection m46sm11546481eeh.9
+read:errno=0
+
+Application Layer 2-13
+
+SMTP: final words
+
+
+
+
+
+SMTP uses persistent
+connections
+SMTP requires message
+(header & body) to be in
+7-bit ASCII
+SMTP server uses
+CRLF.CRLF to
+determine end of message
+
+comparison with HTTP:
+
+
+
+
+
+
+
+
+HTTP: pull
+SMTP: push
+both have ASCII
+command/response
+interaction, status codes
+HTTP: each object
+encapsulated in its own
+response msg
+SMTP: multiple objects
+sent in multipart msg
+Application Layer 2-14
+
+Mail message format
+SMTP: protocol for
+exchanging email msgs
+RFC 822: standard for text
+message format:
+ header lines, e.g.,
+ To:
+ From:
+ Subject:
+
+header
+
+blank
+line
+
+body
+
+different from SMTP MAIL
+FROM, RCPT TO:
+
+
+
+commands!
+Body: the “message”
+ ASCII characters only
+Application Layer 2-15
+
+Mail access protocols
+user
+agent
+
+SMTP
+
+SMTP
+
+mail access
+protocol
+
+user
+agent
+
+(e.g., POP,
+IMAP)
+sender’s mail
+server
+
+
+
+receiver’s mail
+server
+
+SMTP: delivery/storage to receiver’s server
+mail access protocol: retrieval from server
+ POP: Post Office Protocol [RFC 1939]: authorization,
+download
+ IMAP: Internet Mail Access Protocol [RFC 1730]: more
+features, including manipulation of stored msgs on
+server
+ HTTP: gmail, Hotmail, Yahoo! Mail, etc.
+ Exchange: Microsoft’s implementation, de facto for
+business
+
+Application Layer 2-16
+
+POP3 protocol
+authorization phase
+
+
+
+
+client commands:
+ user: declare username
+ pass: password
+server responses
+ +OK
+ -ERR
+
+transaction phase, client:
+
+
+
+
+
+list: list message numbers
+retr: retrieve message by
+number
+dele: delete
+quit
+
+S:
+C:
+S:
+C:
+S:
+
++OK POP3 server ready
+user bob
++OK
+pass hungry
++OK user successfully logged
+
+C:
+S:
+S:
+S:
+C:
+S:
+S:
+C:
+C:
+S:
+S:
+C:
+C:
+S:
+
+list
+1 498
+2 912
+.
+retr 1
+<message 1 contents>
+.
+dele 1
+retr 2
+<message 1 contents>
+.
+dele 2
+quit
++OK POP3 server signing off
+
+on
+
+Application Layer 2-17
+
+POP3 (more) and IMAP
+more about POP3
+
+
+
+
+
+
+previous example uses
+POP3 “download and
+delete” mode
+ Bob cannot re-read email if he changes
+client
+POP3 “download-andkeep”: copies of messages
+on different clients
+POP3 is stateless across
+sessions
+
+IMAP
+
+
+
+
+keeps all messages in one
+place: at server
+allows user to organize
+messages in folders
+keeps user state across
+sessions:
+ names of folders and
+mappings between
+message IDs and folder
+name
+
+Application Layer 2-18
+
+Microsoft Exchange
+winning
+
+
+
+
+
+Uses proprietary protocol called MAPI
+Managed by Microsoft Exchange Server
+Includes (near-instant) synchronization of calendar, email,
+contacts, etc. across many devices at once
+De facto business email system
+
+Application Layer 2-19
+
+Chapter 2: outline
+2.1 principles of network
+applications
+ app architectures
+ app requirements
+
+2.6 P2P applications
+2.7 socket programming
+with UDP and TCP
+
+2.2 Web and HTTP
+2.3 FTP
+2.4 electronic mail
+ SMTP, POP3, IMAP
+
+2.5 DNS
+
+Application Layer 2-20
+
+
