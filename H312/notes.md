@@ -116,3 +116,70 @@ Belmont Report
     2) Beneficence
     3) Justice
 
+################################################################################
+Thu 04/07/2016
+################################################################################
+
+HIV transmission
+    * Drug injection
+    * Semen
+    * Vaginal fluid
+    * Blood
+    * Breast milk
+
+Major variables in successful HIV transmission
+    1) Individuals genetic resistance
+    2) Route of transmittion
+    3) Viral load
+    4) Subtype & variant of HIV present
+
+Not spread by:
+    - Tears, sweat, coughing, or sneezing
+    - Clothing
+    - Contact [work, home, school]
+    - Glasses, utensils
+    - insects
+
+Very low risk:
+    - Kissing
+    - CPR
+    - Pre-chewed food
+
+Factors that help spread the virus:
+    * Lack of condom use
+    * multiple partners
+    * Concurrent partners
+    * Age mixing
+    * High rates of STIs
+    * Low rates of male circumcision
+    * High viral load
+    * Mode of delivery
+
+Female > males in transmission
+    * Vaginal fluid has less than semen
+    * Vaginal walls more prone to tear
+
+Mother to fetus Transmission (Vertical Transmission)
+    * C-section 
+    * Formula breast milk
+
+Injection drug use (IDU)
+    * Much more efficient than through sexual intercourse
+
+Blood Transfusions
+    * Virtually eliminated in the US due to HIV tests
+    * Donating blood 
+        - Ban on Homosexuals donating blood untill 2015
+
+Pre-exposure Prophylaxis (PrEP)
+    * Many behavioral practices place individuals at high-risk for contracting HIV
+    * Drugs are highly effective in PREVENTING the spread of HIV
+
+Keys to Prevention
+    1) Education
+    2) Advocacy
+    3) Guiding resources to pople who need them
+
+
+
+

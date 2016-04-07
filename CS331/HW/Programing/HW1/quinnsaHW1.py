@@ -4,9 +4,186 @@
 # Imports
 import getopt
 import sys
+import os
+import copy
 
-def bfs(verbose):
+# Human readable state varibles
+left = 0
+right = 1
+miss = 0
+cann = 1
+boat = 2
+
+class node:
+    def __init__(self, parent, action, result):
+        self.parent = parent
+        self.action = action
+        self.result = result
+
+def verify(state,verbose):
+    if state[left][cann] > state[left][miss] or state[right][cann] > state[right][miss]:
+        return False
+    return True
+
+def expand(state,verbose):
+    suc = []
+    if verbose: print 'Expand State', state
+    # Boat is on the left bank
+    if state[left][boat] == 1:
+        # Move one Missionary to right bank
+        if state[left][miss] >= 1:
+            if verbose: print 'Move one Missionary to right bank'
+            temp = copy.deepcopy(state)
+            temp[left][miss]  = temp[left][miss] -1
+            temp[right][miss] = temp[right][miss] +1
+            # Boat moved to other side
+            temp[right][boat] = 1
+            temp[left][boat]  = 0
+            if verbose: print temp
+            if verify(temp, verbose):
+                suc.append(temp)
+        # Move two Missionaries to right bank
+        if state[left][miss] >= 2:
+            if verbose: print 'Move two Missionaries to right bank'
+            temp = copy.deepcopy(state)
+            temp[left][miss]  = temp[left][miss] -2
+            temp[right][miss] = temp[right][miss] +2
+            # Boat moved to other side
+            temp[right][boat] = 1
+            temp[left][boat]  = 0
+            if verbose: print temp
+            if verify(temp, verbose):
+                suc.append(temp)
+        # Move one Cannible to right bank
+        if state[left][cann] >= 1:
+            if verbose: print 'Move one Cannible to right bank'
+            temp = copy.deepcopy(state)
+            temp[left][cann]  = temp[left][cann] -1
+            temp[right][cann] = temp[right][cann] +1
+            # Boat moved to other side
+            temp[right][boat] = 1
+            temp[left][boat]  = 0
+            if verbose: print temp
+            if verify(temp, verbose):
+                suc.append(temp)
+        # Move one Cannible and one Missionary to right bank
+        if state[left][cann] >= 1 and state[left][miss] >= 1:
+            if verbose: print 'Move one Cannible and one Missionary to right bank'
+            temp = copy.deepcopy(state)
+            temp[left][cann]  = temp[left][cann] -1
+            temp[right][cann] = temp[right][cann] +1
+            temp[left][miss]  = temp[left][miss] -1
+            temp[right][miss] = temp[right][miss] +1
+            # Boat moved to other side
+            temp[right][boat] = 1
+            temp[left][boat]  = 0
+            if verbose: print temp
+            if verify(temp, verbose):
+                suc.append(temp)
+        # Move two Cannible to right bank
+        if state[left][cann] >= 2:
+            if verbose: print 'Move two Cannible to right bank'
+            temp = copy.deepcopy(state)
+            temp[left][cann]  = temp[left][cann] -2
+            temp[right][cann] = temp[right][cann] +2
+            # Boat moved to other side
+            temp[right][boat] = 1
+            temp[left][boat]  = 0
+            if verbose: print temp
+            if verify(temp, verbose):
+                suc.append(temp)
+
+    # Boat is on the right bank
+    if state[right][boat] == 1:
+        # Move one Missionary to left bank
+        if state[right][miss] >= 1:
+            if verbose: print 'Move one Missionary to left bank'
+            temp = copy.deepcopy(state)
+            temp[right][miss] = temp[right][miss] -1
+            temp[left][miss]  = temp[left][miss] +1
+            # Boat moved to other side
+            temp[left][boat]  = 1
+            temp[right][boat] = 0
+            if verbose: print temp
+            if verify(temp, verbose):
+                suc.append(temp)
+        # Move two Missionaries to left bank
+        if state[right][miss] >= 2:
+            if verbose: print 'Move two Missionaries to left bank'
+            temp = copy.deepcopy(state)
+            temp[right][miss] = temp[right][miss] -2
+            temp[left][miss]  = temp[left][miss] +2
+            # Boat moved to other side
+            temp[left][boat]  = 1
+            temp[right][boat] = 0
+            if verbose: print temp
+            if verify(temp, verbose):
+                suc.append(temp)
+        # Move one Cannible to left bank
+        if state[right][cann] >= 1:
+            if verbose: print 'Move one Cannible to left bank'
+            temp = copy.deepcopy(state)
+            temp[right][cann] = temp[right][cann] -1
+            temp[left][cann]  = temp[left][cann] +1
+            # Boat moved to other side
+            temp[left][boat]  = 1
+            temp[right][boat] = 0
+            if verbose: print temp
+            if verify(temp, verbose):
+                suc.append(temp)
+        # Move one Cannible and one Missionary to left bank
+        if state[right][cann] >= 1 and state[right][miss] >= 1:
+            if verbose: print 'Move one Cannible and one Missionary to left bank'
+            temp = copy.deepcopy(state)
+            temp[right][cann] = temp[right][cann] -1
+            temp[left][cann]  = temp[left][cann] +1
+            temp[right][miss] = temp[right][miss] -1
+            temp[left][miss]  = temp[left][miss] +1
+            # Boat moved to other side
+            temp[left][boat]  = 1
+            temp[right][boat] = 0
+            if verbose: print temp
+            if verify(temp, verbose):
+                suc.append(temp)
+        # Move two Cannible to left bank
+        if state[right][cann] >= 2:
+            if verbose: print 'Move two Cannible to left bank'
+            temp = copy.deepcopy(state)
+            temp[right][cann] = temp[right][cann] -2
+            temp[left][cann]  = temp[left][cann] +2
+            # Boat moved to other side
+            temp[left][boat]  = 1
+            temp[right][boat] = 0
+            if verbose: print temp
+            if verify(temp, verbose):
+                suc.append(temp)
+    print 'Sucsessor'
+    for i in suc:
+        print '   ', i
+    return suc
+
+
+def bfs(state, verbose):
     if verbose: print 'Breadth First Search'
+
+    fringe = []
+    closed = []
+    closed.append([])
+    closed.append([])
+
+    fringe.append(state[0])
+    if verbose: print 'Current fringe', fringe
+    while fringe != state[1]:
+        if fringe == None: return False
+        node = fringe.pop()
+        if node == state[1]: return closed
+        if node not in closed:
+            closed.append(node)
+            for i in expand(node,verbose):
+                fringe.insert(len(fringe),i)
+
+
+
 
 def dfs(verbose):
     if verbose: print 'Depth First Search'
@@ -16,6 +193,54 @@ def iddfs(verbose):
 
 def astar(verbose):
     if verbose: print 'A-Star Search'
+def parse_state(init, goal, verbose):
+    if verbose: print 'Parsing state file'
+    # Check if file path exists
+    if not os.path.isfile(init):
+        print 'ERROR: ' + init + ' does not exist.'
+        sys.exit(3)
+    if not os.path.isfile(goal):
+        print 'ERROR: ' + goal + ' does not exist.'
+        sys.exit(3)
+
+    state = []
+    temp = []
+
+    i = 0
+    init_f = open(init,'r')
+    for line in init_f.readlines():
+        temp.append([])
+        line = line.strip()
+        for s in line.split(','):
+            temp[i].append(int(s))
+        i = i + 1
+
+    state.append(temp)
+    temp = []
+    i = 0
+    goal_f = open(goal,'r')
+    for line in goal_f.readlines():
+        temp.append([])
+        line = line.strip()
+        for s in line.split(','):
+            temp[i].append(int(s))
+        i = i + 1
+    state.append(temp)
+
+    if verbose:
+        print 'State:'
+        print '\tInital:'
+        print '\t  Right Bank'
+        print '\t    ', state[0][right]
+        print '\t  Left Bank'
+        print '\t    ', state[0][left]
+        print '\tGoal:'
+        print '\t  Right Bank'
+        print '\t    ', state[1][right]
+        print '\t  Left Bank'
+        print '\t    ', state[1][left]
+
+    return state
 
 
 def usage():
@@ -33,6 +258,8 @@ def usage():
     print "\t-h,--help\t\tPrint usage message"
 
 def main():
+
+    # Get all command line arguments
     try:
         opts, args = getopt.getopt(sys.argv[1:], "i:g:m:o:vha", ["all", "help", "init=", "goal=", "mode=", "output="])
     except getopt.GetoptError as err:
@@ -64,22 +291,28 @@ def main():
             all_search = True
         else:
             assert False, "unhandled option"
-
-        if all_search:
-            bfs(verbose)
-            dfs(verbose)
-            iddfs(verbose)
-            astar(verbose)
-        elif mode == 'bfs':
-            bfs(verbose)
-        elif mode == 'dfs':
-            dfs(verbose)
-        elif mode == 'iddfs':
-            iddfs(verbose)
-        elif mode == 'astar':
-            astar(verbose)
-        elif mode == None and not all_search:
             usage()
+            sys.exit(2)
+
+
+    state = parse_state(init_file, goal_file, verbose)
+
+    # Determine which search to run
+    if all_search:
+        bfs(state, verbose)
+        dfs(verbose)
+        iddfs(verbose)
+        astar(verbose)
+    elif mode == 'bfs':
+        bfs(state, verbose)
+    elif mode == 'dfs':
+        dfs(verbose)
+    elif mode == 'iddfs':
+        iddfs(verbose)
+    elif mode == 'astar':
+        astar(verbose)
+    elif mode == None and all_search == False:
+        usage()
 
 
 if __name__ == "__main__":
