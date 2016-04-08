@@ -21,54 +21,65 @@ class node:
         self.result = result
 
 def verify(state,verbose):
-    if state[left][cann] > state[left][miss] or state[right][cann] > state[right][miss]:
-        return False
+    if state[left][cann] > state[left][miss]:
+        if state[left][miss]:
+            return False
+    if state[right][cann] > state[right][miss]:
+        if state[right][miss]:
+            return False
     return True
 
 def expand(state,verbose):
     suc = []
-    if verbose: print 'Expand State', state
     # Boat is on the left bank
     if state[left][boat] == 1:
         # Move one Missionary to right bank
         if state[left][miss] >= 1:
-            if verbose: print 'Move one Missionary to right bank'
             temp = copy.deepcopy(state)
             temp[left][miss]  = temp[left][miss] -1
             temp[right][miss] = temp[right][miss] +1
             # Boat moved to other side
             temp[right][boat] = 1
             temp[left][boat]  = 0
-            if verbose: print temp
             if verify(temp, verbose):
+                if verbose:
+                    print '[Valid] Move one Missionary to right bank'
+                    print temp
                 suc.append(temp)
+            else:
+                if verbose > 1: print '[Invalid] Move one Missionary to right bank'
         # Move two Missionaries to right bank
         if state[left][miss] >= 2:
-            if verbose: print 'Move two Missionaries to right bank'
             temp = copy.deepcopy(state)
             temp[left][miss]  = temp[left][miss] -2
             temp[right][miss] = temp[right][miss] +2
             # Boat moved to other side
             temp[right][boat] = 1
             temp[left][boat]  = 0
-            if verbose: print temp
             if verify(temp, verbose):
+                if verbose:
+                    print '[Valid] Move two Missionaries to right bank'
+                    print temp
                 suc.append(temp)
+            else:
+                if verbose > 1: print '[Invalid] Move two Missionaries to right bank'
         # Move one Cannible to right bank
         if state[left][cann] >= 1:
-            if verbose: print 'Move one Cannible to right bank'
             temp = copy.deepcopy(state)
             temp[left][cann]  = temp[left][cann] -1
             temp[right][cann] = temp[right][cann] +1
             # Boat moved to other side
             temp[right][boat] = 1
             temp[left][boat]  = 0
-            if verbose: print temp
             if verify(temp, verbose):
+                if verbose:
+                    print '[Valid] Move one Cannible to right bank'
+                    print temp
                 suc.append(temp)
+            else:
+                if verbose > 1: print '[Invalid] Move one Cannible to right bank'
         # Move one Cannible and one Missionary to right bank
         if state[left][cann] >= 1 and state[left][miss] >= 1:
-            if verbose: print 'Move one Cannible and one Missionary to right bank'
             temp = copy.deepcopy(state)
             temp[left][cann]  = temp[left][cann] -1
             temp[right][cann] = temp[right][cann] +1
@@ -77,63 +88,78 @@ def expand(state,verbose):
             # Boat moved to other side
             temp[right][boat] = 1
             temp[left][boat]  = 0
-            if verbose: print temp
             if verify(temp, verbose):
+                if verbose:
+                    print '[Valid] Move one Cannible and one Missionary to right bank'
+                    print temp
                 suc.append(temp)
+            else:
+                if verbose > 1: print '[Invalid] Move one Cannible and one Missionary to right bank'
         # Move two Cannible to right bank
         if state[left][cann] >= 2:
-            if verbose: print 'Move two Cannible to right bank'
             temp = copy.deepcopy(state)
             temp[left][cann]  = temp[left][cann] -2
             temp[right][cann] = temp[right][cann] +2
             # Boat moved to other side
             temp[right][boat] = 1
             temp[left][boat]  = 0
-            if verbose: print temp
             if verify(temp, verbose):
+                if verbose:
+                    print '[Valid] Move two Cannible to right bank'
+                    print temp
                 suc.append(temp)
+            else:
+                if verbose > 1: print '[Invalid] Move two Cannible to right bank'
 
     # Boat is on the right bank
     if state[right][boat] == 1:
         # Move one Missionary to left bank
         if state[right][miss] >= 1:
-            if verbose: print 'Move one Missionary to left bank'
             temp = copy.deepcopy(state)
             temp[right][miss] = temp[right][miss] -1
             temp[left][miss]  = temp[left][miss] +1
             # Boat moved to other side
             temp[left][boat]  = 1
             temp[right][boat] = 0
-            if verbose: print temp
             if verify(temp, verbose):
+                if verbose:
+                    print '[Valid] Move one Missionary to left bank'
+                    print temp
                 suc.append(temp)
+            else:
+                if verbose > 1: print '[Invalid] Move one Missionary to left bank'
         # Move two Missionaries to left bank
         if state[right][miss] >= 2:
-            if verbose: print 'Move two Missionaries to left bank'
             temp = copy.deepcopy(state)
             temp[right][miss] = temp[right][miss] -2
             temp[left][miss]  = temp[left][miss] +2
             # Boat moved to other side
             temp[left][boat]  = 1
             temp[right][boat] = 0
-            if verbose: print temp
             if verify(temp, verbose):
+                if verbose:
+                    print '[Valid] Move two Missionaries to left bank'
+                    print temp
                 suc.append(temp)
+            else:
+                if verbose > 1: print '[Invalid] Move two Missionaries to left bank'
         # Move one Cannible to left bank
         if state[right][cann] >= 1:
-            if verbose: print 'Move one Cannible to left bank'
             temp = copy.deepcopy(state)
             temp[right][cann] = temp[right][cann] -1
             temp[left][cann]  = temp[left][cann] +1
             # Boat moved to other side
             temp[left][boat]  = 1
             temp[right][boat] = 0
-            if verbose: print temp
             if verify(temp, verbose):
+                if verbose:
+                    print '[Valid] Move one Cannible to left bank'
+                    print temp
                 suc.append(temp)
+            else:
+                if verbose > 1: print '[Invalid] Move one Cannible to left bank'
         # Move one Cannible and one Missionary to left bank
         if state[right][cann] >= 1 and state[right][miss] >= 1:
-            if verbose: print 'Move one Cannible and one Missionary to left bank'
             temp = copy.deepcopy(state)
             temp[right][cann] = temp[right][cann] -1
             temp[left][cann]  = temp[left][cann] +1
@@ -142,25 +168,39 @@ def expand(state,verbose):
             # Boat moved to other side
             temp[left][boat]  = 1
             temp[right][boat] = 0
-            if verbose: print temp
             if verify(temp, verbose):
+                if verbose:
+                    print '[Valid] Move one Cannible and one Missionary to left bank'
+                    print temp
                 suc.append(temp)
+            else:
+                if verbose > 1: print '[Invalid] Move one Cannible and one Missionary to left bank'
         # Move two Cannible to left bank
         if state[right][cann] >= 2:
-            if verbose: print 'Move two Cannible to left bank'
             temp = copy.deepcopy(state)
             temp[right][cann] = temp[right][cann] -2
             temp[left][cann]  = temp[left][cann] +2
             # Boat moved to other side
             temp[left][boat]  = 1
             temp[right][boat] = 0
-            if verbose: print temp
             if verify(temp, verbose):
+                if verbose:
+                    print '[Valid] Move two Cannible to left bank'
+                    print temp
                 suc.append(temp)
-    print 'Sucsessor'
-    for i in suc:
-        print '   ', i
+            else:
+                if verbose > 1: print '[Invalid] Move two Cannible to left bank'
+    if verbose > 1:
+        print 'Sucsessor'
+        for i in suc:
+            print '   ', i
     return suc
+
+def print_sol(sol):
+    print 'Key:\nMissionarys  Cannibles  Boat'
+    print 'Left\t\tRight'
+    for i in sol:
+        print i[left][miss], i[left][cann], i[left][boat],'\t\t',i[right][miss], i[right][cann], i[right][boat]
 
 
 def bfs(state, verbose):
@@ -168,19 +208,33 @@ def bfs(state, verbose):
 
     fringe = []
     closed = []
-    closed.append([])
-    closed.append([])
+    #closed.append([])
+    #closed.append([])
 
     fringe.append(state[0])
     if verbose: print 'Current fringe', fringe
     while fringe != state[1]:
         if fringe == None: return False
-        node = fringe.pop()
-        if node == state[1]: return closed
+        if verbose > 1:
+            print "Fringe:"
+            for i in fringe:
+                print i
+        if len(fringe):
+            node = fringe.pop()
+        else:
+            print 'Not found'
+            return False
+        if node == state[1]:
+            closed.append(node)
+            if verbose > 1:
+                for i in closed:
+                    print i
+            return closed
         if node not in closed:
             closed.append(node)
             for i in expand(node,verbose):
                 fringe.insert(len(fringe),i)
+
 
 
 
@@ -270,12 +324,12 @@ def main():
     output = None
     goal_file = None
     init_file = None
-    verbose = False
+    verbose = 0
     all_search = False
     mode = None
     for o, a in opts:
         if o == "-v":
-            verbose = True
+            verbose = verbose + 1
         elif o in ("-h", "--help"):
             usage()
             sys.exit()
@@ -304,7 +358,7 @@ def main():
         iddfs(verbose)
         astar(verbose)
     elif mode == 'bfs':
-        bfs(state, verbose)
+        print_sol(bfs(state, verbose))
     elif mode == 'dfs':
         dfs(verbose)
     elif mode == 'iddfs':
