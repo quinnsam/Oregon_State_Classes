@@ -88,14 +88,14 @@ Tue 04/04
 **Uniformed Search**
 
 Depth-first Search
-* Complete?     No - can go infininte depth
+* Complete?     No - can go infinite depth
 * Optimal?      No - Can have shallower goals
 * Time complex  O(b^m)
 * space complex O(bm)
 
 Depth-simitde Search
 - Solves infinite path problem by using predetermined depth limit l
-- Nodes depth l are threated as if they have no successors
+- Nodes depth l are treated as if they have no successors
 
 * Complete?     No - Goal can be past limit
 * Optimal?      No - Can have shallower goals
@@ -106,9 +106,38 @@ Bidircetional search
 - Run on search forward and one backwards
 
 * Complete?     yes - provided branching factor is finite
-* Optimal?      yes - If the setp costs are identical in both directions
+* Optimal?      yes - If the step costs are identical in both directions
 * Time complex  O(b^(d/2))
 * space complex O(b^(d/2))
 
+
+################################################################################
+Thu 04/08
+################################################################################
+
+Local search Algorithm Recipe
+    1) Start with initial config X
+    2) Evaluate its neighbors (All states reachable in one move from X)
+    3) Select one of its neighbors X*
+    4) Move to X* and repeat until the current configuetion is satisfactory
+
+Hill-Climbing (intuitively)
+    * Greedy algorithm - best immediate move
+
+    Stochastic Hill climb:
+        - Chooses random among the uphill moves
+        - Probability of selection varies with steepness
+
+    First-choice hill climbing:
+        - Generates successors randomly until one is generatend that is better than the current state
+        - Good when state has many successors
+
+    Random-restart hill-climbing
+        - Good for dealing with local maxima
+        - Conduct a series of hill-climbing searches from randomly generatend intintial states
+
+Simulated Annealing
+    * Hill climb never makes a downhill move
+    * What if we added some random moves to hill-climbing to help it got out of local maxima.
 
 
