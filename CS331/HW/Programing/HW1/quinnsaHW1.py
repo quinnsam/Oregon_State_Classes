@@ -197,10 +197,14 @@ def expand(state,verbose):
     return suc
 
 def print_sol(sol):
+    if not sol:
+        print 'No solution avalible'
+        sys.exit(1)
     print 'Key:\nMissionarys  Cannibles  Boat'
     print 'Left\t\tRight'
     for i in sol:
         print i[left][miss], i[left][cann], i[left][boat],'\t\t',i[right][miss], i[right][cann], i[right][boat]
+    print 'Total Moves:', len(sol)
 
 
 def bfs(state, verbose):
@@ -239,11 +243,64 @@ def bfs(state, verbose):
 
 
 
-def dfs(verbose):
+def dfs(state, verbose):
     if verbose: print 'Depth First Search'
 
-def iddfs(verbose):
+    fringe = []
+    closed = []
+    #closed.append([])
+    #closed.append([])
+
+    fringe.insert(0, state[0])
+    if verbose: print 'Current fringe', fringe
+    while len(fringe):
+        if verbose > 1:
+            print "Fringe:"
+            for i in fringe:
+                print i
+        node = fringe.pop()
+
+        if node == state[1]:
+            closed.append(node)
+            if verbose > 1:
+                for i in closed:
+                    print i
+            return closed
+        if node not in closed:
+            closed.append(node)
+            for i in expand(node,verbose):
+                fringe.insert(0,i)
+
+    return False
+
+def iddfs_dfs(node, depth, goal, visited, verbose):
+    found = []
+    if depth == 0 and node == goal:
+        visited.append(node)
+        print 'fount', visited
+        return visited
+    elif depth > 0:
+        for i in expand(node, verbose):
+            if i not in visited:
+                visited.append(i)
+                iddfs_dfs(i,depth -1, goal, visited, verbose)
+    return []
+
+def iddfs(state, verbose):
     if verbose: print 'Iterative depth First Search'
+
+    closed = []
+    itter = 0
+
+    for itter in range(0,100):
+        closed = iddfs_dfs(state[0], itter, state[1], closed, verbose)
+        print 'clos', closed
+        if state[1] in closed:
+            return closed
+
+
+    return False
+
 
 def astar(verbose):
     if verbose: print 'A-Star Search'
@@ -360,9 +417,9 @@ def main():
     elif mode == 'bfs':
         print_sol(bfs(state, verbose))
     elif mode == 'dfs':
-        dfs(verbose)
+        print_sol(dfs(state, verbose))
     elif mode == 'iddfs':
-        iddfs(verbose)
+        print_sol(iddfs(state, verbose))
     elif mode == 'astar':
         astar(verbose)
     elif mode == None and all_search == False:
