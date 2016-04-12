@@ -274,16 +274,16 @@ def dfs(state, verbose):
     return False
 
 def iddfs_dfs(node, depth, goal, visited, verbose):
-    found = []
     if depth == 0 and node == goal:
-        visited.append(node)
-        print 'fount', visited
+        if verbose: print 'Solution found:', visited
         return visited
     elif depth > 0:
         for i in expand(node, verbose):
             if i not in visited:
                 visited.append(i)
-                iddfs_dfs(i,depth -1, goal, visited, verbose)
+                temp = iddfs_dfs(i,depth -1, goal, visited, verbose)
+                if temp:
+                    return visited
     return []
 
 def iddfs(state, verbose):
@@ -292,10 +292,9 @@ def iddfs(state, verbose):
     closed = []
     itter = 0
 
-    for itter in range(0,100):
-        closed = iddfs_dfs(state[0], itter, state[1], closed, verbose)
-        print 'clos', closed
-        if state[1] in closed:
+    for itter in range(0,30):
+        closed = iddfs_dfs(state[0], itter, state[1], [], verbose)
+        if len(closed):
             return closed
 
 
