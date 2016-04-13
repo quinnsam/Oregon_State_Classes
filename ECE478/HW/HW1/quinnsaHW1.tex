@@ -1,0 +1,207 @@
+\documentclass[letterpaper,11pt,notitlepage,fleqn]{article}
+
+%\usepackage{nopageno} %gets rid of page numbers
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{indentfirst}
+\usepackage{url}
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+\usepackage{pstricks, pst-node}
+\usepackage{geometry}
+\geometry{textheight=9in, textwidth=6.5in} %sets 1" margins 
+\newcommand{\cred}[1]{{\color{red}#1}} %command to change font to red
+\newcommand{\cblue}[1]{{\color{blue}#1}} % ...blue
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+% Code snippets color
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+  language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\lstdefinelanguage{diff}{
+  morecomment=[f][\color{blue}]{@@},     % group identifier
+  morecomment=[f][\color{red}]-,         % deleted lines 
+  morecomment=[f][\color{green}]+,       % added lines
+  morecomment=[f][\color{magenta}]{---}, % Diff header lines (must appear after +,-)
+  morecomment=[f][\color{magenta}]{+++},
+}
+% End color
+\def\name{Sam Quinn}
+
+\parindent = 0.4444 in
+\parskip = 0.2 in
+
+\begin{document}
+\begin{titlepage}
+\vspace*{\fill}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+
+%----------------------------------------------------------------------------------------
+%TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+%\includegraphics[scale=.5]{image.eps}
+\HRule \\[0.4cm]
+{ \huge \bfseries Homework \#1}\\[0.4cm] % Title of your document
+
+%----------------------------------------------------------------------------------------
+%HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE Oregon State University}\\[0.5cm] % Name of your university/college
+\textsc{\Large ECE 478 Network Security}\\[0.5cm] % Major heading such as course name
+\textsc{\large Spring 2016}\\[0.5cm] % Minor heading such as course title
+
+
+\HRule \\[1.5cm]
+%----------------------------------------------------------------------------------------
+%AUTHOR SECTION
+%------------------------------------ ----------------------------------------------------
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Student:}\\
+        \noindent \textbf{Sam \textsc{Quinn}} \\ % Your name
+        {\small Quinnsa@Oregonstate.edu}
+        \end{flushleft}
+        \end{minipage}
+        ~
+        \begin{minipage}{0.4\textwidth}
+        \begin{flushright} \large
+        \emph{Professor:} \\
+            \noindent \textbf{Dr. Attila A \textsc{Yavuz}} \\ % Supervisor's Name
+            {\small Attila.Yavuz@oregonstate.edu}
+            \end{flushright}
+            \end{minipage}\\[3cm]
+
+                %----------------------------------------------------------------------------------------
+                %DATE SECTION
+                %-----------------    -----------------------------------------------------------------------
+
+{\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+
+%----------------------------------------------------------------------------------------
+%LOGO SECTION
+%------   ----------------------------------------------------------------------------------
+
+    \includegraphics[scale=0.5]{coe.eps}\\[1cm] % Include a department/university logo - this will require the graphicx package
+
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+
+
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Question about basic concepts:}
+\noindent \textbf{What are the main security/performance trade-offs for symmetric and asymmetric cryptography to be deployed in practice? Could you give real-life scenarios where symmetric and asymmetric crypto could be more suitable?}
+Symmetric is faster, have to share the key. Real life, symmetric is better when dealing with only 2 parties, don't need accountablity.
+
+
+Asymmetric, don't need to pre-share keys with parties, provides authentication, can be used to share symmetric key. Real life, 
+
+\noindent \textbf{OTPs are highly secure, but why we do not see them much in practice?}
+The size of the key must be the size of the data. 
+
+\noindent \textbf{Does Kerckhoffs's principle contradict with the ``secret algorithm'' practice in military systems? Given sufficient financial capability, how could you incorporate Kerckhoffs's principle into such high-end systems?}
+
+Security through obscurity since the adversary does not know the algorithims used. 
+
+You could higher white hat hackers to look at the scheme and test the security based on them knowing the works, and if it is still secure then it will provide more security.
+
+\section{Data Encryption Standard (DES). DES has weak keys.}
+\noindent \textbf{What is the difference between a weak key, a semi-weak key and a possible weak key?}
+Weak keys are under 64 bits, semi-weak hamming number (too many 1's), possiblly weak unknown..
+\noindent \textbf{What is double DES?  What kind of attack on double DES makes it useless?}
+Meet in the middle attack.
+\noindent \textbf{What is triple DES?  How many keys are use in triple DES process?}
+
+
+
+\section{Block Cipher Design Principles and AES}
+\noindent \textbf{What is the basic design  technique,  which  is  frequently  used  to  construct  modern symmetric ciphers?}
+
+fistel cipher with matrix?
+
+\noindent \textbf{What are the main security properties achieved via this designed technique?}
+
+Non-linear function
+
+\noindent \textbf{Given the  example  of  AES,  which  functional  steps  enable achieving  these  properties?  Please provide  specific  names  of  these operations  and  briefly  explain  how  they  are  applied  in AES (all answers are brief for this question)?}
+
+\noindent \textbf{What are the benefits of the use of finite field arithmetic in AES?}
+
+
+\section{Symmetric Encryption Modes}
+\noindent \textbf{We have discussed various Symmetric Encryption Modes. Each of  these modes  satisfies certain properties, which can be  an  advantage or disadvantage  for  a given  application. Construct a  table providing a  summary  information  about  each mode and  its corresponding properties. For example,  each  row  of  the  table  will  be  properties  (e.g.,  parallel  operation,  ciphertext manipulation,  pre-computation,  etc.,  please  see  course  notes  for  more  properties)  and  columns are  Modes  (e.g.,  CBC,  CTR…).  Each  cell  will  take  a  value  such  as  “Yes”,  “No”,  “partially”, “high”, “low” etc. according to given encryption mode and property.}
+
+\section{Ciphertext  manipulability}
+\noindent \textbf{“Ciphertext  manipulability”  is  generally  considered  as  an  undesirable  property  for Encryption  Modes.  However,  for  modes  that  operates  in  stream  cipher  fashion  (discussed  in class), by design, it is possible to flip bits in plaintext by flipping bits of ciphertext.}
+\noindent \textbf{Why is this possible?}
+\noindent \textbf{Is  there  a  way  to  turn  this  (potentially)  undesirable  property  into  an  advantage, describe how if there is one?}
+\noindent \textbf{Which  extra  cryptographic  function  (a  group  of  functions  discussed  in  the  class)  can be applied to the ciphertext so that the aforementioned advantage can be obtained without compromising the security?}
+
+\noindent Hints:  (i) Consider  noisy  communication  channels  as  application  domain  to  exploit  this  feature. 
+(ii) The extra cryptographic function will require annexing a small-constant tag to the ciphertext. 
+
+\section{Encryption and Compression}
+\noindent \textbf{Encryption (E) and Compression (C) are generally used together to achieve confidentiality and  efficiency  simultaneously. Given  a message M, with which order  function E  and C must be applied? What are the reasons behind of this particular order?}
+
+\section{Symmetric key Authentication}
+\noindent \textbf{In  symmetric  key  cryptography,  it  is  desirable  to  achieve  both  confidentiality  and authentication  (also  provides  integrity)  of  the  data.  These  properties  can  be  achieved  via Encryption (E) and Authentication Functions (A), respectively. What is the correct order of these operations? Lets assume the specific notation and order of these operations are as follows:} 
+\begin{itemize}
+    \item \textbf{Authenticate-then-Encrypt (AtE)}
+    \item \textbf{Encrypt-then-Authenticate (EtA)}
+    \item \textbf{Encryption and Authentication (E\&A) or the opposite way as (A\&E)}
+\end{itemize}
+
+\noindent \textbf{Discuss the security implications of these choices, which one is recommended and why?}
+
+\noindent \textbf{Mention important crypto papers (at least one, cite it), in which the security of an important real-life  protocol  (Hint:  the  protocol  that  securely  connects  your  VPN  for  each  e-commerce transaction!)  analyzed  based  on  the  above  orders.  Explain  why  this  order  matters  a  lot  in practice?  You  may  provide  some  discussions  from  these  papers  (please  be  brief,  just  hit  on important points).}
+
+\section{Cryptographic  hash  functions}
+\noindent \textbf{Given  a modern  cryptographic  hash  function  (e.g.,  SHA) with m-bit  length  output, what is  the maximum  security  it  can  provide  in  terms  of  m  (lets  call  it  x-bit  security)? A  generalized proof  for  any  given  m-bit  hash  function  is  available  to  show  why  it  can  achieve  at  best  x-bit security.  Please  describe  this  generalized  proof  (related  birthday  attack  concept)  that  simply connects m-bit to x-bit.}
+
+\section{Length extension}
+\noindent \textbf{What  is  the  hash  length  extension  attack?  Please  describe  by  giving  some  specific  real-life examples.}
+
+\section{Properties of cryptographic hash function}
+\noindent \textbf{What are the essential properties that a cryptographic hash function must satisfy?}
+\noindent \textbf{What is a Random Oracle and how does it play a role in the security proofs in general 
+(what is its relation with cryptographic hash functions?)}
+
+\medskip
+ 
+\bibliography{crypto}
+\bibliographystyle{ieeetr}
+\end{document}

@@ -141,3 +141,36 @@ Simulated Annealing
     * What if we added some random moves to hill-climbing to help it got out of local maxima.
 
 
+################################################################################
+Tue 04/11
+################################################################################
+
+*Genetic Algorithms*
+    * Vareint of stochastic beam search
+
+    Definintions
+        - Pitness function: Evaluation function in GA
+        - Population: k randomly generated states
+        - Individual: string over a fininte alphabet.
+        - Selection: Pick two radom individuals for reproduction.
+        - Crossover: Mix the two pranet string at the crossover point.
+        - Mutation: Randomly change a location in an individual's string with a small indepentdent probability.
+        - Culling: individuals below a certion threshold are removed
+
+    Example: 8-queens
+        - Fitness Function: number of nonattacking pairs of queens (28)
+        - Represents 8-queens state as an 8 digit string in which each digit represents position of a queen
+
+*Discrete Environments*
+    * Local search in continuous state spaces
+
+    * If Alpha is too large
+        - Gradient descent ovorshoots the optimum point
+    * if Alpha is too small
+        - Gradient descents requires too many steps and will take a very long time to converge.
+
+    Weaknesses of Gradient Descent
+        - Slow to converge
+        - Good results depend on the value of the learnig rate Alpha
+        - f(x) must be differentiable.
+
