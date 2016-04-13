@@ -46,4 +46,29 @@ Extraction
 + Exam - How to compute HMAC
 
 
+################################################################################ 
+Tue 04/11/2016
+################################################################################ 
+
+*One-way Hash Chain*
+    * Used for many network security applictions
+        - S/key
+        - Authenticate data streams
+        - Key derivation in crypto schemes
+       
+    One time password generation. 
+
+    Hash chains are not tollerant to packet loss.
+
+    Weaknesses
+    1) All or nothing 
+    2) Real time
+    3) Packet loss
+
+*Merkel Hash Tree*
+    * A binary tree over data values
+        - For authentication purpose
+    * The root is the commitment of the Merkle tree
+        - Known to the verifier
+
 
