@@ -25,7 +25,7 @@ right = 1
 miss = 0
 cann = 1
 boat = 2
-
+iddfs_counter = 0
 
 def verify(state,verbose):
     if state[left][cann] > state[left][miss]:
@@ -289,16 +289,18 @@ def dfs(state, verbose):
 
     return False
 
-def iddfs_dfs(node, depth, goal, visited, nodes_exp, verbose):
+def iddfs_dfs(node, depth, goal, visited, verbose):
+    global iddfs_counter
     if depth == 0 and node == goal:
         if verbose: print 'Solution found:', visited
-        visited.append(nodes_exp)
+        visited.append(iddfs_counter)
         return visited
     elif depth > 0:
+        iddfs_counter = iddfs_counter + 1
         for i in expand(node, verbose):
             if i not in visited:
                 visited.append(i)
-                temp = iddfs_dfs(i,depth -1, goal, visited, nodes_exp + 1, verbose)
+                temp = iddfs_dfs(i,depth -1, goal, visited, verbose)
                 if temp:
                     return visited
     return []
@@ -310,7 +312,7 @@ def iddfs(state, verbose):
     itter = 0
 
     for itter in range(0,1000):
-        closed = iddfs_dfs(state[0], itter, state[1], [], 0, verbose)
+        closed = iddfs_dfs(state[0], itter, state[1], [], verbose)
         if len(closed):
             return closed
 
@@ -467,9 +469,13 @@ def main():
 
     # Determine which search to run
     if all_search:
+        print "BFS"
         print_sol(bfs(state, verbose), 'bfs')
+        print "DFS"
         print_sol(dfs(state, verbose), 'dfs')
+        print "IDDFS"
         print_sol(iddfs(state, verbose), 'iddfs')
+        print "A-Star"
         print_sol(astar(state, verbose), 'astar')
     elif mode == 'bfs':
         print_sol(bfs(state, verbose), mode)
