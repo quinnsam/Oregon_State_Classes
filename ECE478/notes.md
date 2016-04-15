@@ -72,3 +72,18 @@ Tue 04/11/2016
         - Known to the verifier
 
 
+################################################################################ 
+Thu 04/14/2016
+################################################################################ 
++ What are the leakagese in searchable encryption?
++ what things can you do to prevent leakages in searchable encryption? ORAM
+
+*ORAM*
+Needs to hide:
+    1) Virtual access patterns
+    2) Physical access pattern
+ORAM Propertys:
+    * Equal block size
+    * IND-CPA (randomized encryption)
+
+

@@ -174,3 +174,14 @@ Tue 04/11
         - Good results depend on the value of the learnig rate Alpha
         - f(x) must be differentiable.
 
+*Adversarial search*
+    * Deterministic
+    * Discrete states and decisions
+    * Finite number of states and decisions
+    * Two agents whos  actions alternate
+    * Zero-sum game
+
+    Pruning:
+        - Improve time complexity of O(b^m)
+
+

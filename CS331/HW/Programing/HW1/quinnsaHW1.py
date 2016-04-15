@@ -1,11 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+################################################################################
+#	 ____                     ___        _            		       #
+#	/ ___|  __ _ _ __ ___    / _ \ _   _(_)_ __  _ __  		       #
+#	\___ \ / _` | '_ ` _ \  | | | | | | | | '_ \| '_ \ 		       #
+#	 ___) | (_| | | | | | | | |_| | |_| | | | | | | | |		       #
+#	|____/ \__,_|_| |_| |_|  \__\_\\__,_|_|_| |_|_| |_|		       #
+#	 _   ___        __    _  _     _				       #
+#	| | | \ \      / /  _| || |_  / |				       #
+#	| |_| |\ \ /\ / /  |_  ..  _| | |				       #
+#	|  _  | \ V  V /   |_      _| | |				       #
+#	|_| |_|  \_/\_/      |_||_|   |_|                                      #
+################################################################################
 # Imports
 import getopt
 import sys
 import os
 import copy
+from Queue import PriorityQueue
 
 # Human readable state varibles
 left = 0
@@ -14,11 +26,6 @@ miss = 0
 cann = 1
 boat = 2
 
-class node:
-    def __init__(self, parent, action, result):
-        self.parent = parent
-        self.action = action
-        self.result = result
 
 def verify(state,verbose):
     if state[left][cann] > state[left][miss]:
@@ -196,15 +203,22 @@ def expand(state,verbose):
             print '   ', i
     return suc
 
-def print_sol(sol):
+def print_sol(sol, mode):
     if not sol:
         print 'No solution avalible'
         sys.exit(1)
+
+    f = open(mode + '_solution.txt', 'w')
     print 'Key:\nMissionarys  Cannibles  Boat'
+    f.write('Key:\nMissionarys  Cannibles  Boat\n')
     print 'Left\t\tRight'
+    f.write('Left\t\tRight\n')
+    node_exp = sol.pop()
     for i in sol:
         print i[left][miss], i[left][cann], i[left][boat],'\t\t',i[right][miss], i[right][cann], i[right][boat]
-    print 'Total Moves:', len(sol)
+        f.write(str(i[left][miss]) + ' ' + str(i[left][cann]) + ' ' + str(i[left][boat]) + '\t\t' + str(i[right][miss]) + ' ' + str(i[right][cann]) + ' ' + str(i[right][boat]) + '\n')
+    print 'Total Moves:', len(sol), '\nTotal Nodes expanded:', node_exp
+    f.write('Total Moves: ' + str(len(sol)) + '\nTotal Nodes expanded: ' + str(node_exp) + '\n')
 
 
 def bfs(state, verbose):
@@ -212,8 +226,7 @@ def bfs(state, verbose):
 
     fringe = []
     closed = []
-    #closed.append([])
-    #closed.append([])
+    nodes_exp = 0
 
     fringe.append(state[0])
     if verbose: print 'Current fringe', fringe
@@ -233,7 +246,9 @@ def bfs(state, verbose):
             if verbose > 1:
                 for i in closed:
                     print i
+            closed.append(nodes_exp)
             return closed
+        nodes_exp = nodes_exp + 1
         if node not in closed:
             closed.append(node)
             for i in expand(node,verbose):
@@ -248,8 +263,7 @@ def dfs(state, verbose):
 
     fringe = []
     closed = []
-    #closed.append([])
-    #closed.append([])
+    nodes_exp = 0
 
     fringe.insert(0, state[0])
     if verbose: print 'Current fringe', fringe
@@ -258,14 +272,16 @@ def dfs(state, verbose):
             print "Fringe:"
             for i in fringe:
                 print i
-        node = fringe.pop()
+        node = fringe.pop(0)
 
         if node == state[1]:
             closed.append(node)
             if verbose > 1:
                 for i in closed:
                     print i
+            closed.append(nodes_exp)
             return closed
+        nodes_exp = nodes_exp + 1
         if node not in closed:
             closed.append(node)
             for i in expand(node,verbose):
@@ -273,15 +289,16 @@ def dfs(state, verbose):
 
     return False
 
-def iddfs_dfs(node, depth, goal, visited, verbose):
+def iddfs_dfs(node, depth, goal, visited, nodes_exp, verbose):
     if depth == 0 and node == goal:
         if verbose: print 'Solution found:', visited
+        visited.append(nodes_exp)
         return visited
     elif depth > 0:
         for i in expand(node, verbose):
             if i not in visited:
                 visited.append(i)
-                temp = iddfs_dfs(i,depth -1, goal, visited, verbose)
+                temp = iddfs_dfs(i,depth -1, goal, visited, nodes_exp + 1, verbose)
                 if temp:
                     return visited
     return []
@@ -292,17 +309,61 @@ def iddfs(state, verbose):
     closed = []
     itter = 0
 
-    for itter in range(0,30):
-        closed = iddfs_dfs(state[0], itter, state[1], [], verbose)
+    for itter in range(0,1000):
+        closed = iddfs_dfs(state[0], itter, state[1], [], 0, verbose)
         if len(closed):
             return closed
 
 
     return False
 
+def h(node, verbose):
+    if verbose > 1: print 'A-Star huristic function'
+    lsum = 0
+    rsum = 0
+    for i in node[left]:
+        lsum = lsum + i
+    for i in node[right]:
+        rsum = rsum + i
 
-def astar(verbose):
+    return (rsum + lsum) - lsum
+
+def astar(state, verbose):
     if verbose: print 'A-Star Search'
+
+    fringe = []
+    closed = []
+    h_list = []
+    nodes_exp = 0
+
+    fringe.append(state[0])
+    if verbose: print 'Current fringe', fringe
+    while fringe != state[1]:
+        if fringe == None: return False
+        if verbose > 1:
+            print "Fringe:"
+            for i in fringe:
+                print i
+        if len(fringe):
+            node = fringe.pop(0)
+        else:
+            print 'Not found'
+            return False
+        if node == state[1]:
+            closed.append(node)
+            if verbose > 1:
+                for i in closed:
+                    print i
+            closed.append(nodes_exp)
+            return closed
+        nodes_exp = nodes_exp + 1
+        if node not in closed:
+            closed.append(node)
+            for i in expand(node,verbose):
+                h_list.append(h(node,verbose))
+                fringe.insert(h(node,verbose),i)
+
+
 def parse_state(init, goal, verbose):
     if verbose: print 'Parsing state file'
     # Check if file path exists
@@ -362,22 +423,21 @@ def usage():
     print "\t\t* dfs   (for depth-first search)"
     print "\t\t* iddfs (for iterative deepening depth-first search)"
     print "\t\t* astar (for A-Star search below)"
-    print "\t-o,--output\t\tOutput file"
     print "\t-a,--all\t\tAll search modes"
     print "\t-v\t\t\tVerbose output"
+    print "\t-vv\t\t\tVery Verbose output"
     print "\t-h,--help\t\tPrint usage message"
 
 def main():
 
     # Get all command line arguments
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "i:g:m:o:vha", ["all", "help", "init=", "goal=", "mode=", "output="])
+        opts, args = getopt.getopt(sys.argv[1:], "i:g:m:vha", ["all", "help", "init=", "goal=", "mode="])
     except getopt.GetoptError as err:
         # print help information and exit:
         print str(err) # will print something like "option -a not recognized"
         usage()
         sys.exit(2)
-    output = None
     goal_file = None
     init_file = None
     verbose = 0
@@ -389,8 +449,6 @@ def main():
         elif o in ("-h", "--help"):
             usage()
             sys.exit()
-        elif o in ("-o", "--output"):
-            output = a
         elif o in ("-i", "--init"):
             init_file = a
         elif o in ("-g", "--goal"):
@@ -409,18 +467,18 @@ def main():
 
     # Determine which search to run
     if all_search:
-        bfs(state, verbose)
-        dfs(verbose)
-        iddfs(verbose)
-        astar(verbose)
+        print_sol(bfs(state, verbose), 'bfs')
+        print_sol(dfs(state, verbose), 'dfs')
+        print_sol(iddfs(state, verbose), 'iddfs')
+        print_sol(astar(state, verbose), 'astar')
     elif mode == 'bfs':
-        print_sol(bfs(state, verbose))
+        print_sol(bfs(state, verbose), mode)
     elif mode == 'dfs':
-        print_sol(dfs(state, verbose))
+        print_sol(dfs(state, verbose), mode)
     elif mode == 'iddfs':
-        print_sol(iddfs(state, verbose))
+        print_sol(iddfs(state, verbose), mode)
     elif mode == 'astar':
-        astar(verbose)
+        print_sol(astar(state, verbose), mode)
     elif mode == None and all_search == False:
         usage()
 
