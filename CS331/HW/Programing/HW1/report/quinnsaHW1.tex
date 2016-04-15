@@ -1,0 +1,168 @@
+\documentclass[letterpaper,11pt,notitlepage,fleqn]{article}
+
+%\usepackage{nopageno} %gets rid of page numbers
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{indentfirst}
+\usepackage{url}
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+\usepackage{pstricks, pst-node}
+\usepackage{geometry}
+\geometry{textheight=9in, textwidth=6.5in} %sets 1" margins 
+\newcommand{\cred}[1]{{\color{red}#1}} %command to change font to red
+\newcommand{\cblue}[1]{{\color{blue}#1}} % ...blue
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+% Code snippets color
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+  language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\lstdefinelanguage{diff}{
+  morecomment=[f][\color{blue}]{@@},     % group identifier
+  morecomment=[f][\color{red}]-,         % deleted lines 
+  morecomment=[f][\color{green}]+,       % added lines
+  morecomment=[f][\color{magenta}]{---}, % Diff header lines (must appear after +,-)
+  morecomment=[f][\color{magenta}]{+++},
+}
+% End color
+\def\name{Sam Quinn}
+
+\parindent = 0.4444 in
+\parskip = 0.2 in
+
+\begin{document}
+\begin{titlepage}
+\vspace*{\fill}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+
+%----------------------------------------------------------------------------------------
+%TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+%\includegraphics[scale=.5]{image.eps}
+\HRule \\[0.4cm]
+{ \huge \bfseries Homework \#1}\\[0.4cm] % Title of your document
+
+%----------------------------------------------------------------------------------------
+%HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE Oregon State University}\\[0.5cm] % Name of your university/college
+\textsc{\Large CS331 Artificial Intelligence}\\[0.5cm] % Major heading such as course name
+\textsc{\large Spring 2016}\\[0.5cm] % Minor heading such as course title
+
+
+\HRule \\[1.5cm]
+%----------------------------------------------------------------------------------------
+%AUTHOR SECTION
+%------------------------------------ ----------------------------------------------------
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Student:}\\
+        \noindent \textbf{Sam \textsc{Quinn}} \\ % Your name
+        {\small Quinnsa@Oregonstate.edu}
+        \end{flushleft}
+        \end{minipage}
+        ~
+        \begin{minipage}{0.4\textwidth}
+        \begin{flushright} \large
+        \emph{Professor:} \\
+            \noindent \textbf{Dr. Rebecca \textsc{Hutchinson}} \\ % Supervisor's Name
+            {\small Rah@eecs.oregonstate.edu}
+            \end{flushright}
+            \end{minipage}\\[3cm]
+
+                %----------------------------------------------------------------------------------------
+                %DATE SECTION
+                %-----------------    -----------------------------------------------------------------------
+
+{\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+
+%----------------------------------------------------------------------------------------
+%LOGO SECTION
+%------   ----------------------------------------------------------------------------------
+
+    \includegraphics[scale=0.5]{coe.eps}\\[1cm] % Include a department/university logo - this will require the graphicx package
+
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+
+
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Methodology}
+\noindent \textbf{Usage:} python quinnsaHW1.py --help\\
+\textbf{Breadth First Search:} python quinnsaHW1.py --mode bfs --init start1.txt --goal goal1.txt\\
+\textbf{Depth First Search:} python quinnsaHW1.py --mode dfs --init start1.txt --goal goal1.txt\\
+\textbf{Iterative Deepening Depth First Search:} python quinnsaHW1.py --mode iddfs --init start1.txt --goal goal1.txt\\
+\textbf{A-Star Search:} python quinnsaHW1.py --mode astar --init start1.txt --goal goal1.txt\\
+
+\noindent For this assignment I tested my program on the three scenarios provided with each of my search algorithms.
+\subsection{BFS}
+The BFS search function will explore every node in the tree level by level. This algorithm will insert all of the neighbor nodes to the end of the data structure ensuring that it will explore each node and its neighbors before continuing to the next level of the tree. 
+\subsection{DFS}
+The DFS search function is implemented very similarly to the BFS search function but instead of adding the neighbor nodes to the end of the data structure the neighbors are added to the front. With each node's neighbors added to the front the algorithm will continue to explore one path until a terminal.
+\subsection{IDDFS}
+The Iterative Deepening Depth First Search will start off with the root node and based on the depth limit perform a depth first search. If no solution is found the limit will increase and the whole process will start over again. This algorithm mimics a breadth first search in some sense. 
+\subsection{A-Star}
+The A-Star search algorithm is the only informed search algorithm that I implemented. The A-Star search requires a heuristic and a priority queue. The heuristic has to be admissible, essentially meaning that it is ``best case''. For my heuristic I summed the number of Humans, Cannibals, and the boat then subtracted the number of Humans, Cannibals, and boat from the left side resulting in the heuristic value. The heuristic value that is returned will be where that number is placed within the data
+structure, for example when a heuristic value is 0 (goal node) it will be placed at the index of 0. The A-Star function will pop nodes from the front of the data structure, meaning that the best nodes from the heuristic function will be analyzed first. 
+
+\section{Results}
+\begin{center}
+    \begin{tabular}{|l|l|l|l|l|}
+        \hline
+        & \textbf{BFS} & \textbf{DFS} & \textbf{IDDFS} & \textbf{A-Star} \\ \hline
+        \textbf{Test 1} & Solution: 12 & Solution: 12 & Solution: 14 & Solution: 15 \\
+        & Expanded: 16 & Expanded: 16 & Expanded: 102 & Expanded: 28 \\ \hline
+        \textbf{Test 2} & Solution: 34 & Solution: 34 & Solution: 35 & Solution: 42 \\
+        & Expanded: 57 & Expanded: 57 & Expanded: 514 & Expanded: 82 \\ \hline
+        \textbf{Test 3} & Solution: 1514 & Solution: 1514 & Solution: 494 & Solution: 1611 \\
+        & Expanded: 2254 & Expanded: 2254 & Expanded: 384086 & Expanded: 6438 \\ \hline
+    \end{tabular}
+\end{center}
+
+\section{Discussion}
+After running my program on all three test cases I was surprised to see the results. It was interesting to see that DFS and BFS had the same solution path number as well as the same number of nodes expanded. BFS and DFS out performed IDDFS and A-Star in Test 1 and 2 but IDDFS really pulled ahead on Test 3 getting the solution in less than half of the other algorithms. A-Star was the worst in all the tests, I think this is to do with my heuristic function not optimizing the
+best as possible. The A-Star heuristic, since really didn't do too much thinking and was admissible might have prioritized valuable nodes incorrectly. 
+\\
+\indent IDDFS took a very long time on the largest data set (test 3), almost two full minute to find the solution even though it found the best solution it expanded 384086 nodes which is much much more than any other algorithm.
+
+\section{Conclusion}
+This was very interesting testing the performance of these algorithms, this was my first real hands on with search algorithms. What I can conclude from these results is that there really isn't one search algorithm that can solve everything. If you are looking for an algorithm that is fast and is guaranteed to find a solution you should use BFS. If you need an algorithm that is memory conscious you should use DFS. And if you need the most optimized path use IDDFS or A-Star with a good
+heuristic. It is hard to determine which algorithm performed the best because they all have unique pros and cons associated with each. But for me given this problem I think that I would choose IDDFS since it will give the most optimized path even though it takes much longer. I was not expecting to think that IDDFS would be the best because I thought that BFS would have similar results. 
+ 
+\end{document}
