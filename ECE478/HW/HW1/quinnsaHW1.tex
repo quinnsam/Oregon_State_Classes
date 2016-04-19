@@ -137,18 +137,18 @@ One time pad is one of the highest security since each bit of the plaintext is r
 
 \noindent \textbf{Does Kerckhoffs's principle contradict with the ``secret algorithm'' practice in military systems? Given sufficient financial capability, how could you incorporate Kerckhoffs's principle into such high-end systems?}
 
-The security systems used in the military are often classified until they come up with a new method in which the old systems are released to the public. Witholding the current system from the public introduces the property of security through obscurity since the adversary does not know the algorithims used. One way to introduce Kerckhoffs's principle in to military systems would be to hire a team of skilled cryptographers to study the security systems used thus giving them complete knowledge
+The security systems used in the military are often classified until they come up with a new method in which the old systems are released to the public. Withholding the current system from the public introduces the property of security through obscurity since the adversary does not know the algorithms used. One way to introduce Kerckhoffs's principle in to military systems would be to hire a team of skilled cryptographers to study the security systems used thus giving them complete knowledge
 of the system minus the key. If the team are able to break the system then the only thing that is keeping the military security system secure is the obscurity which is very weak. However if the team is unable to break the system knowing everything but the key then the system is secure plus the added bonus of being obscure.
 
 \section{Data Encryption Standard (DES). DES has weak keys.}
 \noindent \textbf{What is the difference between a weak key, a semi-weak key and a possible weak key?}
 
-The origin of weak, semi-weak, and possibly weak keys in DES start with how DES extracts each rounds encryption keys from the master 56bit key. The 56bit key is divided into 16 sub keys one for each cycle of the DES encryption. A weak key would be $\lbrace0\rbrace^{56}$ or $\lbrace1\rbrace^{56}$ where all of the bits are the same thus making the ratating of the keys for each cycle useless. A semi-weak key would be a key that would reverse the cycle that took place in the previous cycle. A
-key that repeats with a period of 2 meaning that the rotation of keys produces exactly two keys that will be each be used 8 times. Possibly weak keys are keys that repeat with a period of 4, outputing 4 unique keys that will all be used 4 times each. (http://search.proquest.com/openview/6cc5dfe1f7c352582f2b62aa741b47dd/1?pq-origsite=gscholar) 
+The origin of weak, semi-weak, and possibly weak keys in DES start with how DES extracts each rounds encryption keys from the master 56bit key. The 56bit key is divided into 16 sub keys one for each cycle of the DES encryption. A weak key would be $\lbrace0\rbrace^{56}$ or $\lbrace1\rbrace^{56}$ where all of the bits are the same thus making the rotating of the keys for each cycle useless. A semi-weak key would be a key that would reverse the cycle that took place in the previous cycle. A
+key that repeats with a period of 2 meaning that the rotation of keys produces exactly two keys that will be each be used 8 times. Possibly weak keys are keys that repeat with a period of 4, outputting 4 unique keys that will all be used 4 times each. (http://search.proquest.com/openview/6cc5dfe1f7c352582f2b62aa741b47dd/1?pq-origsite=gscholar) 
 
 \noindent \textbf{What is double DES?  What kind of attack on double DES makes it useless?}
 
-Double DES does two rounds of DES encryption with two different keys, thus making the key 112 bits long. With a meet in the middle attack the added benifit of encrypting twice does not increas the security much. 
+Double DES does two rounds of DES encryption with two different keys, thus making the key 112 bits long. With a meet in the middle attack the added benefit of encrypting twice does not increase the security much. 
 Meet in the middle attack. The effective security gain from the single DES $2^{56}$ is increased by one exponential to $2^{57}$ in double DES. Double DES is useless because an adversary could brute force the first round (single DES) and then just pass the output to the second round without the need for any brute forcing. (http://stephanemoore.com/pdf/meetinthemiddle.pdf)
 
 \noindent \textbf{What is triple DES?  How many keys are use in triple DES process?}
@@ -160,21 +160,21 @@ Triple DES uses three rounds of DES making the maximum security 168 bits. Triple
 \section{Block Cipher Design Principles and AES}
 \noindent \textbf{What is the basic design  technique,  which  is  frequently  used  to  construct  modern symmetric ciphers?}
 
-Symmetric crpytography wil use techniques to obscure the data with confusion and diffusion. Confusion is mainly accomplished by substitutions, replacing original data with new data. Diffusion is mainly accomplished by premutations, where one bit changes will permute on to all the ciphertext data to further scramble the original input. Modern symmetric ciphers will alternate substitutions and permutations.
+Symmetric cryptography will use techniques to obscure the data with confusion and diffusion. Confusion is mainly accomplished by substitutions, replacing original data with new data. Diffusion is mainly accomplished by permutations, where one bit changes will permute on to all the ciphertext data to further scramble the original input. Modern symmetric ciphers will alternate substitutions and permutations.
 
 \noindent \textbf{What are the main security properties achieved via this designed technique?}
 
 Confusion in a symmetric cipher will help prevent attacks linear attacks. Because the data is passed through a non-linear table often created by the secret key the data is translated in a non-linear way.\\
-\indent Diffusion will help prevent against patern analysis attacks. Since every language has traceable patterns in grammar, diffusion makes these patterns much harder to spot. If one bit is changed the entire ciphertext will be changed not just the coresponding bit within the ciphertext. 
+\indent Diffusion will help prevent against pattern analysis attacks. Since every language has traceable patterns in grammar, diffusion makes these patterns much harder to spot. If one bit is changed the entire ciphertext will be changed not just the corresponding bit within the ciphertext. 
 
 \noindent \textbf{Given the  example  of  AES,  which  functional  steps  enable achieving  these  properties?  Please provide  specific  names  of  these operations  and  briefly  explain  how  they  are  applied  in AES (all answers are brief for this question)?}
 
-\noindent$\bullet$ Confusion: S-Box - Rijndael S-Box is a lookup matrix generated by deteriminng the multiplicative inverse of each byte from the original input. \\
-$\bullet$ Diffusion: MixColumn - AES uses a MixColumn function on the Rijndael matrix that permutates any change with data through the use of XORs. 
+\noindent$\bullet$ Confusion: S-Box - Rijndael S-Box is a lookup matrix generated by determining the multiplicative inverse of each byte from the original input. \\
+$\bullet$ Diffusion: MixColumn - AES uses a MixColumn function on the Rijndael matrix that permutes any change with data through the use of XORs. 
 
 \noindent \textbf{What are the benefits of the use of finite field arithmetic in AES?}
 
-Finite field arithmetic in AES is an redefinition of how to perform algebraic opperations including multiplcation, addition, subtraction, and division. A finite field has a finited number of integers that  
+Finite field arithmetic in AES is an redefinition of how to perform algebraic operations including multiplication, addition, subtraction, and division. A finite field has a finite number of integers that  
 
 \section{Symmetric Encryption Modes}
 \noindent \textbf{We have discussed various Symmetric Encryption Modes. Each of  these modes  satisfies certain properties, which can be  an  advantage or disadvantage  for  a given  application. Construct a  table providing a  summary  information  about  each mode and  its corresponding properties. For example,  each  row  of  the  table  will  be  properties  (e.g.,  parallel  operation,  ciphertext manipulation,  pre-computation,  etc.,  please  see  course  notes  for  more  properties)  and  columns are  Modes  (e.g.,  CBC,  CTR…).  Each  cell  will  take  a  value  such  as  “Yes”,  “No”,  “partially”, “high”, “low” etc. according to given encryption mode and property.}
