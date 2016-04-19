@@ -173,6 +173,7 @@ Blood Transfusions
 
 Pre-exposure Prophylaxis (PrEP)
     * Many behavioral practices place individuals at high-risk for contracting HIV
+
     * Drugs are highly effective in PREVENTING the spread of HIV
 
 Keys to Prevention
@@ -182,7 +183,27 @@ Keys to Prevention
 
 
 ################################################################################
-Tue 04/11/2016
+Tue 04/19/2016
 ################################################################################
+*STI Prevention*
+    HPV is the number one STI in US
+Partner services - A variety of related services to notify sexual partners.
+    * Public health professional
+    * The infected person
+
+The 5 P's
+    1) Partners
+        - Do you have sex with men, women, or both?
+        - How many partners
+    2) Practices
+        - Anal sex
+        - Do you use condoms
+    3) Prevention of pregnancy
+        - What are you doint to prevent pregnacy?
+    4) Protection from STDs
+        - What do you do to protect yourself
+    5) Past history of STDs
+        - Have you ever had and STD
+
 
 

@@ -185,3 +185,23 @@ Tue 04/11
         - Improve time complexity of O(b^m)
 
 
+################################################################################
+Tue 04/18
+################################################################################
+*Properties of food evaluation functions*
+    1) Orders the terminal states in the same way as the utility function
+    2) Cmputation can't take too long
+    3) Evaluation function should be strongly correlated with the actual chances of winning
+
+    * Exact values don't matter it's the ordering of the terminal states that matters.
+
+*Coming up with evaluation functions*
+    * Extract features from the game
+    * For example, what features from a game of chess indicate that a state will likely lead to a win?
+    * Weighted linear function
+        - Assumes featuers are independent
+     
+*Horizon Effect*
+    * Stalling moves push an unavoidable move further out
+
+

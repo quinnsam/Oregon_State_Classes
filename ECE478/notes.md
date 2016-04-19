@@ -86,4 +86,53 @@ ORAM Propertys:
     * Equal block size
     * IND-CPA (randomized encryption)
 
+################################################################################
+Tue 04/19
+################################################################################
+Notation:
+    (sk,pk) <- SGN.kg(1^k), k >= 80
+    Sigma <- SGN.sig_sk(m)  m exist in {0,1}^*
+    {0,1} <- SGN.ver(m, Sigma, pk)
 
+
+*Lamport OTS (1978)*
+    f{0,1}^n -> {0,1}  // f is OWF, m in {0,1}^n m=(m_1,...,m_n)
+        1) (sk,pk) 11 (x_1,0,x_i, 1) <-$- {0,1}^n
+        2) y_i,0 <- f(x_1,0), y_i,1 <- f(x_1,0)
+
+
+    sk = (x_1,0,x_2,0,...,x_n,0
+          x_1,1,x_2,1,...,x_n,1)
+    pk = (y_1,0,y_2,0,...,y_n,0
+          y_1,1,y_2,1,...,y_n,1)
+
+    Sigma <- sign(m,sk) m = (m_1,...,m_n) Sigma <- (x_1,m_1,x_2,m_2,...,x_n,m_n)
+    {0,1} <- ver(Sigma, m, pk) if f(x_i,m) =?= y_i,m, i = 1,...,n
+                return 1, else 0
+
+    Example:
+        m = 011
+        sk = (x_1,0,x_2,0,x_3,0
+              x_1,1,x_2,1,x_3,1)
+        pk = (y_1,0,y_2,0,y_3,0
+              y_1,1,y_2,1,y_3,1)
+
+        Sigma <- (x_1,0,x_2,1,x_3,1)
+
+        Verify:
+            f(x_1,0) =?= y_1,0
+            f(x_2,1) =?= y_2,1
+            f(x_3,1) =?= y_3,1
+
+
+        Varient I: O(L)
+            h <- H(m)
+            |sk| = |pk| = 2 * |h|*|f|
+            |Sigma| = |h|*|f|
+
+        Varient II: Sign only O or 1 , because bit flip is detected. Size = 80 + 7
+        
+        Varient III: Make private key constant size
+            * Create a seed value that is passed into CPRNG = Key derivation trick
+
+        Varient IV: Reduce size of public key
