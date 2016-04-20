@@ -204,4 +204,21 @@ Tue 04/18
 *Horizon Effect*
     * Stalling moves push an unavoidable move further out
 
+################################################################################
+Wed 04/20
+################################################################################
+*Knowledge-based Agents*
+    * Knowledge of problem solving agents is specific and inflexible
+    * Accepts new tasks in the form of explicitly described goals
+    * Achieve competence
+    * Adapt to changes in the environment by updating the relevant knowledge
+
+Knowledge base (KB)
+    * A knowledge base is a set of "sentences"
+    * Each sentence is expressed as knowledge
+    * Can add/query the knowledge base
+
+Inference: Deriving new sentences from old ones
+ 
+Soundness: An inference algorithm that derives only entailed from the knowledge base.
 
