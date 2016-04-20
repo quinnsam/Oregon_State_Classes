@@ -174,32 +174,59 @@ $\bullet$ Diffusion: MixColumn - AES uses a MixColumn function on the Rijndael m
 
 \noindent \textbf{What are the benefits of the use of finite field arithmetic in AES?}
 
-Finite field arithmetic in AES is an redefinition of how to perform algebraic operations including multiplication, addition, subtraction, and division. A finite field has a finite number of integers that  
+Finite field arithmetic in AES is a redefinition of how to perform algebraic operations including multiplication, addition, subtraction, and division. A finite field has a finite number of integers that  help prevent adversary against linear attacks. 
 
 \section{Symmetric Encryption Modes}
 \noindent \textbf{We have discussed various Symmetric Encryption Modes. Each of  these modes  satisfies certain properties, which can be  an  advantage or disadvantage  for  a given  application. Construct a  table providing a  summary  information  about  each mode and  its corresponding properties. For example,  each  row  of  the  table  will  be  properties  (e.g.,  parallel  operation,  ciphertext manipulation,  pre-computation,  etc.,  please  see  course  notes  for  more  properties)  and  columns are  Modes  (e.g.,  CBC,  CTR…).  Each  cell  will  take  a  value  such  as  “Yes”,  “No”,  “partially”, “high”, “low” etc. according to given encryption mode and property.}
-
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|}
+    \hline
+    & \textbf{ECB} & \textbf{CBC} & \textbf{OFB} & \textbf{CFB} & \textbf{CTR} \\ \hline
+    \textbf{Parallel} & Yes & Decryption only & No & Decryption only & Yes \\ \hline
+    \textbf{Leakage} & Yes & No & No & No & No \\ \hline
+    \textbf{Ciphertext Manipulation} & Yes & No & No & No & No \\ \hline
+    \textbf{Error Propagation} & No & Yes & No & Yes & No \\ \hline
+    \textbf{Pre-computation} & No & No & Yes & No & Yes \\ \hline
+\end{tabular}
+\end{center}
 \section{Ciphertext  manipulability}
-\noindent \textbf{“Ciphertext  manipulability”  is  generally  considered  as  an  undesirable  property  for Encryption  Modes.  However,  for  modes  that  operates  in  stream  cipher  fashion  (discussed  in class), by design, it is possible to flip bits in plaintext by flipping bits of ciphertext.}
-\noindent \textbf{Why is this possible?}
+\noindent \textbf{“Ciphertext  manipulability”  is  generally  considered  as  an  undesirable  property  for Encryption  Modes.  However,  for  modes  that  operates  in  stream  cipher  fashion  (discussed  in class), by design, it is possible to flip bits in plaintext by flipping bits of ciphertext. Why is this possible?}
+
+
 \noindent \textbf{Is  there  a  way  to  turn  this  (potentially)  undesirable  property  into  an  advantage, describe how if there is one?}
+
+Yes, when an encryption scheme has this property of allowing the ciphertext to effect the plaintext in a positive way it is called homomorphic. Elgamal is multiplicatively homomorphic, meaning you can perform multiplication operations on the ciphertext themselves that when decrypted will result in the same multiplication on the plaintext. So if we were given an unknow cyphertext $M \in G$ we can construct a different ciphertext that also decrypts to the same $M$. To get only the original
+$M$ out in plaintext we can create a ciphertext $c'$ with a random message $M'$. We can multiply the ciphertexts $c$ and
+$c'$ together to get $c*c'$. We can send $c*c'$ to a decryption oracle that will output the message $M*M'$, which all we would have to do is pull out the $M'$ from the resulting plaintext. After we extract the message $M'$ the original message $M$ will be left over. 
+
+For good this property could be used to scale encrypted images stored in the cloud or perform mathmatical opperations over encrypted data without ever knowing the data itself. 
+
 \noindent \textbf{Which  extra  cryptographic  function  (a  group  of  functions  discussed  in  the  class)  can be applied to the ciphertext so that the aforementioned advantage can be obtained without compromising the security?}
 
 \noindent Hints:  (i) Consider  noisy  communication  channels  as  application  domain  to  exploit  this  feature. 
 (ii) The extra cryptographic function will require annexing a small-constant tag to the ciphertext. 
 
+One way to ensure that the ciphertext has not been tampered with before passing it to the decryption oracle is to use an encryption scheme with authentication or encrypt the data then Authenticate E.g. a MAC. This would create a cryptographic checksum that would either be prepended or appended to the encrypted data itself so that the recipient could verify that the data had not been tampered with. 
+
 \section{Encryption and Compression}
 \noindent \textbf{Encryption (E) and Compression (C) are generally used together to achieve confidentiality and  efficiency  simultaneously. Given  a message M, with which order  function E  and C must be applied? What are the reasons behind of this particular order?}
+
+Compression must happen before encrypting. This is because compression algorithims usually will take advantage of patterns to minimize the data size, encryption is meant to make the output look random by eliminating patterns. With the encrypted data garbbled most compression algorithims will not have anything to compress. However, if the data is compressed as plaintext the compression algorithims will function at the datas full commpression avalibility which then can be encrypted after. 
 
 \section{Symmetric key Authentication}
 \noindent \textbf{In  symmetric  key  cryptography,  it  is  desirable  to  achieve  both  confidentiality  and authentication  (also  provides  integrity)  of  the  data.  These  properties  can  be  achieved  via Encryption (E) and Authentication Functions (A), respectively. What is the correct order of these operations? Lets assume the specific notation and order of these operations are as follows:} 
 \begin{itemize}
     \item \textbf{Authenticate-then-Encrypt (AtE)}
+        AtE will provide integirty on the plaintext but the cannot prevent against CPA until the recipient has decrypted the message to retrieve the MAC. In some encryption schemes both the ciphertext, MAC, and plaintext could be manipulated and rencapsulated since the MAC is located within the encryption, provided that the encryption scheme is maluable. 
     \item \textbf{Encrypt-then-Authenticate (EtA)}
+        EtA is the most useful order of opperations since it will provide integrity of the ciphertext, which in turn also provides plaintext integrity. EtA will also prevent any CPA since any alterations to the ciphertext will be flagged as invalid. 
     \item \textbf{Encryption and Authentication (E\&A) or the opposite way as (A\&E)}
+        E\&A will provide essentially the same benifits of EtA but since the plaintext is authenticated before encryption if the same message is being transmitted the MAC will be the same for every message duplicate message. As for A\&E that is the same thing as E\&A as those functions are happening simultaniously the order does not matter.  
 \end{itemize}
 
 \noindent \textbf{Discuss the security implications of these choices, which one is recommended and why?}
+
+The reccomend order of opperations would be encrypt then authenticate since will provide integrity of both the ciphertext as well as the plaintext. Since the MAC is taken after the encryption happens it will always produce a uniformly random MAC that would not reviel any information about the encrypted message. 
 
 \noindent \textbf{Mention important crypto papers (at least one, cite it), in which the security of an important real-life  protocol  (Hint:  the  protocol  that  securely  connects  your  VPN  for  each  e-commerce transaction!)  analyzed  based  on  the  above  orders.  Explain  why  this  order  matters  a  lot  in practice?  You  may  provide  some  discussions  from  these  papers  (please  be  brief,  just  hit  on important points).}
 
@@ -222,6 +249,11 @@ the original MAC $m$ and $\otimes m_{1}'$ with the $result$. This would make the
 
 \section{Properties of cryptographic hash function}
 \noindent \textbf{What are the essential properties that a cryptographic hash function must satisfy?}
+\begin{itemize}
+    \item \textbf{Performance:} Must be easy to compute $H(m)$
+    \item \textbf{One-way property:} Given $H(m)$ should not be able to find $m$
+    \item \textbf{Weak/Strong Collision Resistance:} $H(m) \neq H(m')$ and $H(m_{1}) \neq H(m_{2})$ if $m_{1} \neq m_{2}$
+\end{itemize}
 \noindent \textbf{What is a Random Oracle and how does it play a role in the security proofs in general 
 (what is its relation with cryptographic hash functions?)}
 
