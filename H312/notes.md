@@ -205,5 +205,14 @@ The 5 P's
     5) Past history of STDs
         - Have you ever had and STD
 
+################################################################################
+Thu 04/21
+################################################################################
+
+*HIV Criminalization*
+    - The application of criminal law to prosecute those who knowingly transmit HIV and/or expose others to HIV.
+    - Laws in place Globablly
+
+
 
 
