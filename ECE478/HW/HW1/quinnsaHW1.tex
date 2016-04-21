@@ -153,8 +153,10 @@ Meet in the middle attack. The effective security gain from the single DES $2^{5
 
 \noindent \textbf{What is triple DES?  How many keys are use in triple DES process?}
 
-Triple DES uses three rounds of DES making the maximum security 168 bits. Triple DES can either use 2 or 3 keys, however the effective security due to the meet in the middle attack explained above is $2^{112}$. 
-
+Triple DES uses three rounds of DES making the maximum security 168 bits. Triple DES can either use 2 or 3 keys, however the effective security due to the meet in the middle attack explained above is $2^{112}$ for both. This is because if 2 of the 3 rounds are extract the adversary will be able to perform the meet in the middle attack on the first two and a normal brute force on the remaining round. \\
+\begin{center}
+    $2^{56} + 2^{112} \approx 2^{112}$
+\end{center}
 
 
 \section{Block Cipher Design Principles and AES}
@@ -174,7 +176,7 @@ $\bullet$ Diffusion: MixColumn - AES uses a MixColumn function on the Rijndael m
 
 \noindent \textbf{What are the benefits of the use of finite field arithmetic in AES?}
 
-Finite field arithmetic in AES is a redefinition of how to perform algebraic operations including multiplication, addition, subtraction, and division. A finite field has a finite number of integers that  help prevent adversary against linear attacks. 
+Finite field arithmetic in AES is a redefinition of how to perform algebraic operations including multiplication, addition, subtraction, and division. A finite field has a finite number of integers that  help prevent adversary against linear attacks. The prevention against linear attacks is achieved based on the fact that the linear arithmetic is abstracted to a point where there needs to be more computation before hand to unscramble the equations.  
 
 \section{Symmetric Encryption Modes}
 \noindent \textbf{We have discussed various Symmetric Encryption Modes. Each of  these modes  satisfies certain properties, which can be  an  advantage or disadvantage  for  a given  application. Construct a  table providing a  summary  information  about  each mode and  its corresponding properties. For example,  each  row  of  the  table  will  be  properties  (e.g.,  parallel  operation,  ciphertext manipulation,  pre-computation,  etc.,  please  see  course  notes  for  more  properties)  and  columns are  Modes  (e.g.,  CBC,  CTR…).  Each  cell  will  take  a  value  such  as  “Yes”,  “No”,  “partially”, “high”, “low” etc. according to given encryption mode and property.}
@@ -192,6 +194,7 @@ Finite field arithmetic in AES is a redefinition of how to perform algebraic ope
 \section{Ciphertext  manipulability}
 \noindent \textbf{“Ciphertext  manipulability”  is  generally  considered  as  an  undesirable  property  for Encryption  Modes.  However,  for  modes  that  operates  in  stream  cipher  fashion  (discussed  in class), by design, it is possible to flip bits in plaintext by flipping bits of ciphertext. Why is this possible?}
 
+These maniplations are possible based on the fundemental mathmatics behind manipuable encryption algorithims. For RSA it is the fact that $C_{1} \ast C_{2} = X_{1}^{e}X_{2}^{e}mod(M)$, for ElGamal it is because of the cyclic group that the ciphertext will fall into. 
 
 \noindent \textbf{Is  there  a  way  to  turn  this  (potentially)  undesirable  property  into  an  advantage, describe how if there is one?}
 
@@ -203,8 +206,8 @@ For good this property could be used to scale encrypted images stored in the clo
 
 \noindent \textbf{Which  extra  cryptographic  function  (a  group  of  functions  discussed  in  the  class)  can be applied to the ciphertext so that the aforementioned advantage can be obtained without compromising the security?}
 
-\noindent Hints:  (i) Consider  noisy  communication  channels  as  application  domain  to  exploit  this  feature. 
-(ii) The extra cryptographic function will require annexing a small-constant tag to the ciphertext. 
+\noindent \textit{Hints:  (i) Consider  noisy  communication  channels  as  application  domain  to  exploit  this  feature. 
+(ii) The extra cryptographic function will require annexing a small-constant tag to the ciphertext.}
 
 One way to ensure that the ciphertext has not been tampered with before passing it to the decryption oracle is to use an encryption scheme with authentication or encrypt the data then Authenticate E.g. a MAC. This would create a cryptographic checksum that would either be prepended or appended to the encrypted data itself so that the recipient could verify that the data had not been tampered with. 
 
@@ -230,10 +233,29 @@ The reccomend order of opperations would be encrypt then authenticate since will
 
 \noindent \textbf{Mention important crypto papers (at least one, cite it), in which the security of an important real-life  protocol  (Hint:  the  protocol  that  securely  connects  your  VPN  for  each  e-commerce transaction!)  analyzed  based  on  the  above  orders.  Explain  why  this  order  matters  a  lot  in practice?  You  may  provide  some  discussions  from  these  papers  (please  be  brief,  just  hit  on important points).}
 
+In the cryptography paper ``The Order of Enccryption and Authentication for Protecting Communications (or: How Secure Is SSL?)*'' they analyse common network communication method such ass SSL, IPSec, and SSH with regards to how the order of opperations effects the security. \\
+SSL: $a = Auth(x), C = Enc(x,a), transmit C$ \\ 
+IPSec: $C = Enc(x), a = Auth(C), transmit (C,a)$ \\ 
+SSH: $C = Enc(x), a = Auth(x), transmit (C,a)$ \\
+
+EtA is considered secure so form this we can conclude that IPSec is considered secure. However, for SSL the security is questionable even when $Enc()$ is IND-CPA and $Auth()$ provides mussage unforgeability since the packet being transmitted is still supseptible to chosen ciphertext attacks. SSH uses E\&A which is also not proven secure since the MAC while providing unforgability can still leak information about the data being transfered ~\cite{krawczy}.
 \section{Cryptographic  hash  functions}
 \noindent \textbf{Given  a modern  cryptographic  hash  function  (e.g.,  SHA) with m-bit  length  output, what is  the maximum  security  it  can  provide  in  terms  of  m  (lets  call  it  x-bit  security)? A  generalized proof  for  any  given  m-bit  hash  function  is  available  to  show  why  it  can  achieve  at  best  x-bit security.  Please  describe  this  generalized  proof  (related  birthday  attack  concept)  that  simply connects m-bit to x-bit.}
 
-Because of birthday bounds there must be collisions when the data larger than the hash output. 
+There must be collisions when there is data larger than the hash output. It realates to the pidgin hole theorem and birthday bounds where as the size of the data continues to incease the amount of potential colloision rise. If a hash funciton returns a hash output size of $m-bits$ then to guarentee you will find a message you will need to hash $2^{m}$ random inputs. If you use the concept of the birthday paradox with at least 0.5 probability you will get a collision where to different
+messages have the same hash in $2^{m/2}$ random inputs. 
+
+To calculate the probablity of a collision with in a hash funciton the following formula is given.\\
+\indent $Pr[h(m) = h(m')]$ \\
+\indent $= 1-Pr[h(x_{1} \neq h_{2}] \ast Pr[h(x_{3} \not\in {h(x_{1},h(x_{2})}] \dots \ast Pr[h(x_(m) \not\in {h(x_{1}), \dots ,h(x_{m-1})}]$ \\
+\indent $= 1-(1-\frac{1}{2^{n}})(1-\frac{1}{2^{n}}) \dots (1-\frac{m-1}{2^{n}})$ \\
+\indent $\approx 1-e^{-\frac{1}{2^{n}}}e^{\frac{-2}{2^{n}}} \dots e^{\frac{-(m-1)}{2^{n}}}$ \\
+In the line above the value of e raised to the negitive it is very close to zero we can't be sure what the absulute value will be so an approximation is need to calculate. \\
+\indent $\approx 1-e^{\frac{-m^{2}}{2^{n+1}}}$\\
+If we want to find a collision with at least 95\% probability we can plug 95 in to our equation. \\
+\indent $0.95 = 1-e^{\frac{-m^{2}}{2^{n+1}}}$\\
+\indent $m^{2} = (-ln 0.05)^{2^{n+1}}$ \\
+\indent $m \approx 2.45 \ast 2^{\frac{n}{2}} = O(2^{\frac{n}{2}})$ \\
 
 \section{Length extension}
 \noindent \textbf{What  is  the  hash  length  extension  attack?  Please  describe  by  giving  some  specific  real-life examples.}
@@ -259,8 +281,13 @@ the original MAC $m$ and $\otimes m_{1}'$ with the $result$. This would make the
 \noindent \textbf{What is a Random Oracle and how does it play a role in the security proofs in general 
 (what is its relation with cryptographic hash functions?)}
 
+In security proofs a random oracle is used as a baseline of what the proposed cryptograpihc funciton should be indistingusable against. The random oracle will always produce unifromly random output that has nothing to do with the data passed into the ``blackbox''. When proving an encryption aloritmim or a cryptographic function is secure there should be no way for an adversary to determine if the output came from either the random oracle or the encryption scheme. If an adversary is able
+to exploit the cryptographic funciton to a point where they will get deterministic output, then the cryptographic function would not be considered secure. \
+
+Hash functions secutrity can be proven with the use of a random oracle. If an adversary can modify the plaintext input to produce an output that looks anything but unifromly random then the hash function should not be considered secure. The main limitation with a random oracle in regards to cryptographic hash function is that the output is deterministic, meaning that given the same input it should produce the same output. The random oracle can mimic this feature by creating a lookup
+table of input and there respective outputs. If a new input comes in the random oracle will return a unifromly random output, but store the output with an association to the input. So if the same input is ever passed in the random oracle will return the same uniformly random string as the first time. 
+
 \medskip
- 
-\bibliography{crypto}
+\bibliography{quinnsaHW1}
 \bibliographystyle{ieeetr}
 \end{document}
