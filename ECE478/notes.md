@@ -136,3 +136,38 @@ Notation:
             * Create a seed value that is passed into CPRNG = Key derivation trick
 
         Varient IV: Reduce size of public key
+
+################################################################################
+Thu 04/21
+################################################################################
+
+    Varient VII: Increase rubustenss
+        * Inclued multiple pks, in onetime signature
+            pk = (pk_{i+1}, ..., pk_{i+k}) <- key(j^k, k)
+            Sigma <- sign(m||pk_{i+1}, .., pk_{i+k},sk_i)   // Trade off between communication robustness
+
+        - Another Risk: Packet loss => risk for real-time authentication. 
+
+
+    Error-correction codes:
+        * Turbo codes
+        * Victorbi codes
+        * Funton codes
+
+        pk <- kg(j^k,k), (pk_bar, r_bar) <- Ecc(pk_bar), |(pk_bar, r_bar)| >> |pk_bar|
+            Sigma <- Sig(m||pk_bar||r_bar, sk_i)
+
+
+    Subset-resilient: The subsets have exactly one unique counterpart. 
+
+*Time-Valid Security*
+    * k=80-128, 2^80 ~ 2^128 at adversary side
+    * Temparary Security: Guarentee lasting t unit of time
+        Trade off:
+            2^k -> (|sk| = |pk|, t')
+            t   -> (|sk'| = |pk'|, t'')
+
+    Stateful Signature --> Packet loss
+                       |
+                       --> Resynchronize the network
+        
