@@ -1,8 +1,8 @@
 [submodule "CS312/cs312"]
-	path = CS312/cs312
+	path = CS312-Linux-System-Admin/cs312
 	url = https://github.com/osuosl/cs312.git
 [submodule "CS290"]
-	path = CS290
+	path = CS290-Web-Dev
 	url = https://github.com/quinnsam/CS290.git
 [submodule "CS331-Artificial-intelligence"]
 	path = CS331-Artificial-intelligence
