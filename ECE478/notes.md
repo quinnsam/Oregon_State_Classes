@@ -170,4 +170,48 @@ Thu 04/21
     Stateful Signature --> Packet loss
                        |
                        --> Resynchronize the network
-        
+
+################################################################################
+Tue 04/26
+################################################################################
+
+*GCD*
+    The conguence aX = b(mod n) has a unique x exist in Z_m
+Euclid Algorithim
+Def
+    If a >= 1 
+
+Def 2 
+    Euler-phi totient function: The number of integers in km that are relitivly prime to m is defined as Phi(m).
+
+Def 3
+    The order of a group Z_m is Phi(m)
+
+Def 4
+    Order of an element: Sigma_m^* is a finite multiplicitive group, g existis in Sigma then order of g is the smallest integer x
+        g^x = 1 and m
+
+
+Math terms
+    Corallary   - I a claim that is very obvious
+    Lemma       - Smaller proof that suports a larger proof.
+    Conjecture  - An opinion or conclusion formed on the basis of incomplete information.
+    Remark      - A fact that doesn't directly support the claim
+
+Little Fermant theorem: If p is prime, b (in) Z_p then 
+                                b^p = b mod p
+                                b^(p-1) * b = b mod p
+    Phi(p) = p - 1
+
+*RSA*
+    y = H(x), lamport -> Replace H with 
+    - Asymmetric one-way trapdoor primitive y = x^a mod n
+    - Algebraic structure, numder theorecical assumptions.
+
+    Key Generation:
+        a) Generate two large primes (p,q) s.t p!=q and |p| ~ |q| \ 2048 bits.
+        b) n <- p*q and Phi(n) = (p-1)*(q-1) // Euler-Phi totient under Z_n^*
+        c) e <-$- z_n^*
+        S.T. 1 <= e <= Phi(n) and GCD(e, Phi(n)) = 1
+
+
