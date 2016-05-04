@@ -1,0 +1,191 @@
+\documentclass[letterpaper,11pt,notitlepage,fleqn]{article}
+
+%\usepackage{nopageno} %gets rid of page numbers
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{indentfirst}
+\usepackage{url}
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+\usepackage{pstricks, pst-node}
+\usepackage{geometry}
+\geometry{textheight=9in, textwidth=6.5in} %sets 1" margins 
+\newcommand{\cred}[1]{{\color{red}#1}} %command to change font to red
+\newcommand{\cblue}[1]{{\color{blue}#1}} % ...blue
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+% Code snippets color
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+  language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\lstdefinelanguage{diff}{
+  morecomment=[f][\color{blue}]{@@},     % group identifier
+  morecomment=[f][\color{red}]-,         % deleted lines 
+  morecomment=[f][\color{green}]+,       % added lines
+  morecomment=[f][\color{magenta}]{---}, % Diff header lines (must appear after +,-)
+  morecomment=[f][\color{magenta}]{+++},
+}
+% End color
+\def\name{Sam Quinn}
+
+\parindent = 0.4444 in
+\parskip = 0.2 in
+
+\begin{document}
+\begin{titlepage}
+\vspace*{\fill}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+
+%----------------------------------------------------------------------------------------
+%TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+%\includegraphics[scale=.5]{image.eps}
+\HRule \\[0.4cm]
+{ \huge \bfseries Homework \#1}\\[0.4cm] % Title of your document
+
+%----------------------------------------------------------------------------------------
+%HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE Oregon State University}\\[0.5cm] % Name of your university/college
+\textsc{\Large ECE 478 Network Security}\\[0.5cm] % Major heading such as course name
+\textsc{\large Spring 2016}\\[0.5cm] % Minor heading such as course title
+
+
+\HRule \\[1.5cm]
+%----------------------------------------------------------------------------------------
+%AUTHOR SECTION
+%------------------------------------ ----------------------------------------------------
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Student:}\\
+        \noindent \textbf{Sam \textsc{Quinn}} \\ % Your name
+        {\small Quinnsa@Oregonstate.edu}
+        \end{flushleft}
+        \end{minipage}
+        ~
+        \begin{minipage}{0.4\textwidth}
+        \begin{flushright} \large
+        \emph{Professor:} \\
+            \noindent \textbf{Dr. Attila A \textsc{Yavuz}} \\ % Supervisor's Name
+            {\small Attila.Yavuz@oregonstate.edu}
+            \end{flushright}
+            \end{minipage}\\[3cm]
+
+                %----------------------------------------------------------------------------------------
+                %DATE SECTION
+                %-----------------    -----------------------------------------------------------------------
+
+{\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+
+%----------------------------------------------------------------------------------------
+%LOGO SECTION
+%------   ----------------------------------------------------------------------------------
+
+    \includegraphics[scale=0.5]{coe.eps}\\[1cm] % Include a department/university logo - this will require the graphicx package
+
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+
+
+\end{titlepage}
+
+\tableofcontents
+\newpage
+\section{[24] Merkle Hash Tree}
+%\Tree[.1$\Box\Box\Box\Box$ [.2$\Box\Box\Box\Box$ [.4$\Box\Box\Box\Box$ $\Box\Box{b1}\Box$\\8 $\Box\Box\Box{b2}$\\9 ][.5$\Box\Box\Box\Box$ $\Box\Box\Box{b3}$\\10 $\Box{b4}\Box\Box$\\11 ]][.3$\Box\Box\Box\Box$ [.6$\Box\Box\Box\Box$ ${b5}\Box\Box\Box$\\12 $\Box\Box{b6}\Box$\\13 ][.7$\Box\Box\Box\Box$ $\Box{b7}\Box\Box$\\14 ${b8}\Box\Box\Box$\\15 ]]]
+\begin{center}
+    \includegraphics[scale=0.5]{tree.eps}
+\end{center}
+
+\noindent \textbf{Suppose a sender S uses this Merkle hash tree to authenticate these messages to a receiver R. What should be done before this tree can be used?}
+
+Before the Merkle hash tree is able to be sent the root of the tree (H1,8) must be authenticated. This is tyically done through a digital signatuer of pre-distribution. If the root is not authenticatiod by a trusted source before the hash tree is used then all the proceding data could also become compramized if a fraudulent tree matches the top node. 
+
+\noindent \textbf{[8] How would one authenticate message 4?}
+ 
+
+\noindent \textbf{[8] Merkle hash trees have an additional level of hash in the leaves. Is this necessary? Why?}
+
+\noindent \textbf{[8] What are the necessary conditions for a set of data to be authenticated by Merkle-tree? Please provide at least two example application where Merkle-tree with proper data type can be used.}
+
+\section{[24] Cryptographic hash functions and their use in one-time/multiple time signatures}
+
+\noindent \textbf{[12] Let L be the number of messages, t is the number of bits to be signed in a message, and |f| is the bit-length of one-way function. Describe Lamport One time signature variant I, II, III, IV, VI, and VII (excluding V) . For each variant, describe the its algorithm, its performance in terms of security and efficiency,  and what are the key sizes and what is its storage complexity. For example, for one variant, you might want to mention what is the computational complexity for the
+efficiency  of the algorithm and what is the security trade-off you must pay in order to achieve that efficiency. You must also mention what is the storage complexity of the public and private key in Big O.}  
+ 
+
+\noindent \textbf{[12] One-time/multiple signatures, after many years, started gain a new traction in  the  research  community.  What  is  the  main  reason  behind  this?  Compared traditional cryptographic methods  (e.g., RSA, ECDSA), what  is  the main security advantage of multiple-time signatures and why they are more secure?}  
+
+\section{[48] RSA encryption and digital signatures}
+
+\noindent \textbf{[8]  What  is  the  role  of  Euler-Function,  Extended  Euclid  Algorithm  and  Fermat Little  Theorem  in  RSA  encryption?  Explain  the  role  of  each  by  showing  the specific step in RSA encryption and decryption process.}  
+
+\noindent \textbf{[8] Using Euclid’s algorithm (Not extended, but just Euclid), calculate the $g$ $gcd(16261,  85652)$.  Using  Fermat’s  little  theorem,  compute  $3^{31}  (mod  7)$  (Hint: Decompose the exponent)} 
+
+\noindent \textbf{[8]  In  RSA,  public  key  e  can  be  smaller  than  the  private  key  d.  What  are  the performance  and  security  implications  of  this?  What  should  be  considered  for selecting public exponent e as a security metric?}
+
+\noindent \textbf{[8]  In  RSA  encryption  and  signatures,  the  use  of  private/public  key  pair  between sender  and  verifier  is  swapped.  Why  this  is  the  case?  (Hint:  Think  about  the purpose  of  signatures  and  encryption.  Also,  think  about  the  purpose  of authentication and its difference from encryption)}
+
+\noindent \textbf{[8]  In  RSA  signatures,  randomness  was  introduced  during  the  signing  process using  Coron’s  Full  Domain  Hash  Function.  What  is  the  objective  of  this randomness?} \textit{Please again use Google Scholar to look up JS Coron’s paper on full domain hash  function. You may want  to  look Bellare’s paper on  full domain hash function.  Please  note  that  full  domain  hash  function  IS  NOT  an  RSA-based signature scheme.}
+
+\noindent \textbf{[8]  Textbook  implementation  of  RSA    is  subjected  to  timing-based  side-channel attacks. Explain why  (Hint:  see how  square  and multiply  algorithm works  and  tie this  to  a  side-channel  attack).  Describe  a  simple  blinding  technique  that  can prevent this basic side-channel attack. This technique is also called masking.}
+ 
+ 
+\section{[24] ORAM}
+ 
+ 
+ 
+\noindent \textbf{[6] What is the basic formal security definition of ORAM? Please go on Google Scholar and find the Path-ORAM paper by Emil Stefanov et al.} 
+ 
+ 
+ 
+\noindent \textbf{[4] What is IND-CPA encryption? Give its formal definition based on symmetric encryption.}
+ 
+ 
+ 
+\noindent \textbf{[4] Why IND-CPA encryption is required in order for ORAM to work?}
+ 
+ 
+\noindent \textbf{[10] Give a basic Path ORAM tree with 8 items, where b1,…,b8 represent blocks to be accessed (assume stash size = 4). Denote each intermediate node with a number (see ORAM slides for an example). On this Path ORAM tree, why is accessing the same block arbitrary number of times yield indistinguishable access patterns?} 
+
+\noindent \textbf{How is this achieved?}
+\begin{itemize}
+    \item Why IND-CPA encryption plays a role on this?
+    \item Which  step  of  Path-ORAM  ORAM  algorithm  (in  addition  to  IND-CPA aspect) is vital to achieve indistinguishable access patterns?
+\end{itemize}
+
+\medskip
+\bibliography{quinnsaHW2}
+\bibliographystyle{ieeetr}
+\end{document}

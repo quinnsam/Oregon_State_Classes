@@ -1,6 +1,6 @@
 [submodule "CS290"]
 	path = CS290-Web-Dev
-	url = https://github.com/quinnsam/CS290.git
+	url = https://github.com/quinnsam/CS290-Web-Dev.git
 [submodule "CS331-Artificial-intelligence"]
 	path = CS331-Artificial-intelligence
 	url = https://github.com/quinnsam/CS331-Artificial-intelligence.git

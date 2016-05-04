@@ -214,4 +214,16 @@ Little Fermant theorem: If p is prime, b (in) Z_p then
         c) e <-$- z_n^*
         S.T. 1 <= e <= Phi(n) and GCD(e, Phi(n)) = 1
 
+Discrete Log Problem:
+    Given cyclic group G (eg Z_p^*) of order prime q and n generatio a of Simga, let A be an algoritm that returns an element of Z_q^*
+        Experment Expt^DL Sigma, a (A)
+        y <-$- Z_^^*, y <- a^y mod p 
+        y' <- A(y)
+        if a^y' mod p = Y then A retun 1, else 0.
+            - Extract the exponent
+
+        The DL advanteage of A adv^DL Sigma, a(A) = Pr[Expt^DL_sigma,a (A)= 1]
+
+
+
 
