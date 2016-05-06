@@ -137,12 +137,21 @@ Before the Merkle hash tree is able to be sent the root of the tree (H1,8) must 
 
 \noindent \textbf{[8] Merkle hash trees have an additional level of hash in the leaves. Is this necessary? Why?}
 
+The additional level of hashes is not necessary but prevents unessasary disclosure. To authenticate a message the verifier would either need to know the message to calculate the parent node or the verifier could use a hash of the message. If the verifier does not need to know the adjacent messages it is a benifit to have another level of hashes. 
+
 \noindent \textbf{[8] What are the necessary conditions for a set of data to be authenticated by Merkle-tree? Please provide at least two example application where Merkle-tree with proper data type can be used.}
 
 \section{[24] Cryptographic hash functions and their use in one-time/multiple time signatures}
 
 \noindent \textbf{[12] Let L be the number of messages, t is the number of bits to be signed in a message, and |f| is the bit-length of one-way function. Describe Lamport One time signature variant I, II, III, IV, VI, and VII (excluding V) . For each variant, describe the its algorithm, its performance in terms of security and efficiency,  and what are the key sizes and what is its storage complexity. For example, for one variant, you might want to mention what is the computational complexity for the
-efficiency  of the algorithm and what is the security trade-off you must pay in order to achieve that efficiency. You must also mention what is the storage complexity of the public and private key in Big O.}  
+efficiency  of the algorithm and what is the security trade-off you must pay in order to achieve that efficiency. You must also mention what is the storage complexity of the public and private key in Big O.} 
+
+\textbf{Variant I}
+\textbf{Variant II}
+\textbf{Variant III}
+\textbf{Variant IV}
+\textbf{Variant VI}
+\textbf{Variant VII}
  
 
 \noindent \textbf{[12] One-time/multiple signatures, after many years, started gain a new traction in  the  research  community.  What  is  the  main  reason  behind  this?  Compared traditional cryptographic methods  (e.g., RSA, ECDSA), what  is  the main security advantage of multiple-time signatures and why they are more secure?}  
