@@ -133,11 +133,15 @@
 Before the Merkle hash tree is able to be sent the root of the tree (H1,8) must be authenticated. This is tyically done through a digital signatuer of pre-distribution. If the root is not authenticatiod by a trusted source before the hash tree is used then all the proceding data could also become compramized if a fraudulent tree matches the top node. 
 
 \noindent \textbf{[8] How would one authenticate message 4?}
- 
+To authenticate a message trough a Merkle tree you must complete the entire path to the root. In the tree displayed above you would need to compute H3,H4 to get H3,4 and then you would need H1,2 and H3,4 to get H1,4. Then the last step would be to get H5,8 which combinded with H1,4 will give you H1,8 and thus be able to verify the tree and if message M4 was tampered with or not.
+
 
 \noindent \textbf{[8] Merkle hash trees have an additional level of hash in the leaves. Is this necessary? Why?}
+unessasry discloser.
 
 \noindent \textbf{[8] What are the necessary conditions for a set of data to be authenticated by Merkle-tree? Please provide at least two example application where Merkle-tree with proper data type can be used.}
+
+One real world application of a Merkle tree is with cryptocurrencies. Bitcoin's public ledger is designed as a Merkle tree where each transacions hash is propigated up the tree to the root. This provides authentication on each individual transaction.
 
 \section{[24] Cryptographic hash functions and their use in one-time/multiple time signatures}
 
