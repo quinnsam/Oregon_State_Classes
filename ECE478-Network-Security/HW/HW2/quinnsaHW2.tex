@@ -42,7 +42,7 @@
   tabsize=3
 }
 \lstdefinelanguage{diff}{
-  morecomment=[f][\color{blue}]{@@},     % group identifier
+    morecomment=[f][\color{blue}]{@@},     % group identifier
   morecomment=[f][\color{red}]-,         % deleted lines 
   morecomment=[f][\color{green}]+,       % added lines
   morecomment=[f][\color{magenta}]{---}, % Diff header lines (must appear after +,-)
@@ -56,65 +56,65 @@
 
 \begin{document}
 \begin{titlepage}
-\vspace*{\fill}
+    \vspace*{\fill}
 
-\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+    \newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
 
-\center % Center everything on the page
+    \center % Center everything on the page
 
-%----------------------------------------------------------------------------------------
-%TITLE SECTION
-%----------------------------------------------------------------------------------------
+    %----------------------------------------------------------------------------------------
+    %TITLE SECTION
+    %----------------------------------------------------------------------------------------
 
-%\includegraphics[scale=.5]{image.eps}
-\HRule \\[0.4cm]
-{ \huge \bfseries Homework \#1}\\[0.4cm] % Title of your document
+    %\includegraphics[scale=.5]{image.eps}
+    \HRule \\[0.4cm]
+    { \huge \bfseries Homework \#1}\\[0.4cm] % Title of your document
 
-%----------------------------------------------------------------------------------------
-%HEADING SECTIONS
-%----------------------------------------------------------------------------------------
+    %----------------------------------------------------------------------------------------
+    %HEADING SECTIONS
+    %----------------------------------------------------------------------------------------
 
-\textsc{\LARGE Oregon State University}\\[0.5cm] % Name of your university/college
-\textsc{\Large ECE 478 Network Security}\\[0.5cm] % Major heading such as course name
-\textsc{\large Spring 2016}\\[0.5cm] % Minor heading such as course title
+    \textsc{\LARGE Oregon State University}\\[0.5cm] % Name of your university/college
+    \textsc{\Large ECE 478 Network Security}\\[0.5cm] % Major heading such as course name
+    \textsc{\large Spring 2016}\\[0.5cm] % Minor heading such as course title
 
 
-\HRule \\[1.5cm]
-%----------------------------------------------------------------------------------------
-%AUTHOR SECTION
-%------------------------------------ ----------------------------------------------------
+    \HRule \\[1.5cm]
+    %----------------------------------------------------------------------------------------
+    %AUTHOR SECTION
+    %------------------------------------ ----------------------------------------------------
 
-\begin{minipage}{0.4\textwidth}
-\begin{flushleft} \large
-\emph{Student:}\\
-        \noindent \textbf{Sam \textsc{Quinn}} \\ % Your name
-        {\small Quinnsa@Oregonstate.edu}
+    \begin{minipage}{0.4\textwidth}
+        \begin{flushleft} \large
+            \emph{Student:}\\
+            \noindent \textbf{Sam \textsc{Quinn}} \\ % Your name
+            {\small Quinnsa@Oregonstate.edu}
         \end{flushleft}
-        \end{minipage}
+    \end{minipage}
         ~
         \begin{minipage}{0.4\textwidth}
-        \begin{flushright} \large
-        \emph{Professor:} \\
-            \noindent \textbf{Dr. Attila A \textsc{Yavuz}} \\ % Supervisor's Name
-            {\small Attila.Yavuz@oregonstate.edu}
+            \begin{flushright} \large
+                \emph{Professor:} \\
+                \noindent \textbf{Dr. Attila A \textsc{Yavuz}} \\ % Supervisor's Name
+                {\small Attila.Yavuz@oregonstate.edu}
             \end{flushright}
-            \end{minipage}\\[3cm]
+        \end{minipage}\\[3cm]
 
-                %----------------------------------------------------------------------------------------
-                %DATE SECTION
-                %-----------------    -----------------------------------------------------------------------
+        %----------------------------------------------------------------------------------------
+        %DATE SECTION
+        %-----------------    -----------------------------------------------------------------------
 
-{\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+    {\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
 
-%----------------------------------------------------------------------------------------
-%LOGO SECTION
-%------   ----------------------------------------------------------------------------------
+    %----------------------------------------------------------------------------------------
+    %LOGO SECTION
+    %------   ----------------------------------------------------------------------------------
 
     \includegraphics[scale=0.5]{coe.eps}\\[1cm] % Include a department/university logo - this will require the graphicx package
 
-%----------------------------------------------------------------------------------------
+    %----------------------------------------------------------------------------------------
 
-\vfill % Fill the rest of the page with whitespace
+    \vfill % Fill the rest of the page with whitespace
 
 
 
@@ -182,18 +182,52 @@ efficiency  of the algorithm and what is the security trade-off you must pay in 
 \textbf{Variant VII}
 \noindent Algorithim:\\
 \noindent Performance:\\
- 
+
 
 \noindent \textbf{[12] One-time/multiple signatures, after many years, started gain a new traction in  the  research  community.  What  is  the  main  reason  behind  this?  Compared traditional cryptographic methods  (e.g., RSA, ECDSA), what  is  the main security advantage of multiple-time signatures and why they are more secure?}  
+
+One thing that One-time and Multiple signatures are really good at is protecting against quantum computers and their advantages in breaking traditional cryptographic methods. The reason that many cryptographic methods are not quantum restaint is that they use very complex math to gain security with either discrete logarithm problem or an elptial curve. Quantum computers are able to calculate many more possibilies in a relitivly small amount of time reducing the over all
+security of the schemes that use thes math problems. One-time and multiple signatures have the property of one time pad where the keys are uniformly random and do not rely on any mathmatical problems that quantum computers could take advantage of. 
 
 \section{[48] RSA encryption and digital signatures}
 
 \noindent \textbf{[8]  What  is  the  role  of  Euler-Function,  Extended  Euclid  Algorithm  and  Fermat Little  Theorem  in  RSA  encryption?  Explain  the  role  of  each  by  showing  the specific step in RSA encryption and decryption process.}
 
-The Euler totient function or $\phi(n)$ is the set of numbers that are relativly prime to $n$
+The \textit{Euler totient function} or $\phi(n)$ is the set of numbers that are relativly prime to $n$. \\
+\begin{center}
+    \begin{tabular}{l}
+        $\phi(n) = |\mathbb{Z}_{n}^{*}|$ \\
+        if $p,q$ are prime $(p \neq q)$ then $\phi(pq) = (p-1)(q-1)$
+    \end{tabular}
+\end{center}
+
+The \textit{Extended Euclidean algorithm} is a way for finding the GCD.\\
+\begin{center}
+    \begin{tabular}{l}
+        $gcd(p,q) = 1$ Then for all $u,v$ there is a solution for $x$ in \\
+        $x = u$ $mod(p)$ \\ 
+        $x = v$ $mod(p)$ 
+    \end{tabular}
+\end{center}
+The \textit{Fermat Little Theorem} is $a^{p-1} \equiv 1$ $mod(p)$ but in its application to RSA it is used to pro
+
+
+The security within RSA is gained through the idea that it would be infe
 
 \noindent \textbf{[8] Using Euclid’s algorithm (Not extended, but just Euclid), calculate the $g$ $gcd(16261,  85652)$.  Using  Fermat’s  little  theorem,  compute  $3^{31}  (mod  7)$  (Hint: Decompose the exponent)} 
 
+\begin{center}
+    \begin{tabular}{l}
+        $gcd(16261, 85652)$\\
+        $85652 = 16261 \ast 5 + 4347$\\
+        $16261 = 4347\ast 3 + 3220$ \\
+        $4347 = 3220\ast 1 + 1127$ \\
+        $3220 = 1127\ast 2 + 966$ \\
+        $1127 = 966\ast 1 + 161$ \\
+        $966 = 161\ast 6 + 0$ \\
+        \textbf{GCD:} $161$\\
+    \end{tabular}
+\end{center}
 \noindent \textbf{[8]  In  RSA,  public  key  e  can  be  smaller  than  the  private  key  d.  What  are  the performance  and  security  implications  of  this?  What  should  be  considered  for selecting public exponent e as a security metric?}
 
 \noindent \textbf{[8]  In  RSA  encryption  and  signatures,  the  use  of  private/public  key  pair  between sender  and  verifier  is  swapped.  Why  this  is  the  case?  (Hint:  Think  about  the purpose  of  signatures  and  encryption.  Also,  think  about  the  purpose  of authentication and its difference from encryption)}
@@ -201,23 +235,23 @@ The Euler totient function or $\phi(n)$ is the set of numbers that are relativly
 \noindent \textbf{[8]  In  RSA  signatures,  randomness  was  introduced  during  the  signing  process using  Coron’s  Full  Domain  Hash  Function.  What  is  the  objective  of  this randomness?} \textit{Please again use Google Scholar to look up JS Coron’s paper on full domain hash  function. You may want  to  look Bellare’s paper on  full domain hash function.  Please  note  that  full  domain  hash  function  IS  NOT  an  RSA-based signature scheme.}
 
 \noindent \textbf{[8]  Textbook  implementation  of  RSA    is  subjected  to  timing-based  side-channel attacks. Explain why  (Hint:  see how  square  and multiply  algorithm works  and  tie this  to  a  side-channel  attack).  Describe  a  simple  blinding  technique  that  can prevent this basic side-channel attack. This technique is also called masking.}
- 
- 
+
+
 \section{[24] ORAM}
- 
- 
- 
+
+
+
 \noindent \textbf{[6] What is the basic formal security definition of ORAM? Please go on Google Scholar and find the Path-ORAM paper by Emil Stefanov et al.} 
- 
- 
- 
+
+
+
 \noindent \textbf{[4] What is IND-CPA encryption? Give its formal definition based on symmetric encryption.}
- 
- 
- 
+
+
+
 \noindent \textbf{[4] Why IND-CPA encryption is required in order for ORAM to work?}
- 
- 
+
+
 \noindent \textbf{[10] Give a basic Path ORAM tree with 8 items, where b1,…,b8 represent blocks to be accessed (assume stash size = 4). Denote each intermediate node with a number (see ORAM slides for an example). On this Path ORAM tree, why is accessing the same block arbitrary number of times yield indistinguishable access patterns?} 
 
 \noindent \textbf{How is this achieved?}
