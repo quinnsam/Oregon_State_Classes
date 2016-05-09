@@ -151,18 +151,46 @@ One real world application of a Merkle tree is with cryptocurrencies. Bitcoin's 
 efficiency  of the algorithm and what is the security trade-off you must pay in order to achieve that efficiency. You must also mention what is the storage complexity of the public and private key in Big O.} 
 
 \textbf{Variant I}
+\noindent Algorithim:\\
+\indent \textit{Variant I} will create a random public and private key for both 1's and 0's for each bit in the message. To sign a message every bit will be 
+
+\noindent Performance:\\
+\indent \textit{Variant I} is considered secure based on the fact that the signature leverages the OTP property. The size of the keys are where this variant is lacking. Since the keys are $|sk|=|pk|=2|h|\ast|h|$ and $\sigma = |h|\ast|h|$ \\
+%\indent\indent $m = (m_{i},\dots,m_{n}) \sigma = (x_{1}m_{1},\dots,x_{n}m_{n})$ \\
+%\indent Verify:\\
+%\indent\indent if $f(x_{1}, m_{i})=y_{i}m_{i}$  $\forall$ $i$ return $1$ else $0$ \\
+
 \textbf{Variant II}
+\noindent Algorithim:\\
+\indent \textit{VariantII} is similar to \textit{Variant I} however only the 1's are signed in this scheme. 
+\noindent Performance:\\
+\indent \textit{VariantII} by signing only 1's is able to reduce the key size by approxamatly half from \textit{variant I}.
+
 \textbf{Variant III}
+\noindent Algorithim:\\
+\indent \textit{Variant III} takes advantage of a cryptographic psudo random number generator to allow the private key to be a constant size. 
+\noindent Performance:\\
+\indent Because \textit{variant III} through the use of hash-chains allows the private key remain constant there is more computation involved makeing the trade-off between storge and computation. 
 \textbf{Variant IV}
+\noindent Algorithim:\\
+\indent  
+\noindent Performance:\\
 \textbf{Variant VI}
+\noindent Algorithim:\\
+\indent
+\noindent Performance:\\
 \textbf{Variant VII}
+\noindent Algorithim:\\
+\noindent Performance:\\
  
 
 \noindent \textbf{[12] One-time/multiple signatures, after many years, started gain a new traction in  the  research  community.  What  is  the  main  reason  behind  this?  Compared traditional cryptographic methods  (e.g., RSA, ECDSA), what  is  the main security advantage of multiple-time signatures and why they are more secure?}  
 
 \section{[48] RSA encryption and digital signatures}
 
-\noindent \textbf{[8]  What  is  the  role  of  Euler-Function,  Extended  Euclid  Algorithm  and  Fermat Little  Theorem  in  RSA  encryption?  Explain  the  role  of  each  by  showing  the specific step in RSA encryption and decryption process.}  
+\noindent \textbf{[8]  What  is  the  role  of  Euler-Function,  Extended  Euclid  Algorithm  and  Fermat Little  Theorem  in  RSA  encryption?  Explain  the  role  of  each  by  showing  the specific step in RSA encryption and decryption process.}
+
+The Euler totient function or $\phi(n)$ is the set of numbers that are relativly prime to $n$
 
 \noindent \textbf{[8] Using Euclid’s algorithm (Not extended, but just Euclid), calculate the $g$ $gcd(16261,  85652)$.  Using  Fermat’s  little  theorem,  compute  $3^{31}  (mod  7)$  (Hint: Decompose the exponent)} 
 
