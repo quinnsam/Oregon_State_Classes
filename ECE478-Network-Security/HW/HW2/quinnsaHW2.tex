@@ -230,6 +230,11 @@ The security within RSA is gained through the idea that it would be infe
 \end{center}
 \noindent \textbf{[8]  In  RSA,  public  key  e  can  be  smaller  than  the  private  key  d.  What  are  the performance  and  security  implications  of  this?  What  should  be  considered  for selecting public exponent e as a security metric?}
 
+The reason that the public key $e$ can be smaller than the private is that everything is within the cyclic group of $Z_{n}^{*}$ so any number raised to the $e$ will be with in the bounds of $1-(n-1)$.
+Having a smaller $e$ allows for the data to be encrypted faster since the exponential is the slowest aspect of the RSA algorithim, the smaller the number the quicker the data can be encrypted. 
+
+It has been proven that you should not use too small of an $e$ as they have been broken, for example $e=3$ and $e=7$. This attack is considered a small exponet attack. An adiquite size of key for $e$ would be $e=2^{16}+7$.  
+
 \noindent \textbf{[8]  In  RSA  encryption  and  signatures,  the  use  of  private/public  key  pair  between sender  and  verifier  is  swapped.  Why  this  is  the  case?  (Hint:  Think  about  the purpose  of  signatures  and  encryption.  Also,  think  about  the  purpose  of authentication and its difference from encryption)}
 
 \noindent \textbf{[8]  In  RSA  signatures,  randomness  was  introduced  during  the  signing  process using  Coron’s  Full  Domain  Hash  Function.  What  is  the  objective  of  this randomness?} \textit{Please again use Google Scholar to look up JS Coron’s paper on full domain hash  function. You may want  to  look Bellare’s paper on  full domain hash function.  Please  note  that  full  domain  hash  function  IS  NOT  an  RSA-based signature scheme.}
