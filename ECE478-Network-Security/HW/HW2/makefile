@@ -7,7 +7,7 @@ all: pdf
 
 dvi: ${TARGET}.tex 
 	latex ${TARGET}.tex
-	#bibtex $(TARGET)
+	bibtex $(TARGET)
 	latex $(TARGET).tex
 
 ps: dvi
