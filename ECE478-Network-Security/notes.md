@@ -226,4 +226,52 @@ Discrete Log Problem:
 
 
 
+DSS Signature algorithm
+    Key Generation
+        sk <- (H,p,q,g,x) pk <- (H,p,q,g,y)
+             Signer             verifier
+
+        sign:
+            sigma <- sighn_{sk}(m) = m \in {0,1}^*
+            1) k <-$- Z_q^*
+            2) r <- [g^k mod p] (mod q)
+            3) s <- (H(m) * s^-1 mod q 
+            4 sigmo <- (n,s)
+        verify:
+            {0,1} <- Ver_{pk}(m, sigma)
+            1) m_1 <- H(m) * s^-1 mod q
+            2) m_2 <- r * s^-1 mod q 
+            3) output 1 iff: r = [(g^m1 * g^m2 mod p)] mod q
+
+    DSA correctness
+    
+        u1 = H(m) * s^-1 mod q
+        y = g^x mod p
+        u2 = r * r^-1 mod q
+        s = (H(m) + x * r) * k^-1
+
+        r = (g^u1 * y^u2 mod p) mod q
+        let m1 = H(m), the signature is (r,s)
+
+        r = g^(m^1 * s ^-1) * (g^x)^r * s^-1
+          = g^m^1 * (m^1 + x * r )^-1 * k
+          ...
+          g^k = g^k
+
+Schnor Digital Signature
+
+    Keygeneration:
+        p = 2*q+1 // Sofie german prime
+        1) sk = y <-$- Z_q^*,  pk = Y <- alpah^y  mod p
+
+    Signature:
+        sigma <- sch.sig(sk,m) = m \in {0,1}^*
+        1) r <-$- Z_q^*
+        2) R <- alpha^r mod p
+        3) S <- r - H(m||R) * y mod q
+        4) sigma = (s,r)
+
+    Verify:
+        R =?= alpha^S * Y^{m||R) mod p
+
 

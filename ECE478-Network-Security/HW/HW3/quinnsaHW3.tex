@@ -1,0 +1,191 @@
+\documentclass[letterpaper,11pt,notitlepage,fleqn]{article}
+
+%\usepackage{nopageno} %gets rid of page numbers
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{indentfirst}
+\usepackage{url}
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+\usepackage{pstricks, pst-node}
+\usepackage{geometry}
+\geometry{textheight=9in, textwidth=6.5in} %sets 1" margins 
+\newcommand{\cred}[1]{{\color{red}#1}} %command to change font to red
+\newcommand{\cblue}[1]{{\color{blue}#1}} % ...blue
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+% Code snippets color
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+  language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\lstdefinelanguage{diff}{
+    morecomment=[f][\color{blue}]{@@},     % group identifier
+  morecomment=[f][\color{red}]-,         % deleted lines 
+  morecomment=[f][\color{green}]+,       % added lines
+  morecomment=[f][\color{magenta}]{---}, % Diff header lines (must appear after +,-)
+  morecomment=[f][\color{magenta}]{+++},
+}
+% End color
+\def\name{Sam Quinn}
+
+\parindent = 0.4444 in
+\parskip = 0.2 in
+
+\begin{document}
+\begin{titlepage}
+    \vspace*{\fill}
+
+    \newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+    \center % Center everything on the page
+
+    %----------------------------------------------------------------------------------------
+    %TITLE SECTION
+    %----------------------------------------------------------------------------------------
+
+    %\includegraphics[scale=.5]{image.eps}
+    \HRule \\[0.4cm]
+    { \huge \bfseries Homework \#3}\\[0.4cm] % Title of your document
+
+    %----------------------------------------------------------------------------------------
+    %HEADING SECTIONS
+    %----------------------------------------------------------------------------------------
+
+    \textsc{\LARGE Oregon State University}\\[0.5cm] % Name of your university/college
+    \textsc{\Large ECE 478 Network Security}\\[0.5cm] % Major heading such as course name
+    \textsc{\large Spring 2016}\\[0.5cm] % Minor heading such as course title
+
+
+    \HRule \\[1.5cm]
+    %----------------------------------------------------------------------------------------
+    %AUTHOR SECTION
+    %------------------------------------ ----------------------------------------------------
+
+    \begin{minipage}{0.4\textwidth}
+        \begin{flushleft} \large
+            \emph{Student:}\\
+            \noindent \textbf{Sam \textsc{Quinn}} \\ % Your name
+            {\small Quinnsa@Oregonstate.edu}
+        \end{flushleft}
+    \end{minipage}
+        ~
+        \begin{minipage}{0.4\textwidth}
+            \begin{flushright} \large
+                \emph{Professor:} \\
+                \noindent \textbf{Dr. Attila A \textsc{Yavuz}} \\ % Supervisor's Name
+                {\small Attila.Yavuz@oregonstate.edu}
+            \end{flushright}
+        \end{minipage}\\[3cm]
+
+        %----------------------------------------------------------------------------------------
+        %DATE SECTION
+        %-----------------    -----------------------------------------------------------------------
+
+    {\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+
+    %----------------------------------------------------------------------------------------
+    %LOGO SECTION
+    %------   ----------------------------------------------------------------------------------
+
+    \includegraphics[scale=0.5]{coe.eps}\\[1cm] % Include a department/university logo - this will require the graphicx package
+
+    %----------------------------------------------------------------------------------------
+
+    \vfill % Fill the rest of the page with whitespace
+
+
+
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Impact of the PRGN Quality over the Security of DLP-based Primitives}
+\noindent \textbf{[30] Consider the following attack:}\\ 
+\textbf{The server computes a Schnorr signature under private key y (here we follow the notation of ETA slide/paper) periodically such that for every message M to be signed, it adds current time  stamp  $ts\_i$  and  involve  randomness  $r\_i$  as  $H(M||ts\_i||r\_i)$  and  follows  the  Schnorr signature  algorithm  as  required.  Here,  $r\_i$  is  the  output  of  a  PRNG,  which  derives randomness from certain Operating System (OS) parameters.}  \\
+\textbf {Assume  that  an  attacker  managed  infiltrating  a  virus  into  the  OS  of  the  server,  which  is capable of resetting OS parameters that PRGN relies on, meaning the seed of PRNG is set to its initial values.} \\
+\textbf{Show that by observing small-constant number of signatures, the attacker can totally break the Schnorr signature scheme under these circumstances (remark that it does not mean the Schnorr signature scheme is flawed, it is about how it is used with certain PRNGs).} \\
+\textbf{You must show how the attack works step by step, by illustrating algebraic recovery step, and explain how $ts\_i$ and $r\_i$ play a role in this attack.}
+
+\section{Basic security models for authentication primitives}
+\begin{itemize}
+    \item \textbf{(3) Explain EU-CMA experiment for a MAC scheme.} \\
+        Existential Unforgeable Under Chosen Message Attacks. 
+    \item \textbf{(4) Explain EU-CMA experiment for a digital signature scheme.}
+    \item \textbf{(3) Why adaptability is important, and what are non-triviality and  validity conditions?}
+\end{itemize}
+ 
+\noindent \textbf{Please  describe  the  formal  experiments  with  cryptographic  games,  providing  the  related probability equation, and then give a brief explanation what these probabilities means. You may refer Mihir Bellare’s Lecture Notes as a source. Also, the book of Prof. Dr. Jonathan Katz referred in the Syllabus is a good resource for this question.}
+
+\section{Synergy between Elgamal and DH}
+\noindent \textbf{[20] Do you see any synergy between Elgamal encryption scheme and DH key exchange}
+
+Elgamal encryption scheme is very similar to the Diffie Hellman key echange. 
+
+\noindent Elgamal Encryption: \\
+\begin{tabular}{l l l}
+    \underline{Keygen:} & \underline{ENC(A,M)} & \underline{DEC(a,(B,C)):} \\ 
+    $a \leftarrow \mathbb{Z}_{n}$ & $b \leftarrow \mathbb{Z}_{n}$ & $K = B^a$ \\
+    $pk = A = g^a$ & $B = g^b$ & $M = C \ast K^{-1}$ \\
+    $sk = a$ & $K = A^b$ & Return $M$ \\
+    & $C = K \ast M$ & \\
+    & Return ($B$, $C$) &
+    
+\end{tabular}
+
+\noindent Diffie Hellman Key Agreement: \\
+\begin{tabular}{l c l}
+    \textit{Alice} & Transfer & \textit{Bob} \\
+    $a \leftarrow \mathbb{Z}_{n}$ & & $b \leftarrow \mathbb{Z}_{n}$ \\ 
+    $A = g^a$ & $A \rightarrow$ & \\
+    & $\leftarrow B$ & $ B = g^b $ \\
+    $K = B^{a}$ & & $K = A^{b}$ \\
+\end{tabular}
+
+
+\section{RSA digital signatures and their properties}
+\noindent \textbf{[20] Aggregate  signatures  enable  O(L) 
+protocol? Explain how one implicitly uses another to achieve its objective.  
+signatures to be compressed into a single, compact (i.e., constant-size) verifiable signature.}
+\begin{itemize}
+    \item \textbf{In  RSA,  it  is  easy  to  aggregate  signatures  computed  under  the  same  private key. What is the name of this scheme, and how this aggregation is performed?}
+    \item \textbf{In cloud computing environment, especially  in outsourced databases, several tuples  belonging  to  different  users  are  stored  together.  Therefore,  it  is desirable  to  aggregate  signatures  computed  with  different  keys  belonging different  users.  Is  it  possible  to  use  the  RSA  aggregation  strategy  discussed above  for  this  purpose?  If  it  is  possible,  show  how  it  can  be  done.  If  it  is  not possible, explain the reason in
+        detail.}
+\end{itemize}
+\textit{Hint:  The  paper  “Practical  immutable  signature  bouquets  (PISB)  for authentication and integrity in outsourced databases” might give you clues for both questions.}
+
+\section{PKI Concepts}
+\begin{itemize}
+    \item \textbf{(4)  What  are  the  core  components  of  a  PKI?  Briefly  describe  each component.}
+    \item \textbf{(3) Discuss the trustworthiness of root certificates provided by browsers.}
+    \item \textbf{(3)  What  is  the  purpose  of  the  X.509  standard  and  what  is  a  certificate chain? How is an X.509 certificate revoked?}
+\end{itemize}
+
+
+\medskip
+\bibliography{quinnsaHW3}
+\bibliographystyle{ieeetr}
+\end{document}

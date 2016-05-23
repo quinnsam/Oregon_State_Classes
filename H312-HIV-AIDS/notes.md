@@ -215,4 +215,20 @@ Thu 04/21
 
 
 
+*Cures*
+    1) Sterilizing: Surgical or medical removal of every replication competent virus in the body.
+    2) Functional: The use of antiretroviral Therapy to reduce HIV to undetectable levels and strengthen the immune system enought ot hold the disease back. 
+
+Latent Reservoirs
+    Hidden dormant HIV cells. 
+
+HAART: Highly Active Antiretroviral Therapy
+
+
+Prevalence: The precentage of the population that is living with a disease at any given point or date in time.
+
+Incidence: The number of times an event occurs in a givent time frame or period in a specific popualtion
+
+Rate: The number of new disease diagnosis divided by the population in each group , multiplied by 100.
+
 
