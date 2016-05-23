@@ -140,10 +140,26 @@
  
 \noindent \textbf{Please  describe  the  formal  experiments  with  cryptographic  games,  providing  the  related probability equation, and then give a brief explanation what these probabilities means. You may refer Mihir Bellare’s Lecture Notes as a source. Also, the book of Prof. Dr. Jonathan Katz referred in the Syllabus is a good resource for this question.}
 
+All signature schemes require a \textit{Keygen}, \textit{Sign}, and a \textit{Verify} function. A cryptographic game that would be able to test the security of a signature scheme is defined as follows.\\
+\textbf{Setup} Let a challenger run \textit{Keygen} and publicly distribute the public key $PK$ to the adversary. The secret key $SK$ will be kept confidential to only the challenger. \\
+\textbf{Signature Queries} The adversary will send messages $m_{1}, \dots, m_{q}$ to the challenger to which they will sign by calling \textit{sign} $m_{i} \rightarrow \sigma_{i}$ and send $\sigma$ back to the adversary. The querys may or may not depend on previous signed messages $m_{1}, \dots, m_{i-1}$ \\
+\textbf{Result} If the adversary is able to create a pair ($m$, $\sigma$) that has a valid signature of $m$ with the use of \textit{Verify} in the case that $m$ is not included in the original $m_{i}, then the challanger loses and the adversary wins. 
+
 \section{Synergy between Elgamal and DH}
 \noindent \textbf{[20] Do you see any synergy between Elgamal encryption scheme and DH key exchange}
 
-Elgamal encryption scheme is very similar to the Diffie Hellman key echange. 
+Elgamal encryption scheme is very similar to the Diffie Hellman key agreement, the only difference is that instead of agreeing on a shared key the data is encrypted. A message that is encrypted under Elgamal must also be $M \in \mathbb{Z}_{p}$, where $\mathbb{Z}_{p}$ is the cyclic group. Because the message $M$ needs to be within the cyclic group of the parameters it is considered to have high overhead as an encryption scheme. 
+
+\noindent Diffie Hellman Key Agreement: \\
+\begin{tabular}{l c l}
+    \textit{Alice} & Transfer & \textit{Bob} \\
+    $a \leftarrow \mathbb{Z}_{n}$ & & $b \leftarrow \mathbb{Z}_{n}$ \\ 
+    $A = g^a$ & $A \rightarrow$ & \\
+    & $\leftarrow B$ & $ B = g^b $ \\
+    $K = B^{a}$ & & $K = A^{b}$ \\
+\end{tabular}
+
+The Diffie Hellman Key Agreement is interactive between the two parties, while the Elgamal encryption scheme the party that is encrypting has an unequal share of computation. 
 
 \noindent Elgamal Encryption: \\
 \begin{tabular}{l l l}
@@ -154,15 +170,6 @@ Elgamal encryption scheme is very similar to the Diffie Hellman key echange.
     & $C = K \ast M$ & \\
     & Return ($B$, $C$) &
     
-\end{tabular}
-
-\noindent Diffie Hellman Key Agreement: \\
-\begin{tabular}{l c l}
-    \textit{Alice} & Transfer & \textit{Bob} \\
-    $a \leftarrow \mathbb{Z}_{n}$ & & $b \leftarrow \mathbb{Z}_{n}$ \\ 
-    $A = g^a$ & $A \rightarrow$ & \\
-    & $\leftarrow B$ & $ B = g^b $ \\
-    $K = B^{a}$ & & $K = A^{b}$ \\
 \end{tabular}
 
 
