@@ -143,7 +143,7 @@
 All signature schemes require a \textit{Keygen}, \textit{Sign}, and a \textit{Verify} function. A cryptographic game that would be able to test the security of a signature scheme is defined as follows.\\
 \textbf{Setup} Let a challenger run \textit{Keygen} and publicly distribute the public key $PK$ to the adversary. The secret key $SK$ will be kept confidential to only the challenger. \\
 \textbf{Signature Queries} The adversary will send messages $m_{1}, \dots, m_{q}$ to the challenger to which they will sign by calling \textit{sign} $m_{i} \rightarrow \sigma_{i}$ and send $\sigma$ back to the adversary. The querys may or may not depend on previous signed messages $m_{1}, \dots, m_{i-1}$ \\
-\textbf{Result} If the adversary is able to create a pair ($m$, $\sigma$) that has a valid signature of $m$ with the use of \textit{Verify} in the case that $m$ is not included in the original $m_{i}, then the challanger loses and the adversary wins. 
+\textbf{Result} If the adversary is able to create a pair ($m$, $\sigma$) that has a valid signature of $m$ with the use of \textit{Verify} in the case that $m$ is not included in the original $m_{i}$, then the challanger loses and the adversary wins. 
 
 \section{Synergy between Elgamal and DH}
 \noindent \textbf{[20] Do you see any synergy between Elgamal encryption scheme and DH key exchange}
@@ -187,7 +187,12 @@ signatures to be compressed into a single, compact (i.e., constant-size) verifia
 \section{PKI Concepts}
 \begin{itemize}
     \item \textbf{(4)  What  are  the  core  components  of  a  PKI?  Briefly  describe  each component.}
+        \subitem Issuing, renwal, and revocation
+        \subitem Key's storage and update
+        \subitem Providing services to other protocols
+        \subitem Providing access contorl
     \item \textbf{(3) Discuss the trustworthiness of root certificates provided by browsers.}
+
     \item \textbf{(3)  What  is  the  purpose  of  the  X.509  standard  and  what  is  a  certificate chain? How is an X.509 certificate revoked?}
 \end{itemize}
 
