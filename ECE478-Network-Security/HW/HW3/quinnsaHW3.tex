@@ -128,8 +128,54 @@
 \textbf{The server computes a Schnorr signature under private key y (here we follow the notation of ETA slide/paper) periodically such that for every message M to be signed, it adds current time  stamp  $ts\_i$  and  involve  randomness  $r\_i$  as  $H(M||ts\_i||r\_i)$  and  follows  the  Schnorr signature  algorithm  as  required.  Here,  $r\_i$  is  the  output  of  a  PRNG,  which  derives randomness from certain Operating System (OS) parameters.}  \\
 \textbf {Assume  that  an  attacker  managed  infiltrating  a  virus  into  the  OS  of  the  server,  which  is capable of resetting OS parameters that PRGN relies on, meaning the seed of PRNG is set to its initial values.} \\
 \textbf{Show that by observing small-constant number of signatures, the attacker can totally break the Schnorr signature scheme under these circumstances (remark that it does not mean the Schnorr signature scheme is flawed, it is about how it is used with certain PRNGs).} \\
-\textbf{You must show how the attack works step by step, by illustrating algebraic recovery step, and explain how $ts\_i$ and $r\_i$ play a role in this attack.}
+\textbf{You must show how the attack works step by step, by illustrating algebraic recovery step, and explain how $ts\_i$ and $r\_i$ play a role in this attack.}\\
+To sign a message $m$ the signer must:\\
+Let $k = 0 < k < q$ \\
+Let $x = 0 < x < q$ \\
+Let $r = g^k$ \\
+Let $e = H(m \| r)$ \\
+Let $s = (k - xe)\ mod\ q$ \\
+$\sigma = (s,e)$ \\
 
+If an adversary has compramized the system in which they are able to deterministically invoke a value via a PRGN then the adversary could forge any message with the following. Because the Schorr algorithm uses the random varible $r\_i$ as a source of entropy with the hashing mechanism if the adversary is able to produce at least 2 messages with the same $r\_i$ they would able to recover the private key. If the private key is derived the adversary can forge any message they please.
+
+Let two signatures be $(s,e)$ and $(s',e')$ for two messages $m \neq m'$, but the random number $r = r'$ because $k=k'$. 
+
+\begin{center}
+    $s \equiv k -xe\ (mod\ q)$
+\end{center}
+and 
+\begin{center}
+    $s' \equiv k -xe'\ (mod\ q)$
+\end{center}
+
+Since the value of $s$ is the same in both signatures, we can conclude:
+\begin{center}
+    $s + xe \equiv s' + xe'\ (mod\ q)$
+\end{center}
+which with some more simple math can extract the private key $x$ with:
+\begin{center}
+    $s-s' \equiv x(e'-e)\ (mod\ q)$\\
+    $x \equiv (s-s')(e'-e)^{-1}\ (mod\ q)$
+\end{center}
+Now that the adversary has extracted the secret key $x$ they may forge any signature they would like, totally breaking the Schnorr Signature scheme.
+
+%let the two message that the adversary would have access to be $m_1$ and $m_2$. Since the every value of $r\_i$ is constant it will be donoted as $r$ and we can recover its value with middle school math as shown.
+%\begin{center}
+%    $(r = g^{x_{0}}\ mod\ p,s_1 = \frac{H(m_1) - x_a \ast r_0}{x_0}\ mod(p-1))$ \\
+%\end{center}
+%and for the second message
+%\begin{center}
+%    $(r = g^{x_{0}}\ mod\ p,s_1 = \frac{H(m_2) - x_a \ast r_0}{x_0}\ mod(p-1))$ \\
+%\end{center}
+%For the adversary to find out the contents of $x_0$ they could perform the following opperations.
+%\begin{center}
+%    $x_0 = \frac{H(m_1) - H(m_2)}{s_1 \ast s_2}\ mod(p-1)$
+%\end{center}
+%With the adversary now knowing $x_0$ we can find out the signers secret key $x_a$ with:
+%\begin{center}
+%    $x_a = \frac{H(m_1)-s_1 \ast x_0}{r_0}\ mod(p-1)$
+%\end{center}
 
 
 \section{Basic security models for authentication primitives}
