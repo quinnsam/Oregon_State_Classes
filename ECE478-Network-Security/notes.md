@@ -274,4 +274,6 @@ Schnor Digital Signature
     Verify:
         R =?= alpha^S * Y^{m||R) mod p
 
+KDC: Key distribution center
+
 

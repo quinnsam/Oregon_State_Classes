@@ -130,47 +130,93 @@
 \textbf{Show that by observing small-constant number of signatures, the attacker can totally break the Schnorr signature scheme under these circumstances (remark that it does not mean the Schnorr signature scheme is flawed, it is about how it is used with certain PRNGs).} \\
 \textbf{You must show how the attack works step by step, by illustrating algebraic recovery step, and explain how $ts\_i$ and $r\_i$ play a role in this attack.}
 
+
+
 \section{Basic security models for authentication primitives}
 \begin{itemize}
     \item \textbf{(3) Explain EU-CMA experiment for a MAC scheme.} \\
-        Existential Unforgeable Under Chosen Message Attacks. 
-    \item \textbf{(4) Explain EU-CMA experiment for a digital signature scheme.}
-    \item \textbf{(3) Why adaptability is important, and what are non-triviality and  validity conditions?}
+        Existential Unforgeable Under Chosen Message Attacks defines a MAC scheme that should prevent any forged tag created by the adversary from being verified.\\ 
+        \begin{enumerate}
+            \item This experiment creates a key $k$ with the keygen given $1^n$.
+            \item Then the adversary $A$ is given the input $1^n$ and access to the $Mac_{k}$ oracle. 
+            \item The adversary outputs ($m$, $t$). Each query that $A$ produces is denoted as $Q$. The adversary succeeds if and only if $Vrfy_{k}(m,t) = 1$ and $m \notin Q$.
+        \end{enumerate}
+                If the previous is satisfied then the adversary wins. The probability of this happening is:
+                \begin{center}
+                    $Pr[Mac-forge_{A,\pi}(n) = 1] \leq negl(n)$
+                \end{center} 
+                \cite{katz}
+    \item \textbf{(4) Explain EU-CMA experiment for a digital signature scheme.}\\
+        \begin{enumerate}
+            \item Obtain keys $(pk,sk)$ from the keygen with $1^n$.
+            \item The adversary $A$ is given only the $pk$ and access to the $Sign_{sk}$ oracle. Each query that the adversary makes is denoted $Q$. 
+            \item The adversary succeeds if and only if  $Vrfy_{pk}(m,\sigma) = 1$ and $m \notin Q$
+        \end{enumerate}
+        The adversary can achieve the steps listed above then the adversary wins. The probability that the adversary can execute such an attack is: 
+        \begin{center}
+            $Pr[Sig-forge_{A,\pi}(n) = 1] \leq negl(n)$
+        \end{center}
+        \cite{katz}
+
+    \item \textbf{(3) Why adaptability is important, and what are non-triviality and  validity conditions?}\\
+        With these security games the challenger must be able to protect against adversaries that can adapt to different scenarios. It is important for each scheme to be non-trivial in respects to the probability that the advantage the adversary has.
+
 \end{itemize}
  
 \noindent \textbf{Please  describe  the  formal  experiments  with  cryptographic  games,  providing  the  related probability equation, and then give a brief explanation what these probabilities means. You may refer Mihir Bellare’s Lecture Notes as a source. Also, the book of Prof. Dr. Jonathan Katz referred in the Syllabus is a good resource for this question.}
 
 All signature schemes require a \textit{Keygen}, \textit{Sign}, and a \textit{Verify} function. A cryptographic game that would be able to test the security of a signature scheme is defined as follows.\\
 \textbf{Setup} Let a challenger run \textit{Keygen} and publicly distribute the public key $PK$ to the adversary. The secret key $SK$ will be kept confidential to only the challenger. \\
-\textbf{Signature Queries} The adversary will send messages $m_{1}, \dots, m_{q}$ to the challenger to which they will sign by calling \textit{sign} $m_{i} \rightarrow \sigma_{i}$ and send $\sigma$ back to the adversary. The querys may or may not depend on previous signed messages $m_{1}, \dots, m_{i-1}$ \\
-\textbf{Result} If the adversary is able to create a pair ($m$, $\sigma$) that has a valid signature of $m$ with the use of \textit{Verify} in the case that $m$ is not included in the original $m_{i}$, then the challanger loses and the adversary wins. 
+\textbf{Signature Queries} The adversary will send messages $m_{1}, \dots, m_{q}$ to the challenger to which they will sign by calling \textit{sign} $m_{i} \rightarrow \sigma_{i}$ and send $\sigma$ back to the adversary. The queries may or may not depend on previous signed messages $m_{1}, \dots, m_{i-1}$ \\
+\textbf{Result} If the adversary is able to create a pair ($m$, $\sigma$) that has a valid signature of $m$ with the use of \textit{Verify} in the case that $m$ is not included in the original $m_{i}$, then the challenger loses and the adversary wins. 
 
 \section{Synergy between Elgamal and DH}
 \noindent \textbf{[20] Do you see any synergy between Elgamal encryption scheme and DH key exchange}
 
 Elgamal encryption scheme is very similar to the Diffie Hellman key agreement, the only difference is that instead of agreeing on a shared key the data is encrypted. A message that is encrypted under Elgamal must also be $M \in \mathbb{Z}_{p}$, where $\mathbb{Z}_{p}$ is the cyclic group. Because the message $M$ needs to be within the cyclic group of the parameters it is considered to have high overhead as an encryption scheme. 
 
-\noindent Diffie Hellman Key Agreement: \\
-\begin{tabular}{l c l}
+\noindent \textbf{Diffie Hellman Key Agreement:} \\
+\begin{center}
+\begin{tabular}{|l c l|}
+    \hline
     \textit{Alice} & Transfer & \textit{Bob} \\
+    \hline
     $a \leftarrow \mathbb{Z}_{n}$ & & $b \leftarrow \mathbb{Z}_{n}$ \\ 
     $A = g^a$ & $A \rightarrow$ & \\
     & $\leftarrow B$ & $ B = g^b $ \\
     $K = B^{a}$ & & $K = A^{b}$ \\
+    \hline
 \end{tabular}
-
+\end{center}
 The Diffie Hellman Key Agreement is interactive between the two parties, while the Elgamal encryption scheme the party that is encrypting has an unequal share of computation. 
 
-\noindent Elgamal Encryption: \\
-\begin{tabular}{l l l}
+\noindent \textbf{Elgamal Encryption:} \\
+\begin{center}
+\begin{tabular}{|l l l|}
+    \hline
     \underline{Keygen:} & \underline{ENC(A,M)} & \underline{DEC(a,(B,C)):} \\ 
     $a \leftarrow \mathbb{Z}_{n}$ & $b \leftarrow \mathbb{Z}_{n}$ & $K = B^a$ \\
     $pk = A = g^a$ & $B = g^b$ & $M = C \ast K^{-1}$ \\
     $sk = a$ & $K = A^b$ & Return $M$ \\
     & $C = K \ast M$ & \\
-    & Return ($B$, $C$) &
+    & Return ($B$, $C$) & \\
+    \hline
     
 \end{tabular}
+\end{center}
+From the two schemes demonstrated above we can conclude that Elgamal and Diffie Hellman share these same variables:
+\begin{center}
+    \begin{tabular} {|c|c|}
+        \hline
+        \textbf{Elgamal} & \textbf{Diffie Hellman} \\
+        \hline
+        sk & a or b \\
+        \hline
+        pk & A or B \\
+        \hline
+    \end{tabular}
+\end{center}
+
 
 
 \section{RSA digital signatures and their properties}
@@ -178,24 +224,44 @@ The Diffie Hellman Key Agreement is interactive between the two parties, while t
 protocol? Explain how one implicitly uses another to achieve its objective.  
 signatures to be compressed into a single, compact (i.e., constant-size) verifiable signature.}
 \begin{itemize}
-    \item \textbf{In  RSA,  it  is  easy  to  aggregate  signatures  computed  under  the  same  private key. What is the name of this scheme, and how this aggregation is performed?}
+    \item \textbf{In  RSA,  it  is  easy  to  aggregate  signatures  computed  under  the  same  private key. What is the name of this scheme, and how this aggregation is performed?} \\
+        This RSA scheme is called condensed RSA or C-RSA. With $t$ different messages ${m_{1}, \dots, m_{t}}$ and their signatures ${\sigma_{1}, \dots, \sigma_{t}}$ created by the same signer. The Condensed-RSA signature is computed as follows:\\
+        \begin{center}
+            $\sigma_{1,t} = \prod\limits_{i = 1}^{t} \sigma_{i}\ (mod\ n)$
+        \end{center}
+        \cite{myk}
+
     \item \textbf{In cloud computing environment, especially  in outsourced databases, several tuples  belonging  to  different  users  are  stored  together.  Therefore,  it  is desirable  to  aggregate  signatures  computed  with  different  keys  belonging different  users.  Is  it  possible  to  use  the  RSA  aggregation  strategy  discussed above  for  this  purpose?  If  it  is  possible,  show  how  it  can  be  done.  If  it  is  not possible, explain the reason in
-        detail.}
+        detail.} \\
+        To preserve authentication amunst signatures the signatures must not use multiplication like in C-RSA. When there are multiple different signatures due to RSA's multiplicitavly homomorphic property to aggregate multiple different signatures addition is used. This scheme is called BGLS and is aggergated as described below:
+
+        \begin{center}
+            $e(\sigma_{1,t},g_{2}) = \sum\limits_{i=1}^{t}e(H_{i},\upsilon_{i})$
+        \end{center}
+        \cite{myk}
 \end{itemize}
 \textit{Hint:  The  paper  “Practical  immutable  signature  bouquets  (PISB)  for authentication and integrity in outsourced databases” might give you clues for both questions.}
 
 \section{PKI Concepts}
 \begin{itemize}
     \item \textbf{(4)  What  are  the  core  components  of  a  PKI?  Briefly  describe  each component.}
-        \subitem Issuing, renwal, and revocation
-        \subitem Key's storage and update
-        \subitem Providing services to other protocols
-        \subitem Providing access contorl
-    \item \textbf{(3) Discuss the trustworthiness of root certificates provided by browsers.}
+        \subitem A Certificate Authority (CA) \\
+        Digitally sign and publish public keys for users.
+        \subitem A Registration Authority \\
+        Verifies identities of users requesting their digital certificates to be stored in the CA.
+        \subitem A Central Directory \\
+        A secure storage location to store and index keys.
+        \subitem A Certificate Management System \\
+        Manages access and delivery of certificates. 
+        \subitem A Certificate Policy \\
+        A published document explaining the architecture of the PKI and the roles.
+    \item \textbf{(3) Discuss the trustworthiness of root certificates provided by browsers.} \\
+Browsers come with a preinstalled list of root certificate authorities. The trustworthiness is solely based on the users trust of the given browser. All certificates below the root certificate inherits the trust of the root. The certificates for browsers verify identities that use SSL connections.
 
-    \item \textbf{(3)  What  is  the  purpose  of  the  X.509  standard  and  what  is  a  certificate chain? How is an X.509 certificate revoked?}
+    \item \textbf{(3)  What  is  the  purpose  of  the  X.509  standard  and  what  is  a  certificate chain? How is an X.509 certificate revoked?} \\
+        The X.509 is a standard for PKI's to manage digital certificates. A certificate chain is a series of certificates that form a path to a trusted root. Each certificate will be signed by the secret key of the next certificate in the chain leading up to the last certificate. The last certificate is often self-signed. To revoke a certificate the certificate unique serial number is added to a black list. When a X.509 certificate is revoked the client will notice that the
+        certificate is in the blacklist and should not be trusted, however the blacklists are often not maintained as well as they should. 
 \end{itemize}
-
 
 \medskip
 \bibliography{quinnsaHW3}
