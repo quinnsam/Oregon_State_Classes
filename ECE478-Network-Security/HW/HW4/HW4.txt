@@ -1,0 +1,103 @@
+CS 478/ECE 478
+
+Homework 4
+
+May 27, 2016
+
+Due date: June 6, 2016 at midnight.
+
+Requirements: HW will be completed by each student individually (no
+collaboration). Directly borrowing (e.g., copy-paste) from any material and
+putting in solutions (e.g, from online solutions, Wikipedia, or research papers)
+isplagiarism (see Syllabus for its corresponding actions).
+
+Please cite very carefully each resource you use, but citing a solution does not
+give a license to directly put itasan answer.All of your answers must bein your
+in own words and interpretations. HW should be prepared by LaTeX or Word.
+Handwritten submissions are not accepted. Note that this homework is extra
+credit.
+
+1. (20 points) Group Diﬃe-Hellman (GDH): We use the GDH3 protocol, and there are
+ﬁve participants in the system. Let α be a generator and q is the order of the algebraic
+group. Mi denotes the i-th member of the group, Ni is the random exponent generated
+by the group member Mi . K denotes the group key.
+(a) (10 points) Write the up-ﬂow and down-ﬂow messages, and then show how each
+member derives the group key K .
+
+(b) (10 points) Write the number of rounds, total message size, exponentiations per
+Mi , and total number of exponentiations.
+
+2. (20 points) Iolus:
+Consider the following network conﬁguration in which Iolus is used.
+
+GGSIGSIGSIGSIGSCG2CG3AG2AG2BG1GSIG3BA"CS 478/ECE 478
+
+HW4 2 of 3
+
+May 27, 2016
+
+Assume the GSC is distributing a new group key to the to the group members using
+Iolus. How many times will this new key be encrypted and decrypted before A learns
+the value of the new key? Also describe what entity performs each of the encryptions
+and decryptions.
+
+3. (12 points) Key Trees Consider the following key tree.
+
+(a) (6 points) If u5 is removed from the group, what keys should be changed? Write
+down how keys are distributed with each required step. Assume user oriented re-
+keying.
+
+(b) (6 points) Assume a new member is added (at now vacant location u5 ). Write down
+how keys are distributed with each required step. Assume key-oriented re-keying.
+
+4. (20 points) SSL/TSL
+
+(a) (10 points) What is “The Heartbleed Bug”, describe in detail how it works against
+SSL, and how it can be present.
+
+(b) (10 points) The proper key exchange and cipher suite choices for SSL/TLS contin-
+ually change. We have discussed a potential key exchange mode and cipher suite
+selection that would be a reasonable choice at this moment during the class (also
+with an email). Write down some of the algorithms (discussed on the board), and
+also state what should be an ultimate care while you conﬁgure SSL/TLS (especially
+while doing international business).
+
+5. (14 points) Needham-Schroeder, Otway-Rees
+
+(a) (12 points) In the Needham-Schroeder protocol (extended version in slides)
+i. (2 points) how is Alice authenticated by the KDC?
+ii. (2 points) How is Bob authenticated by the KDC?
+iii. (2 points) How is the KDC authenticated to Alice?
+iv. (2 points) How is the KDC authenticated to Bob?
+
+Page 2
+
+K123%K456%K789%KABC%K1/9%K1/C%U1%U2%U3%U4%U5%U6%U7%U8%UA%UB%UC%U9%K1%K2%K3%K4%K5%K6%K7%K8%KA%KB%KC%K9%CS 478/ECE 478
+
+HW4 3 of 3
+
+May 27, 2016
+
+v. (2 points) How Alice is authenticated to Bob?
+vi. (2 points) How Bob is authenticated to Alice?
+
+(b) (2 points) In the Needham-Schroeder protocol, Alice is the party that is in contact
+with the KDC, but in the Otway-Rees protocol, Bob is the party that is in contact
+with the KDC. Explain why this is the case.
+
+6. (14 points) Kerberos:
+
+(a) (3 points) When Bob receives a ticket from Alice, how does he know it is genuine?
+
+(b) (3 points) When Bob receives a ticket from Alice, how does he know it came from
+Alice?
+
+(c) (3 points) When Alice receives a replay, how does he know it came from Bob (that
+it is not a replay of an earlier message from Bob)?
+
+(d) (5 points) What does the Ticket contain that allows Alice and Bob to communicate
+securely?
+
+Page 3
+
+
